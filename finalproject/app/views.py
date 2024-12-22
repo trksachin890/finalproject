@@ -2,18 +2,109 @@ from django.shortcuts import render,redirect
 from django.contrib.auth.models import User
 from django.contrib.auth import login,authenticate,logout
 from django.contrib import messages
+from app.models import *
 from django.contrib.auth.decorators import login_required
 
 # Create your views here.
 def BASE(request):
+   
     return render(request,'core/base.html')
 
-def INDEX(request):
-    return render(request,'core/index.html')
+def firstpage(request):
+    return render(request,'core/firstpage.html')
 
-from django.contrib import messages
-from django.shortcuts import render, redirect
-from django.contrib.auth.models import User
+
+# @login_required(login_url="/login/")
+def INDEX(request):
+    product = Product.objects.filter(status='PUBLIC')
+    category = Categories.objects.all()
+    vehicletype = VehicleType.objects.all()
+    brand = Brand.objects.all()
+    
+    # Get category, vehicle type, and brand from request
+    CATID = request.GET.get('category')
+    VEHID = request.GET.get('vehicletype')
+    BRANDID = request.GET.get('brand')
+    ATOZID = request.GET.get('ATOZ')
+    ZTOAID = request.GET.get('ZTOA')
+    PRICE_LOWTOHIGHID = request.GET.get('PRICE_LOWTOHIGH')
+    PRICE_HIGHTOLOWID = request.GET.get('PRICE_HIGHTOLOW')
+    NEWTOOLDID = request.GET.get("NEWTOOLD")
+    OLDTONEWID = request.GET.get("OLDTONEW")
+
+    # Apply filters based on the presence of category, vehicle type, and brand
+    if CATID and VEHID and BRANDID:
+        product = Product.objects.filter(
+            category=CATID, 
+            vehicletype=VEHID, 
+            brand=BRANDID, 
+            status='PUBLIC'
+        )
+    elif CATID and VEHID:
+        product = Product.objects.filter(
+            category=CATID, 
+            vehicletype=VEHID, 
+            status='PUBLIC'
+        )
+    elif CATID and BRANDID:
+        product = Product.objects.filter(
+            category=CATID, 
+            brand=BRANDID, 
+            product_status='PUBLIC'
+        )
+    elif VEHID and BRANDID:
+        product = Product.objects.filter(
+            vehicletype=VEHID, 
+            brand=BRANDID, 
+            status='PUBLIC'
+        )
+    elif CATID:
+        product = Product.objects.filter(
+            category=CATID, 
+            status='PUBLIC'
+        )
+    elif VEHID:
+        product = Product.objects.filter(
+            vehicletype=VEHID, 
+            status='PUBLIC'
+        )
+    elif BRANDID:
+        product = Product.objects.filter(
+            brand=BRANDID, 
+            status='PUBLIC'
+        )
+    else:
+        product = Product.objects.filter(status='PUBLIC')
+
+    if ATOZID:
+        product = Product.objects.filter(product_status='PUBLIC').order_by('name')
+    elif ZTOAID:
+        product = Product.objects.filter(product_status='PUBLIC').order_by('-name')
+    elif PRICE_LOWTOHIGHID: 
+        product = Product.objects.filter(product_status='PUBLIC').order_by('price')
+    elif PRICE_HIGHTOLOWID:
+        product = Product.objects.filter(product_status='PUBLIC').order_by('-price')
+    elif NEWTOOLDID:
+        product = Product.objects.filter(product_status='PUBLIC',condition='NEW').order_by('-id')
+    elif OLDTONEWID:
+        product = Product.objects.filter(product_status='PUBLIC',condition='OLD').order_by('id')
+
+
+
+
+    
+
+
+    context = {
+        "product": product,
+        "category": category,
+        "brand": brand,
+        "vehicletype": vehicletype
+    }
+
+    return render(request, 'core/index.html', context)
+
+
 
 def HandleRegister(request):
     if request.method == 'POST':
@@ -52,10 +143,6 @@ def HandleRegister(request):
 
 
 
-from django.contrib import messages
-from django.shortcuts import render, redirect
-from django.contrib.auth import authenticate, login
-from django.contrib.auth.models import User
 
 def HandleLogin(request):
     # Redirect authenticated users to the home page
@@ -77,3 +164,7 @@ def HandleLogout(request):
     logout(request)
     
     return  redirect('home')
+
+
+def SingleProductImage(request):
+    return  render(request,'core/single-product.html')

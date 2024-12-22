@@ -32,6 +32,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'ckeditor',
     'jazzmin',
     'django.contrib.admin',
     'django.contrib.auth',
@@ -41,6 +42,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     # app
     'app',
+    
     
 ]
 
@@ -145,5 +147,13 @@ JAZZMIN_SETTINGS = {
     'site_logo' : "assets/images/logo/logo1.png",
     'copyright' : " Sachin Thakur",
 
+}
+
+CKEDITOR_CONFIGS = {
+    'default': {
+        'toolbar': 'full',
+        'height': 300,
+        'width': 300,
+    },
 }
 

@@ -12,7 +12,9 @@
     <title>API – Electronics E-Commerce </title>
     <meta name="robots" content="index, follow" />
     <meta name="description" content="API-Smart Product E-Commerce">
-    
+    <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css">
+<script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
+
     <link rel="shortcut icon" type="image/x-icon" href="{% static 'assets/images/favicon.ico' %}" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="{% static 'assets/css/bootstrap.min.css' %}" />
@@ -25,6 +27,7 @@
    
     <link rel="stylesheet" href="{% static 'assets/css/plugins.min.css' %}">
     <link rel="stylesheet" href="{% static 'assets/css/style.min.css' %}">
+    
 </head>
 
 <body>
@@ -377,7 +380,8 @@
             </div>
         </div>
         <!-- OffCanvas Cart End -->
-        <div id="offcanvas-account" class="offcanvas offcanvas-account">
+       
+        <!-- <div id="offcanvas-account" class="offcanvas offcanvas-account">
             <div class="inner">
                 <div class="head">
                     <span class="title">My Account</span>
@@ -398,9 +402,46 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </div> -->
+        
         <!-- i edited -->
-    
+        <div id="offcanvas-account" class="offcanvas offcanvas-account">
+            <div class="inner">
+                {% if user.is_authenticated %}
+                <!-- Header for Authenticated Users -->
+                <div class="head">
+                    <span class="title">My Account</span>
+                    <button class="offcanvas-close">×</button>
+                </div>
+                <!-- Body Section for Authenticated Users -->
+                <div class="body customScroll">
+                    <ul class="account-links">
+                        <li><a href="my-account.html">Dashboard</a></li>
+                        <li><a href="orders.html">Orders</a></li>
+                        <li><a href="wishlist.html">Wishlist</a></li>
+                        <li><a href="profile.html">Profile</a></li>
+                    </ul>
+                </div>
+                <!-- Footer Section for Authenticated Users -->
+                <div class="foot">
+                    <div class="buttons mt-30px">
+                        <a href="{% url 'logout' %}" class="btn btn-outline-dark current-btn">Logout</a>
+                    </div>
+                </div>
+                {% else %}
+                <!-- Login Section for Unauthenticated Users -->
+                <a href="{% url 'login' %}" class="login-icon" style="font-size: 20px;">
+                    <i class="fa fa-lock fa-2x"></i> Login
+                </a>
+                {% endif %}
+            </div>
+        </div>
+        
+        
+        <!-- Account Section for Authenticated Users -->
+        
+        
+                
 
         <!-- edited end -->
         
@@ -591,7 +632,7 @@
                                                 <li class="li"><a class="single-link" href="contact.html">Contact</a></li>
                                                 <li class="li"><a class="single-link" href="cart.html">Shopping cart</a></li>
                                                 <li class="li"><a class="single-link" href="shop-left-sidebar.html">Shop</a></li>
-                                                <li class="li"><a class="single-link" href="login.html">Services Login</a></li>
+                                                <li class="li"><a class="single-link" href="{% url 'login' %}">Services Login</a></li>
                                             </ul>
                                         </div>
                                     </div>
@@ -655,50 +696,35 @@
         <!-- Footer Area End -->
     </div>
     <!-- Modal -->
-    <div class="modal modal-2 fade" id="exampleModal" tabindex="-1" role="dialog">
+     {% for i in product %}
+    <div class="modal modal-2 fade" id="exampleModal-{{forloop.counter}}" tabindex="-1" role="dialog">
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
                 <div class="modal-body">
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"> <i class="pe-7s-close"></i></button>
                     <div class="row">
+                        <!-- <div class="col-lg-6 col-sm-12 col-xs-12 mb-lm-30px mb-md-30px mb-sm-30px">
+                            <!-Swiper -->
+                            
+
                         <div class="col-lg-6 col-sm-12 col-xs-12 mb-lm-30px mb-md-30px mb-sm-30px">
                             <!-- Swiper -->
                             <div class="swiper-container gallery-top">
                                 <div class="swiper-wrapper">
+                                    {% for img in i.productimages_set.all %}
                                     <div class="swiper-slide">
-                                        <img class="img-responsive m-auto" src="{% static 'assets/images/product-image/zoom-image/1.webp' %}" alt="">
+                                        <img class="img-responsive m-auto" src="{{img.image.url}}" alt="">
                                     </div>
-                                    <div class="swiper-slide">
-                                        <img class="img-responsive m-auto" src="{% static 'assets/images/product-image/zoom-image/2.webp' %}" alt="">
-                                    </div>
-                                    <div class="swiper-slide">
-                                        <img class="img-responsive m-auto" src="{% static 'assets/images/product-image/zoom-image/3.webp' %}" alt="">
-                                    </div>
-                                    <div class="swiper-slide">
-                                        <img class="img-responsive m-auto" src="{% static 'assets/images/product-image/zoom-image/4.webp' %}" alt="">
-                                    </div>
-                                    <div class="swiper-slide">
-                                        <img class="img-responsive m-auto" src="{% static 'assets/images/product-image/zoom-image/5.webp' %}" alt="">
-                                    </div>
+                                   {% endfor %}
                                 </div>
                             </div>
                             <div class="swiper-container gallery-thumbs mt-20px slider-nav-style-1 small-nav">
                                 <div class="swiper-wrapper">
+                                    {% for img in i.productimages_set.all %}
                                     <div class="swiper-slide">
-                                        <img class="img-responsive m-auto" src="{% static 'assets/images/product-image/small-image/1.webp' %}" alt="">
+                                        <img class="img-responsive m-auto" src="{{img.image.url}}" alt="">
                                     </div>
-                                    <div class="swiper-slide">
-                                        <img class="img-responsive m-auto" src="{% static 'assets/images/product-image/small-image/2.webp' %}" alt="">
-                                    </div>
-                                    <div class="swiper-slide">
-                                        <img class="img-responsive m-auto" src="{% static 'assets/images/product-image/small-image/3.webp' %}" alt="">
-                                    </div>
-                                    <div class="swiper-slide">
-                                        <img class="img-responsive m-auto" src="{% static 'assets/images/product-image/small-image/4.webp' %}" alt="">
-                                    </div>
-                                    <div class="swiper-slide">
-                                        <img class="img-responsive m-auto" src="{% static 'assets/images/product-image/small-image/5.webp' %}" alt="">
-                                    </div>
+                                   {% endfor %}
                                 </div>
                                 <!-- Add Arrows -->
                                 <div class="swiper-buttons">
@@ -707,12 +733,13 @@
                                 </div>
                             </div>
                         </div>
+
                         <div class="col-lg-6 col-sm-12 col-xs-12" data-aos="fade-up" data-aos-delay="200">
                             <div class="product-details-content quickview-content">
-                                <h2>Modern Smart Phone</h2>
+                                <h2>{{i.name}}</h2>
                                 <div class="pricing-meta">
                                     <ul class="d-flex">
-                                        <li class="new-price">$20.90</li>
+                                        <li class="new-price">NRP {{i.price}}</li>
                                     </ul>
                                 </div>
                                 <div class="pro-details-rating-wrap">
@@ -725,37 +752,28 @@
                                     </div>
                                     <span class="read-review"><a class="reviews" href="#">( 2 Review )</a></span>
                                 </div>
-                                <p class="mt-30px">E-commerce, put simply, is the practice of buying and selling goods or services using the Internet.</p>
-                                <div class="pro-details-categories-info pro-details-same-style d-flex m-0">
-                                    <span>SKU:</span>
-                                    <ul class="d-flex">
-                                        <li>
-                                            <a href="#">Ch-256xl</a>
-                                        </li>
-                                    </ul>
-                                </div>
+                                <p class="mt-30px">{{i.description}}</p>
+                                
                                 <div class="pro-details-categories-info pro-details-same-style d-flex m-0">
                                     <span>Categories: </span>
                                     <ul class="d-flex">
                                         <li>
-                                            <a href="#">Smart Device, </a>
+                                            <a href="#">{{i.category}}, </a>
                                         </li>
-                                        <li>
-                                            <a href="#">ETC</a>
-                                        </li>
+                                        
                                     </ul>
                                 </div>
                                 <div class="pro-details-categories-info pro-details-same-style d-flex m-0">
                                     <span>Tags: </span>
                                     <ul class="d-flex">
-                                        <li>
-                                            <a href="#">Smart Device, </a>
-                                        </li>
-                                        <li>
-                                            <a href="#">Phone</a>
-                                        </li>
+                                        {% for tag in i.tags.all %}
+                                            <li>
+                                                <a href="#">{{ tag.name }}</a>
+                                            </li>
+                                        {% endfor %}
                                     </ul>
                                 </div>
+                                
                                 <div class="pro-details-quality">
                                     <div class="cart-plus-minus">
                                         <input class="cart-plus-minus-box" type="text" name="qtybutton" value="1" />
@@ -778,6 +796,7 @@
             </div>
         </div>
     </div>
+    {% endfor %}
     <!-- Modal end -->
     <!-- Modal Cart -->
     <div class="modal customize-class fade" id="exampleModal-Cart" tabindex="-1"   aria-hidden="true">
