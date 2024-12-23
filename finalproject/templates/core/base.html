@@ -71,8 +71,8 @@
                         </div>
                         <div class="col-lg-6 d-none d-lg-block">
                             <div class="search-element">
-                                <form action="#">
-                                    <input type="text" placeholder="Search" />
+                                <form action="/search" method="get">
+                                    <input type="text" placeholder="Search" name="query" id="query"/>
                                     <button><i class="pe-7s-search"></i></button>
                                 </form>
                             </div>
@@ -116,8 +116,8 @@
                         </div>
                         <div class="col-lg-6 d-none d-lg-block">
                             <div class="search-element">
-                                <form action="#">
-                                    <input type="text" placeholder="Search" />
+                                <form action="/search" method="get">
+                                    <input type="text" placeholder="Search" name="query" id="query"/>
                                     <button><i class="pe-7s-search"></i></button>
                                 </form>
                             </div>
@@ -210,7 +210,7 @@
                                             </ul>
                                             <ul class="d-block">
                                                 <li class="title"><a href="#">product Details Page</a></li>
-                                                <li><a href="single-product.html">Product Single</a></li>
+                                                <li><a href="{% url 'singleproduct' %}">Product Single</a></li>
                                                 <li><a href="single-product-variable.html">Product Variable</a></li>
                                                 <li><a href="single-product-affiliate.html">Product Affiliate</a></li>
                                                 <li><a href="single-product-group.html">Product Group</a></li>
@@ -281,8 +281,8 @@
                 <div class="container">
                     <!-- mobile search start -->
                     <div class="search-element max-width-100">
-                        <form action="#">
-                            <input type="text" placeholder="Search" />
+                        <form action="/search" method="get">
+                            <input type="text" placeholder="Search" name="query" id="query"/>
                             <button><i class="pe-7s-search"></i></button>
                         </form>
                     </div>
@@ -303,25 +303,25 @@
                 <div class="body customScroll">
                     <ul class="minicart-product-list">
                         <li>
-                            <a href="single-product.html" class="image"><img src="assets/images/product-image/1.webp" alt="Cart product Image"></a>
+                            <a href="{% url 'singleproduct' %}" class="image"><img src="assets/images/product-image/1.webp" alt="Cart product Image"></a>
                             <div class="content">
-                                <a href="single-product.html" class="title">Modern Smart Phone</a>
+                                <a href="{% url 'singleproduct' %}" class="title">Modern Smart Phone</a>
                                 <span class="quantity-price">1 x <span class="amount">$21.86</span></span>
                                 <a href="#" class="remove">×</a>
                             </div>
                         </li>
                         <li>
-                            <a href="single-product.html" class="image"><img src="assets/images/product-image/2.webp" alt="Cart product Image"></a>
+                            <a href="{% url 'singleproduct' %}" class="image"><img src="assets/images/product-image/2.webp" alt="Cart product Image"></a>
                             <div class="content">
-                                <a href="single-product.html" class="title">Bluetooth Headphone</a>
+                                <a href="{% url 'singleproduct' %}" class="title">Bluetooth Headphone</a>
                                 <span class="quantity-price">1 x <span class="amount">$13.28</span></span>
                                 <a href="#" class="remove">×</a>
                             </div>
                         </li>
                         <li>
-                            <a href="single-product.html" class="image"><img src="assets/images/product-image/3.webp" alt="Cart product Image"></a>
+                            <a href="{% url 'singleproduct' %}" class="image"><img src="assets/images/product-image/3.webp" alt="Cart product Image"></a>
                             <div class="content">
-                                <a href="single-product.html" class="title">Smart Music Box</a>
+                                <a href="{% url 'singleproduct' %}" class="title">Smart Music Box</a>
                                 <span class="quantity-price">1 x <span class="amount">$17.34</span></span>
                                 <a href="#" class="remove">×</a>
                             </div>
@@ -346,25 +346,25 @@
                 <div class="body customScroll">
                     <ul class="minicart-product-list">
                         <li>
-                            <a href="single-product.html" class="image"><img src="assets/images/product-image/1.webp" alt="Cart product Image"></a>
+                            <a href="{% url 'singleproduct' %}" class="image"><img src="assets/images/product-image/1.webp" alt="Cart product Image"></a>
                             <div class="content">
-                                <a href="single-product.html" class="title">Modern Smart Phone</a>
+                                <a href="{% url 'singleproduct' %}" class="title">Modern Smart Phone</a>
                                 <span class="quantity-price">1 x <span class="amount">$18.86</span></span>
                                 <a href="#" class="remove">×</a>
                             </div>
                         </li>
                         <li>
-                            <a href="single-product.html" class="image"><img src="assets/images/product-image/2.webp" alt="Cart product Image"></a>
+                            <a href="{% url 'singleproduct' %}" class="image"><img src="assets/images/product-image/2.webp" alt="Cart product Image"></a>
                             <div class="content">
-                                <a href="single-product.html" class="title">Bluetooth Headphone</a>
+                                <a href="{% url 'singleproduct' %}" class="title">Bluetooth Headphone</a>
                                 <span class="quantity-price">1 x <span class="amount">$43.28</span></span>
                                 <a href="#" class="remove">×</a>
                             </div>
                         </li>
                         <li>
-                            <a href="single-product.html" class="image"><img src="assets/images/product-image/3.webp" alt="Cart product Image"></a>
+                            <a href="{% url 'singleproduct' %}" class="image"><img src="assets/images/product-image/3.webp" alt="Cart product Image"></a>
                             <div class="content">
-                                <a href="single-product.html" class="title">Smart Music Box</a>
+                                <a href="{% url 'singleproduct' %}" class="title">Smart Music Box</a>
                                 <span class="quantity-price">1 x <span class="amount">$37.34</span></span>
                                 <a href="#" class="remove">×</a>
                             </div>
@@ -517,7 +517,7 @@
                                 <li>
                                     <a href="#"><span class="menu-text">product Details Page</span></a>
                                     <ul class="sub-menu">
-                                        <li><a href="single-product.html">Product Single</a></li>
+                                        <li><a href="{% url 'singleproduct' %}">Product Single</a></li>
                                         <li><a href="single-product-variable.html">Product Variable</a></li>
                                         <li><a href="single-product-affiliate.html">Product Affiliate</a></li>
                                         <li><a href="single-product-group.html">Product Group</a></li>
@@ -779,8 +779,7 @@
                                         <input class="cart-plus-minus-box" type="text" name="qtybutton" value="1" />
                                     </div>
                                     <div class="pro-details-cart">
-                                        <button class="add-cart"> Add To
-                                            Cart</button>
+                                        <button class="add-cart"> Add To Cart</button>
                                     </div>
                                     <div class="pro-details-compare-wishlist pro-details-wishlist ">
                                         <a href="wishlist.html"><i class="pe-7s-like"></i></a>

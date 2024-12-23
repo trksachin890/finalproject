@@ -11,7 +11,12 @@ def BASE(request):
     return render(request,'core/base.html')
 
 def firstpage(request):
-    return render(request,'core/firstpage.html')
+    product = Product.objects.filter(status="PUBLIC")
+
+    context = {
+        "product":product
+    }
+    return render(request,'core/firstpage.html',context)
 
 
 # @login_required(login_url="/login/")
@@ -20,11 +25,16 @@ def INDEX(request):
     category = Categories.objects.all()
     vehicletype = VehicleType.objects.all()
     brand = Brand.objects.all()
+    filter_price = FilterPrice.objects.all()
+
+    tag = Tags.objects.all()
     
-    # Get category, vehicle type, and brand from request
+
+    # Get query parameters
     CATID = request.GET.get('category')
     VEHID = request.GET.get('vehicletype')
     BRANDID = request.GET.get('brand')
+    PRICE_FILTER_ID = request.GET.get('filter_price')
     ATOZID = request.GET.get('ATOZ')
     ZTOAID = request.GET.get('ZTOA')
     PRICE_LOWTOHIGHID = request.GET.get('PRICE_LOWTOHIGH')
@@ -32,74 +42,45 @@ def INDEX(request):
     NEWTOOLDID = request.GET.get("NEWTOOLD")
     OLDTONEWID = request.GET.get("OLDTONEW")
 
-    # Apply filters based on the presence of category, vehicle type, and brand
-    if CATID and VEHID and BRANDID:
-        product = Product.objects.filter(
-            category=CATID, 
-            vehicletype=VEHID, 
-            brand=BRANDID, 
-            status='PUBLIC'
-        )
-    elif CATID and VEHID:
-        product = Product.objects.filter(
-            category=CATID, 
-            vehicletype=VEHID, 
-            status='PUBLIC'
-        )
-    elif CATID and BRANDID:
-        product = Product.objects.filter(
-            category=CATID, 
-            brand=BRANDID, 
-            product_status='PUBLIC'
-        )
-    elif VEHID and BRANDID:
-        product = Product.objects.filter(
-            vehicletype=VEHID, 
-            brand=BRANDID, 
-            status='PUBLIC'
-        )
-    elif CATID:
-        product = Product.objects.filter(
-            category=CATID, 
-            status='PUBLIC'
-        )
-    elif VEHID:
-        product = Product.objects.filter(
-            vehicletype=VEHID, 
-            status='PUBLIC'
-        )
-    elif BRANDID:
-        product = Product.objects.filter(
-            brand=BRANDID, 
-            status='PUBLIC'
-        )
-    else:
-        product = Product.objects.filter(status='PUBLIC')
-
-    if ATOZID:
-        product = Product.objects.filter(product_status='PUBLIC').order_by('name')
-    elif ZTOAID:
-        product = Product.objects.filter(product_status='PUBLIC').order_by('-name')
-    elif PRICE_LOWTOHIGHID: 
-        product = Product.objects.filter(product_status='PUBLIC').order_by('price')
-    elif PRICE_HIGHTOLOWID:
-        product = Product.objects.filter(product_status='PUBLIC').order_by('-price')
-    elif NEWTOOLDID:
-        product = Product.objects.filter(product_status='PUBLIC',condition='NEW').order_by('-id')
-    elif OLDTONEWID:
-        product = Product.objects.filter(product_status='PUBLIC',condition='OLD').order_by('id')
-
-
-
-
+    TAGID = request.GET.get('tag')
     
 
+    # Apply category, vehicle type, and brand filters
+    if CATID:
+        product = product.filter(category=CATID)
+    if VEHID:
+        product = product.filter(vehicletype=VEHID)
+    if BRANDID:
+        product = product.filter(brand=BRANDID)
+    if TAGID:
+        product = product.filter(tags=TAGID)
+
+    # Apply price filter
+    if PRICE_FILTER_ID:
+        product = product.filter(filter_price=PRICE_FILTER_ID)
+
+    # Apply sorting
+    if ATOZID:
+        product = product.order_by('name')
+    elif ZTOAID:
+        product = product.order_by('-name')
+    elif PRICE_LOWTOHIGHID:
+        product = product.order_by('price')
+    elif PRICE_HIGHTOLOWID:
+        product = product.order_by('-price')
+    elif NEWTOOLDID:
+        product = product.filter(condition='NEW').order_by('-id')
+    elif OLDTONEWID:
+        product = product.filter(condition='OLD').order_by('id')
 
     context = {
         "product": product,
         "category": category,
         "brand": brand,
-        "vehicletype": vehicletype
+        "vehicletype": vehicletype,
+        "filter_price": filter_price,
+        "tag": tag,
+        
     }
 
     return render(request, 'core/index.html', context)
@@ -168,3 +149,18 @@ def HandleLogout(request):
 
 def SingleProductImage(request):
     return  render(request,'core/single-product.html')
+
+
+def SEARCH(request):
+    query = request.GET.get("query", "")
+    
+    # Filter products by 'PUBLIC' status and the search query
+    if query:
+        product = Product.objects.filter(status='PUBLIC', name__icontains=query)
+    else:
+        product = Product.objects.filter(status='PUBLIC')  # If no query, just return all 'PUBLIC' products
+    
+    context = {
+        "product": product,
+    }
+    return render(request, 'core/search.html', context)

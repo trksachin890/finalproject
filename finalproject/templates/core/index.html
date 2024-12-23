@@ -24,16 +24,43 @@
                         </div>
                         <!-- Single Wedge End -->
                         <div class="header-bottom-set dropdown">
-                            <button class="dropdown-toggle header-action-btn" data-bs-toggle="dropdown">Default <i class="fa fa-angle-down"></i></button>
+                            <button class="dropdown-toggle header-action-btn" data-bs-toggle="dropdown">
+                                Default <i class="fa fa-angle-down"></i>
+                            </button>
                             <ul class="dropdown-menu dropdown-menu-right">
-                                <li><a class="dropdown-item" href="/home/{% for i in product %}?ATOZ={{product.id}} {% endfor %}">Name, A to Z</a></li>
-                                <li><a class="dropdown-item" href="/home/{% for i in product %}?ZTOA={{product.id}} {% endfor %}">Name, Z to A</a></li>
-                                <li><a class="dropdown-item" href="/home/{% for i in product %}?PRICE_LOWTOHIGH={{product.id}} {% endfor %}">Price, low to high</a></li>
-                                <li><a class="dropdown-item" href="/home/{% for i in product %}?PRICE_HIGHTOLOW={{product.id}} {% endfor %}">Price, high to low</a></li>
-                                <li><a class="dropdown-item" href="/home/{% for i in product %}?NEWTOOLD={{product.id}} {% endfor %}">Sort By new</a></li>
-                                <li><a class="dropdown-item" href="/home/{% for i in product %}?OLDTONEW={{product.id}} {% endfor %}">Sort By old</a></li>
+                                <li>
+                                    <a class="dropdown-item" href="/home/?{% if request.GET.category %}category={{ request.GET.category }}&{% endif %}{% if request.GET.vehicletype %}&vehicletype={{ request.GET.vehicletype }}&{% endif %}ATOZ=1">
+                                        Name, A to Z
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item" href="/home/?{% if request.GET.category %}category={{ request.GET.category }}&{% endif %}{% if request.GET.vehicletype %}&vehicletype={{ request.GET.vehicletype }}&{% endif %}ZTOA=1">
+                                        Name, Z to A
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item" href="/home/?{% if request.GET.category %}category={{ request.GET.category }}&{% endif %}{% if request.GET.vehicletype %}&vehicletype={{ request.GET.vehicletype }}&{% endif %}PRICE_LOWTOHIGH=1">
+                                        Price, low to high
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item" href="/home/?{% if request.GET.category %}category={{ request.GET.category }}&{% endif %}{% if request.GET.vehicletype %}&vehicletype={{ request.GET.vehicletype }}&{% endif %}PRICE_HIGHTOLOW=1">
+                                        Price, high to low
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item" href="/home/?{% if request.GET.category %}category={{ request.GET.category }}&{% endif %}{% if request.GET.vehicletype %}&vehicletype={{ request.GET.vehicletype }}&{% endif %}NEWTOOLD=1">
+                                        Sort By New
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item" href="/home/?{% if request.GET.category %}category={{ request.GET.category }}&{% endif %}{% if request.GET.vehicletype %}&vehicletype={{ request.GET.vehicletype }}&{% endif %}OLDTONEW=1">
+                                        Sort By Old
+                                    </a>
+                                </li>
                             </ul>
                         </div>
+                        
                         <!-- Single Wedge Start -->
                     </div>
                     <!-- Right Side End -->
@@ -60,7 +87,7 @@
                                                 </span>
                                                 
                                                 <div class="thumb">
-                                                    <a href="single-product.html" class="image">
+                                                    <a href="{% url 'singleproduct' %}" class="image">
                                                         <img src="{{ prod.image.url }}" alt="Product" style="width: 100%; height: 250px; object-fit: cover;" />
                                                         <img class="hover-image" src="{{ prod.image.url }}" alt="Product" style="width: 100%; height: 250px; object-fit: cover;" />
                                                     </a>
@@ -68,7 +95,7 @@
                                                 <div class="content">
                                                     <span class="category"><a href="#">{{ prod.category }}</a></span>
                                                     <h5 class="title">
-                                                        <a href="single-product.html">{{ prod.name }}</a>
+                                                        <a href="{% url 'singleproduct' %}">{{ prod.name }}</a>
                                                     </h5>
                                                     <span class="price">
                                                         {% if prod.old_price > 0 %}
@@ -113,7 +140,7 @@
                                             <div class="col-md-5 col-lg-5 col-xl-4 mb-lm-30px">
                                                 <div class="product">
                                                     <div class="thumb">
-                                                        <a href="{% url 'singleproductimage' %}" class="image">
+                                                        <a href="{% url 'singleproduct' %}" class="image">
                                                             <img src="{{ prod.image.url }}" alt="Product" style="width: 100%; height: 250px; object-fit: cover;" />
                                                             <img class="hover-image" src="{{ prod.image.url }}" alt="Product" style="width: 100%; height: 250px; object-fit: cover;" />
                                                         </a>
@@ -256,35 +283,37 @@
                     <div class="sidebar-widget mt-8">
                         <h4 class="sidebar-title">Price Filter</h4>
                         <div class="price-filter">
-                            <div class="price-slider-amount">
-                                <input type="text" id="amount" class="p-0 h-auto lh-1" name="price" placeholder="Add Your Price" />
-                            </div>
-                            <div id="slider-range"></div>
+                           {% for f_price in filter_price %}
+                           <li>
+                            <a href="/home/?{% if request.GET.category %}category={{ request.GET.category }}&{% endif %}{% if request.GET.vehicletype %}vehicletype={{ request.GET.vehicletype }}&{% endif %}filter_price={{ f_price.id }}" class="selected m-8">
+                            {{ f_price.price }}
+                            </a>
+
+                            </li>
+                        
+                           {% endfor %}
                         </div>
+
+                        
+                        <!-- filture switch end -->
                     </div>
                     <!-- Sidebar single item -->
-                    <div class="sidebar-widget">
-                        <h4 class="sidebar-title">Color</h4>
-                        <div class="sidebar-widget-color">
-                            <ul class="d-flex flex-wrap">
-                                <li><a href="#" class="color-1"></a></li>
-                                <li><a href="#" class="color-2"></a></li>
-                                <li><a href="#" class="color-3"></a></li>
-                                <li><a href="#" class="color-4"></a></li>
-                                <li><a href="#" class="color-5"></a></li>
-                                <li><a href="#" class="color-6"></a></li>
-                                <li><a href="#" class="color-7"></a></li>
-                                <li><a href="#" class="color-8"></a></li>
-                                <li><a href="#" class="color-9"></a></li>
-                                <li><a href="#" class="color-10"></a></li>
-                                <li><a href="#" class="color-11"></a></li>
-                                <li><a href="#" class="color-12"></a></li>
-                                <li><a href="#" class="color-13"></a></li>
-                                <li><a href="#" class="color-14"></a></li>
-                            </ul>
+                    <div class="sidebar-widget mt-8">
+                        <h4 class="sidebar-title">TAG</h4>
+                        <div class="price-filter">
+                           {% for t in tag %}
+                           <li>
+                            <a href="/home/?tag={{ t.id }}"> {{ t.name }}</a>
+                            
+
+                            </li>
+                        
+                           {% endfor %}
                         </div>
-                    </div>
-                    <!-- Sidebar single item -->
+
+                        
+                        <!-- filture switch end -->
+                    </div><!-- Sidebar single item -->
                     <div class="sidebar-widget">
                         <h4 class="sidebar-title">Size</h4>
                         <div class="sidebar-widget-size">
