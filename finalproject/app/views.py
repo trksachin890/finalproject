@@ -2,8 +2,11 @@ from django.shortcuts import render,redirect
 from django.contrib.auth.models import User
 from django.contrib.auth import login,authenticate,logout
 from django.contrib import messages
+from django.db.models import Avg
 from app.models import *
 from django.contrib.auth.decorators import login_required
+
+from finalproject import settings
 
 # Create your views here.
 def BASE(request):
@@ -147,8 +150,57 @@ def HandleLogout(request):
     return  redirect('home')
 
 
-def SingleProductImage(request):
-    return  render(request,'core/single-product.html')
+
+@login_required(login_url="/login/")
+
+def SingleProductImage(request, id):
+    # Get the product by ID
+    prod = Product.objects.filter(id=id).first()
+
+    # Get all reviews for the product, ordered by the most recent
+    review = ProductReview.objects.filter(product=prod).order_by("-date")
+
+    # Calculate the average rating
+    avarage_rating = ProductReview.objects.filter(product=prod).aggregate(rating=Avg("rating"))["rating"]
+
+    # Pass the product, reviews, and average rating to the template
+    context = {
+        "prod": prod,
+        "review": review,
+        "avarage_rating": round(avarage_rating, 2) if avarage_rating else 0,  # Handle no reviews
+    }
+    return render(request, 'core/single-product.html', context)
+
+
+
+
+def add_review(request):
+    if request.method == "POST":
+        # Ensure user is authenticated
+        if not request.user.is_authenticated:
+            messages.error(request, "You must be logged in to submit a review.")
+            return redirect("login")  # Redirect to login page if not logged in
+
+        product_id = request.POST.get("product_id")
+        review_text = request.POST.get("review")
+        rating = request.POST.get("rating")
+        product = Product.objects.get(id=product_id)
+
+        # Create the review
+        ProductReview.objects.create(
+            user=request.user,
+            product=product,
+            review=review_text,
+            rating=rating,
+        )
+
+        # Success message
+        messages.success(request, "Your review has been submitted successfully.")
+
+        return redirect("singleproduct", id=product_id)  # Redirect back to the product page
+
+    return redirect("home")  # Redirect to home if the request is not POST
+
 
 
 def SEARCH(request):
@@ -164,3 +216,33 @@ def SEARCH(request):
         "product": product,
     }
     return render(request, 'core/search.html', context)
+
+
+def CONTACT(request):
+    if request.method == 'POST':
+        name = request.POST.get('name')
+        email = request.POST.get('email')
+        subject = request.POST.get('subject')
+        message = request.POST.get('message')
+
+        contact = ContactUs(
+            name=name,
+            email=email,
+            subject=subject,
+            message=message
+        )
+        
+        # subject = subject
+        # message = message
+        # email_from = settings.EMAIL_HOST_USER
+        # try:
+        #     send_mail(subject,message,email_from,['mrsachin2060@gmail.com'])
+        #     contact.save()
+        #     return redirect('home')
+        # except:
+        #     return redirect('contact')
+
+        contact.save()
+        return redirect('home')
+        
+    return render(request,'core/contact.html')

@@ -2,5 +2,239 @@
 {% block content %}
 {% load static %}
 
-hii
+        <!-- Product Details Area Start -->
+        <div class="product-details-area pt-100px pb-100px">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-6 col-sm-12 col-xs-12 mb-lm-30px mb-md-30px mb-sm-30px">
+                        <!-- Swiper -->
+                         <!-- image part bigreko cxa ani aarko index page ma image change garna mildaina kine vane hami le tesma for loop lagako xainau so -->
+                        <div class="swiper-container zoom-top">
+                            <div class="swiper-wrapper">
+                                <div class="swiper-slide">
+                                    {% for i in prod.productimage.all %}
+                                    <img class="img-responsive m-auto" src="{{i.image.url}}" alt="">
+                                    <a class="venobox full-preview" data-gall="myGallery" href="{{i.image.url}}">
+                                        <i class="fa fa-arrows-alt" aria-hidden="true"></i>
+                                    </a>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="swiper-container mt-20px zoom-thumbs slider-nav-style-1 small-nav">
+                            <div class="swiper-wrapper">
+                                {% for i in prod.productimage.all %}
+                                <div class="swiper-slide">
+                                    <img class="img-responsive m-auto" src="{{i.image.url}}" alt="">
+                                </div>
+                                {% endfor %}
+                            </div>
+
+                            <!-- Add Arrows -->
+                            <div class="swiper-buttons">
+                                <div class="swiper-button-next"></div>
+                                <div class="swiper-button-prev"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6 col-sm-12 col-xs-12" data-aos="fade-up" data-aos-delay="200">
+                        <div class="product-details-content quickview-content ml-25px">
+                            <h2>{{prod.name}}</h2>
+                            <div class="pricing-meta">
+                                <ul class="d-flex">
+                                    <li class="new-price">NRP.{{prod.price}}</li>
+                                </ul>
+                            </div>
+                            <div class="pro-details-rating-wrap">
+                                <div class="rating-product">
+                                    <i class="fa fa-star"></i>
+                                    <i class="fa fa-star"></i>
+                                    <i class="fa fa-star"></i>
+                                    <i class="fa fa-star"></i>
+                                    <i class="fa fa-star"></i>
+                                </div>
+                                <span class="read-review"><a class="reviews" href="#">({{avarage_rating|floatformat:2}} Customer Review out of 5)</a></span>
+                            </div>
+                            <p class="mt-30px">{{prod.description}}</p>
+                            <div class="pro-details-categories-info pro-details-same-style d-flex m-0">
+                                <span>SKU:</span>
+                                <ul class="d-flex">
+                                    <li>
+                                        <a href="#">Ch-256xl</a>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="pro-details-categories-info pro-details-same-style d-flex m-0">
+                                <span>Categories: </span>
+                                <ul class="d-flex">
+                                    <li>
+                                        <a href="#">{{prod.category}} </a>
+                                    </li>
+                                    
+                                </ul>
+                            </div>
+                            <div class="pro-details-categories-info pro-details-same-style d-flex m-0">
+                                <span>Tags: </span>
+                                <ul class="d-flex">
+                                    {% for t in prod.tags.all %}
+                                    <li>
+                                        <a href="#">{{prod.name}} </a>
+                                    </li>
+                                    {% endfor %}
+                                    
+                                </ul>
+                            </div>
+                            <div class="pro-details-quality">
+                                <div class="cart-plus-minus">
+                                    <input class="cart-plus-minus-box" type="text" name="qtybutton" value="1" />
+                                </div>
+                                <div class="pro-details-cart">
+                                    <button class="add-cart"> Add To Cart</button>
+                                </div>
+                                <div class="pro-details-compare-wishlist pro-details-wishlist ">
+                                    <a href="wishlist.html"><i class="pe-7s-like"></i></a>
+                                </div>
+                                <div class="pro-details-compare-wishlist pro-details-wishlist ">
+                                    <a href="compare.html"><i class="pe-7s-refresh-2"></i></a>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- product details description area start -->
+                        <div class="description-review-wrapper">
+                            <div class="description-review-topbar nav">
+                                <button data-bs-toggle="tab" data-bs-target="#des-details2">Information</button>
+                                <button class="active" data-bs-toggle="tab" data-bs-target="#des-details1">Description</button>
+                                <button data-bs-toggle="tab" data-bs-target="#des-details3">Reviews ({{ review.count }})</button>
+                            </div>
+                            <div class="tab-content description-review-bottom">
+                                <div id="des-details2" class="tab-pane">
+                                    <div class="product-anotherinfo-wrapper text-start">
+                                        <ul>
+                                            <li>{{prod.information}}</li>
+                                           
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div id="des-details1" class="tab-pane active">
+                                    <div class="product-description-wrapper">
+                                        <p>
+                                           {{prod.description}}
+                                        </p>
+                                    </div>
+                                </div>
+                                
+                                <div id="des-details3" class="tab-pane">
+                                    <div class="row">
+                                        <div class="col-lg-12">
+                                            {% for re in review %}
+                                            <div class="review-wrapper">
+                                                <div class="single-review">
+                                                    <div class="review-img">
+                                                        <img src="assets/images/review-image/1.png" alt="" />
+                                                    </div>
+                                                    <div class="review-content">
+                                                        <div class="review-top-wrap">
+                                                            <div class="review-left">
+                                                                <div class="review-name">
+                                                                    {% if re.user.get_full_name %}
+                                                                        {{ re.user.get_full_name }}
+                                                                    {% else %}
+                                                                        {{ re.user.username }}
+                                                                    {% endif %}
+                                                                </div>
+                                                                
+                                                                <div class="rating-product">
+                                                                    <i class="fa fa-star"></i>
+                                                                    <i class="fa fa-star"></i>
+                                                                    <i class="fa fa-star"></i>
+                                                                    <i class="fa fa-star"></i>
+                                                                    <i class="fa fa-star"></i>
+                                                                </div>
+                                                            </div>
+                                                           
+                                                        </div>
+                                                        <div class="review-bottom">
+                                                            {{re.review}}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            {% endfor %}
+                                        </div>
+                                    </div>
+                                    <!-- review start -->
+                                    <div class="col-lg-12">
+                                        <div class="ratting-form-wrapper pl-50">
+                                            <h3>Add a Review</h3>
+                                            <div class="ratting-form">
+                                                <form action="{% url 'add_review' %}" method="post">
+                                                    {% csrf_token %}
+                                                    <!-- Hidden field to pass the product ID -->
+                                                    <input type="hidden" name="product_id" value="{{ prod.id }}">
+                                    
+                                                    <!-- Star rating input -->
+                                                    <div class="star-box">
+                                                        <span>Your rating:</span>
+                                                        <div class="rating-product">
+                                                            <!-- Hidden input to capture the selected rating -->
+                                                            <input type="hidden" name="rating" id="rating-value" value="0">
+                                                            <!-- Clickable stars for rating -->
+                                                            <i class="fa fa-star" data-value="1"></i>
+                                                            <i class="fa fa-star" data-value="2"></i>
+                                                            <i class="fa fa-star" data-value="3"></i>
+                                                            <i class="fa fa-star" data-value="4"></i>
+                                                            <i class="fa fa-star" data-value="5"></i>
+                                                        </div>
+                                                    </div>
+                                    
+                                                    <!-- Read-only name and email fields -->
+                                                    <div class="row">
+                                                        <div class="col-md-6">
+                                                            <div class="rating-form-style">
+                                                                <input
+                                                                    type="text"
+                                                                    name="name"
+                                                                    value="{% if request.user.is_authenticated %}{{ request.user.get_full_name }}{% else %}Guest{% endif %}"
+                                                                    readonly
+                                                                />
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-6">
+                                                            <div class="rating-form-style">
+                                                                <input
+                                                                    type="email"
+                                                                    name="email"
+                                                                    value="{% if request.user.is_authenticated %}{{ request.user.email }}{% else %}guest@example.com{% endif %}"
+                                                                    readonly
+                                                                />
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                    
+                                                    <!-- Review text area -->
+                                                    <div class="col-md-12">
+                                                        <div class="rating-form-style form-submit">
+                                                            <textarea name="review" placeholder="Write your review here"></textarea>
+                                                            <button class="btn btn-primary btn-hover-color-primary" type="submit">
+                                                                Submit
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- end review -->
+                                </div>
+                            </div>
+                        </div>
+                        <!-- product details description area end -->
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Product Area Start -->
+
 {% endblock content %}

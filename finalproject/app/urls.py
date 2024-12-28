@@ -10,10 +10,12 @@ urlpatterns = [
     path('register/',views.HandleRegister,name="register"),
     path('login/',views.HandleLogin,name="login"),
     path('logout/',views.HandleLogout,name="logout"),
+    path('contact/',views.CONTACT,name="contact"),
 
     path('search/',views.SEARCH, name="search"),
 
-    path('singleproduct/',views.SingleProductImage,name='singleproduct')
+    path('home/<str:id>',views.SingleProductImage,name='singleproduct'),
+    path("add-review/", views.add_review, name="add_review"),
 
     
 ]

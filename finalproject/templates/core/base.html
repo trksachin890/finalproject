@@ -210,7 +210,7 @@
                                             </ul>
                                             <ul class="d-block">
                                                 <li class="title"><a href="#">product Details Page</a></li>
-                                                <li><a href="{% url 'singleproduct' %}">Product Single</a></li>
+                                                <li><a href="home/{{prod.id}}">Product Single</a></li>
                                                 <li><a href="single-product-variable.html">Product Variable</a></li>
                                                 <li><a href="single-product-affiliate.html">Product Affiliate</a></li>
                                                 <li><a href="single-product-group.html">Product Group</a></li>
@@ -270,7 +270,7 @@
                                         </li>
                                     </ul>
                                 </li>
-                                <li><a href="contact.html">Contact</a></li>
+                                <li><a href="{% url 'contact' %}">Contact</a></li>
                             </ul>
                         </div>
                     </div>
@@ -303,25 +303,25 @@
                 <div class="body customScroll">
                     <ul class="minicart-product-list">
                         <li>
-                            <a href="{% url 'singleproduct' %}" class="image"><img src="assets/images/product-image/1.webp" alt="Cart product Image"></a>
+                            <a href="home/{{prod.id}}" class="image"><img src="assets/images/product-image/1.webp" alt="Cart product Image"></a>
                             <div class="content">
-                                <a href="{% url 'singleproduct' %}" class="title">Modern Smart Phone</a>
+                                <a href="home/{{prod.id}}" class="title">Modern Smart Phone</a>
                                 <span class="quantity-price">1 x <span class="amount">$21.86</span></span>
                                 <a href="#" class="remove">×</a>
                             </div>
                         </li>
                         <li>
-                            <a href="{% url 'singleproduct' %}" class="image"><img src="assets/images/product-image/2.webp" alt="Cart product Image"></a>
+                            <a href="home/{{prod.id}}" class="image"><img src="assets/images/product-image/2.webp" alt="Cart product Image"></a>
                             <div class="content">
-                                <a href="{% url 'singleproduct' %}" class="title">Bluetooth Headphone</a>
+                                <a href="home/{{prod.id}}" class="title">Bluetooth Headphone</a>
                                 <span class="quantity-price">1 x <span class="amount">$13.28</span></span>
                                 <a href="#" class="remove">×</a>
                             </div>
                         </li>
                         <li>
-                            <a href="{% url 'singleproduct' %}" class="image"><img src="assets/images/product-image/3.webp" alt="Cart product Image"></a>
+                            <a href="home/{{prod.id}}" class="image"><img src="assets/images/product-image/3.webp" alt="Cart product Image"></a>
                             <div class="content">
-                                <a href="{% url 'singleproduct' %}" class="title">Smart Music Box</a>
+                                <a href="home/{{prod.id}}}" class="title">Smart Music Box</a>
                                 <span class="quantity-price">1 x <span class="amount">$17.34</span></span>
                                 <a href="#" class="remove">×</a>
                             </div>
@@ -346,25 +346,25 @@
                 <div class="body customScroll">
                     <ul class="minicart-product-list">
                         <li>
-                            <a href="{% url 'singleproduct' %}" class="image"><img src="assets/images/product-image/1.webp" alt="Cart product Image"></a>
+                            <a href="home/{{prod.id}}" class="image"><img src="assets/images/product-image/1.webp" alt="Cart product Image"></a>
                             <div class="content">
-                                <a href="{% url 'singleproduct' %}" class="title">Modern Smart Phone</a>
+                                <a href="home/{{prod.id}}" class="title">Modern Smart Phone</a>
                                 <span class="quantity-price">1 x <span class="amount">$18.86</span></span>
                                 <a href="#" class="remove">×</a>
                             </div>
                         </li>
                         <li>
-                            <a href="{% url 'singleproduct' %}" class="image"><img src="assets/images/product-image/2.webp" alt="Cart product Image"></a>
+                            <a href="home/{{prod.id}}" class="image"><img src="assets/images/product-image/2.webp" alt="Cart product Image"></a>
                             <div class="content">
-                                <a href="{% url 'singleproduct' %}" class="title">Bluetooth Headphone</a>
+                                <a href="home/{{prod.id}}" class="title">Bluetooth Headphone</a>
                                 <span class="quantity-price">1 x <span class="amount">$43.28</span></span>
                                 <a href="#" class="remove">×</a>
                             </div>
                         </li>
                         <li>
-                            <a href="{% url 'singleproduct' %}" class="image"><img src="assets/images/product-image/3.webp" alt="Cart product Image"></a>
+                            <a href="home/{{prod.id}}" class="image"><img src="assets/images/product-image/3.webp" alt="Cart product Image"></a>
                             <div class="content">
-                                <a href="{% url 'singleproduct' %}" class="title">Smart Music Box</a>
+                                <a href="home/{{prod.id}}" class="title">Smart Music Box</a>
                                 <span class="quantity-price">1 x <span class="amount">$37.34</span></span>
                                 <a href="#" class="remove">×</a>
                             </div>
@@ -517,7 +517,7 @@
                                 <li>
                                     <a href="#"><span class="menu-text">product Details Page</span></a>
                                     <ul class="sub-menu">
-                                        <li><a href="{% url 'singleproduct' %}">Product Single</a></li>
+                                        <li><a href="home/{{prod.id}}">Product Single</a></li>
                                         <li><a href="single-product-variable.html">Product Variable</a></li>
                                         <li><a href="single-product-affiliate.html">Product Affiliate</a></li>
                                         <li><a href="single-product-group.html">Product Group</a></li>
@@ -558,7 +558,7 @@
                                 <li><a href="blog-single-right-sidebar.html">Single Right Sidbar</a>
                             </ul>
                         </li>
-                        <li><a href="contact.html">Contact Us</a></li>
+                        <li><a href="{% url 'contact' %}">Contact Us</a></li>
                     </ul>
                 </div>
                 <!-- OffCanvas Menu End -->
@@ -629,7 +629,7 @@
                                         <div class="footer-row">
                                             <ul class="align-items-center">
                                                 <li class="li"><a class="single-link" href="my-account.html">My Account</a></li>
-                                                <li class="li"><a class="single-link" href="contact.html">Contact</a></li>
+                                                <li class="li"><a class="single-link" href="{% url 'contact' %}">Contact</a></li>
                                                 <li class="li"><a class="single-link" href="cart.html">Shopping cart</a></li>
                                                 <li class="li"><a class="single-link" href="shop-left-sidebar.html">Shop</a></li>
                                                 <li class="li"><a class="single-link" href="{% url 'login' %}">Services Login</a></li>
@@ -647,7 +647,7 @@
                                         <div class="footer-row">
                                             <ul class="align-items-center">
                                                 <li class="li"><a class="single-link" href="my-account.html">My Account</a></li>
-                                                <li class="li"><a class="single-link" href="contact.html">Contact</a></li>
+                                                <li class="li"><a class="single-link" href="{% url 'contact' %}">Contact</a></li>
                                                 <li class="li"><a class="single-link" href="cart.html">Shopping cart</a></li>
                                                 <li class="li"><a class="single-link" href="shop-left-sidebar.html">Shop</a></li>
                                                 <li class="li"><a class="single-link" href="login.html">Services Login</a></li>
