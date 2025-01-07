@@ -3,13 +3,13 @@ from django.utils.html import mark_safe
 from app.models import *
 
 # Inline for Product Images
-class ProductImagesAdmin(admin.TabularInline):
-    model = ProductImages
+class ImagesAdmin(admin.TabularInline):
+    model = Images
     
 
 # Admin for Product
 class ProductAdmin(admin.ModelAdmin):
-    inlines = [ProductImagesAdmin]
+    inlines = [ImagesAdmin]
     list_display = ['name', 'product_image', 'category', 'price', 'stock', 'condition', 'vehicletype']
     
 
@@ -30,8 +30,6 @@ class CartOrderAdmin(admin.ModelAdmin):
     list_display = ['user', 'price', 'order_date', 'product_status']
 
 # Admin for Cart Order Items
-class CartOrderItemAdmin(admin.ModelAdmin):
-    list_display = ['order', 'product_status', 'price', 'total']
 
 # Admin for Product Review
 class ProductReviewAdmin(admin.ModelAdmin):
@@ -42,23 +40,27 @@ class WishlistAdmin(admin.ModelAdmin):
     list_display = ['user', 'product', 'date']
 
 # Admin for Address
-class AddressAdmin(admin.ModelAdmin):
-    list_display = ['user', 'address', 'status']
+class OrderAdmin(admin.ModelAdmin):
+    list_display = ['user', 'address', 'firstname','lastname']
 
+class OrderItemAdmin(admin.ModelAdmin):
+    list_display = ['user', 'product', 'quantity','price','total']
 # Admin for Tags
-class TagsAdmin(admin.ModelAdmin):
+class TagAdmin(admin.ModelAdmin):
     list_display = ['name']
 
 # Registering Models
 admin.site.register(VehicleType, VehicletypeAdmin)
 admin.site.register(Product, ProductAdmin)
-admin.site.register(Categories, CategoryAdmin)
+admin.site.register(Category, CategoryAdmin)
 admin.site.register(Brand, BrandAdmin)
 admin.site.register(FilterPrice)
 admin.site.register(CartOrder, CartOrderAdmin)
-admin.site.register(CartOrderItems, CartOrderItemAdmin)
 admin.site.register(ProductReview, ProductReviewAdmin)
 admin.site.register(Wishlist, WishlistAdmin)
-admin.site.register(Address, AddressAdmin)
-admin.site.register(Tags, TagsAdmin)
-admin.site.register(ContactUs)
+admin.site.register(Order, OrderAdmin)
+
+admin.site.register(OrderItem, OrderItemAdmin)
+
+admin.site.register(Tag, TagAdmin)
+admin.site.register(Contact_us)

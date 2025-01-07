@@ -1,0 +1,412 @@
+{% extends 'core/base.html' %}
+{% block content %}
+ <!-- Shop Page Start  -->
+ <div class="shop-category-area pt-100px pb-100px">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-9 order-lg-last col-md-12 order-md-first">
+                <!-- Shop Top Area Start -->
+                <div class="shop-top-bar d-flex">
+                    <p class="compare-product"> <span>12</span> Product Found of <span>30</span></p>
+                    <!-- Left Side End -->
+                    <div class="shop-tab nav">
+                        <button class="active" data-bs-target="#shop-grid" data-bs-toggle="tab">
+                            <i class="fa fa-th" aria-hidden="true"></i>
+                        </button>
+                        <button data-bs-target="#shop-list" data-bs-toggle="tab">
+                            <i class="fa fa-list" aria-hidden="true"></i>
+                        </button>
+                    </div>
+                    <!-- Right Side Start -->
+                    <div class="select-shoing-wrap d-flex align-items-center">
+                        <div class="shot-product">
+                            <p>Sort By:</p>
+                        </div>
+                        <!-- Single Wedge End -->
+                        <div class="header-bottom-set dropdown">
+                            <button class="dropdown-toggle header-action-btn" data-bs-toggle="dropdown">
+                                Default <i class="fa fa-angle-down"></i>
+                            </button>
+                            <ul class="dropdown-menu dropdown-menu-right">
+                                <li>
+                                    <a class="dropdown-item" href="/products/?{% if request.GET.category %}category={{ request.GET.category }}&{% endif %}{% if request.GET.vehicletype %}&vehicletype={{ request.GET.vehicletype }}&{% endif %}ATOZ=1">
+                                        Name, A to Z
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item" href="/products/?{% if request.GET.category %}category={{ request.GET.category }}&{% endif %}{% if request.GET.vehicletype %}&vehicletype={{ request.GET.vehicletype }}&{% endif %}ZTOA=1">
+                                        Name, Z to A
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item" href="/products/?{% if request.GET.category %}category={{ request.GET.category }}&{% endif %}{% if request.GET.vehicletype %}&vehicletype={{ request.GET.vehicletype }}&{% endif %}PRICE_LOWTOHIGH=1">
+                                        Price, low to high
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item" href="/products/?{% if request.GET.category %}category={{ request.GET.category }}&{% endif %}{% if request.GET.vehicletype %}&vehicletype={{ request.GET.vehicletype }}&{% endif %}PRICE_HIGHTOLOW=1">
+                                        Price, high to low
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item" href="/products/?{% if request.GET.category %}category={{ request.GET.category }}&{% endif %}{% if request.GET.vehicletype %}&vehicletype={{ request.GET.vehicletype }}&{% endif %}NEWTOOLD=1">
+                                        Sort By New
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item" href="/products/?{% if request.GET.category %}category={{ request.GET.category }}&{% endif %}{% if request.GET.vehicletype %}&vehicletype={{ request.GET.vehicletype }}&{% endif %}OLDTONEW=1">
+                                        Sort By Old
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                        
+                        <!-- Single Wedge Start -->
+                    </div>
+                    <!-- Right Side End -->
+                </div>
+                <!-- Shop Top Area End -->
+                <!-- Shop Bottom Area Start -->
+                <div class="shop-bottom-area">
+                    <!-- Tab Content Area Start -->
+                    <div class="row">
+                        <div class="col">
+                            <div class="tab-content">
+                                <div class="tab-pane fade show active" id="shop-grid">
+                                    <div class="row mb-n-30px">
+
+                                        {% for prod in product %}
+                                        <div class="col-lg-4 col-md-6 col-sm-6 col-xs-6 mb-30px">
+                                            <!-- Single Product -->
+                                            <div class="product">
+                                                <span class="badges">
+                                                    {% if prod.get_percentage|floatformat != "0" %}
+                                                        <span class="discount" style="background-color: blue;">-{{ prod.get_percentage|floatformat }} %</span>
+                                                    {% endif %}
+                                                    <span class="new">{{ prod.condition }}</span>
+                                                </span>
+                                                
+                                                <div class="thumb">
+                                                    <a href="{% url 'product_detail' prod.id %}" class="image">
+                                                        <img src="{{ prod.image.url }}" alt="Product" style="width: 100%; height: 250px; object-fit: cover;" />
+                                                        <img class="hover-image" src="{{ prod.image.url }}" alt="Product" style="width: 100%; height: 250px; object-fit: cover;" />
+                                                    </a>
+                                                </div>
+                                                <div class="content">
+                                                    <span class="category"><a href="{% url 'product_detail' prod.id %}">{{ prod.category }}</a></span>
+                                                    <h5 class="title">
+                                                        <a href="{% url 'product_detail' prod.id %}">{{ prod.name }}</a>
+                                                    </h5>
+                                                    <span class="price">
+                                                        {% if prod.old_price > 0 %}
+                                                            <span class="old" style="text-decoration: line-through; color: #888; margin-right: 5px;">
+                                                                NRP. {{ prod.old_price }}
+                                                            </span>
+                                                        {% endif %}
+                                                        <span class="new" style="color: #e60000; font-weight: bold;">
+                                                            NRP. {{ prod.price }}
+                                                        </span>
+                                                    </span>
+                                                    
+                                                </div>
+                                                <div class="actions">
+                                                    <button title="Add To Cart" class="action add-to-cart" data-bs-toggle="modal" data-bs-target="#exampleModal-Cart-{{forloop.counter}}">
+                                                        <i class="pe-7s-shopbag"></i>
+                                                    </button>
+                                                    <button class="action wishlist" title="Wishlist" data-bs-toggle="modal" data-bs-target="#exampleModal-Wishlist-{{forloop.counter}}">
+                                                        <i class="pe-7s-like"></i>
+                                                    </button>
+                                                    <button class="action quickview" data-link-action="quickview" title="Quick view" data-bs-toggle="modal" data-bs-target="#exampleModal-{{forloop.counter}}">
+                                                        <i class="pe-7s-look"></i>
+                                                    </button>
+                                                    <button class="action compare" title="Compare" data-bs-toggle="modal" data-bs-target="#exampleModal-Compare-{{forloop.counter}}">
+                                                        <i class="pe-7s-refresh-2"></i>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                                        {% endfor %}
+
+                                
+                                    </div>
+                                </div>
+
+                                
+                                <div class="tab-pane fade mb-n-30px" id="shop-list">
+                                    {% for prod in product %}
+                                    <div class="shop-list-wrapper mb-30px">
+                                        <div class="row">
+                                            <div class="col-md-5 col-lg-5 col-xl-4 mb-lm-30px">
+                                                <div class="product">
+                                                    <div class="thumb">
+                                                        <a href="{% url 'product_detail' prod.id %}" class="image">
+                                                            <img src="{{ prod.image.url }}" alt="Product" style="width: 100%; height: 250px; object-fit: cover;" />
+                                                            <img class="hover-image" src="{{ prod.image.url }}" alt="Product" style="width: 100%; height: 250px; object-fit: cover;" />
+                                                        </a>
+                                                        <span class="badges">
+                                                            {% if prod.get_percentage|floatformat != "0" %}
+                                                        <span class="discount" style="background-color: blue;">-{{ prod.get_percentage|floatformat }} %</span>
+                                                    {% endif %}
+                                                            <span class="new">{{ prod.condition }}</span>
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-7 col-lg-7 col-xl-8">
+                                                <div class="content-desc-wrap">
+                                                    <div class="content">
+                                                        <span class="category"><a href="{% url 'product_detail' prod.id %}">{{ prod.category }}</a></span>
+                                                        <h5 class="title"><a href="{% url 'product_detail' prod.id %}">{{ prod.name }}</a></h5>
+                                                        {{ prod.information }} 
+                                                    </div>
+                                                    <div class="box-inner">
+                                                        <span class="price">
+                                                            {% if prod.old_price > 0 %}
+                                                                <span class="old" style="text-decoration: line-through; color: #888; margin-right: 5px;">
+                                                                    NRP. {{ prod.old_price }}
+                                                                </span>
+                                                            {% endif %}
+                                                            <span class="new" style="color: #e60000; font-weight: bold;">
+                                                                NRP. {{ prod.price }}
+                                                            </span>
+                                                        </span>
+                                                        <div class="actions">
+                                                            <button title="Add To Cart" class="action add-to-cart" data-bs-toggle="modal" data-bs-target="#exampleModal-Cart-{{forloop.counter}}">
+                                                                <i class="pe-7s-shopbag"></i>
+                                                            </button>
+                                                            <button class="action wishlist" title="Wishlist" data-bs-toggle="modal" data-bs-target="#exampleModal-Wishlist-{{forloop.counter}}">
+                                                                <i class="pe-7s-like"></i>
+                                                            </button>
+                                                            <button class="action quickview" data-link-action="quickview" title="Quick view" data-bs-toggle="modal" data-bs-target="#exampleModal-{{forloop.counter}}">
+                                                                <i class="pe-7s-look"></i>
+                                                            </button>
+                                                            <button class="action compare" title="Compare" data-bs-toggle="modal" data-bs-target="#exampleModal-Compare">
+                                                                <i class="pe-7s-refresh-2"></i>
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    {% endfor %}
+                                </div>
+                                
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Tab Content Area End -->
+                    <!--  Pagination Area Start -->
+                    <div class="pro-pagination-style text-center text-lg-end" data-aos="fade-up" data-aos-delay="200">
+                        <div class="pages">
+                            <ul>
+                                <li class="li"><a class="page-link" href="#"><i class="fa fa-angle-left"></i></a>
+                                </li>
+                                <li class="li"><a class="page-link" href="#">1</a></li>
+                                <li class="li"><a class="page-link active" href="#">2</a></li>
+                                <li class="li"><a class="page-link" href="#">3</a></li>
+                                <li class="li"><a class="page-link" href="#"><i class="fa fa-angle-right"></i></a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <!--  Pagination Area End -->
+                </div>
+                <!-- Shop Bottom Area End -->
+            </div>
+            <!-- Sidebar Area Start -->
+            <div class="col-lg-3 order-lg-first col-md-12 order-md-last">
+                <div class="shop-sidebar-wrap">
+
+                    <!-- vehicle type start -->
+                    <div class="sidebar-widget">
+                        <h4 class="sidebar-title">VEHICLE TYPE</h4>
+                        <div class="sidebar-widget-category">
+                            <ul style="list-style: none; padding: 0; margin: 0;">
+                                <!-- "All VEHICLE" option -->
+                                <li style="margin-bottom: 10px;">
+                                    <a href="{% url 'products' %}" 
+                                       class="vehicle-option selected m-0" 
+                                       data-type="all" 
+                                       style="display: inline-block; padding: 10px 15px; border: 2px solid #ccc; border-radius: 4px; text-align: center; cursor: pointer; background-color: #007bff; color: #fff; text-decoration: none; user-select: none; width: 100%; box-sizing: border-box;"
+                                       onclick="handleClick(this, 'all')">All VEHICLE</a>
+                                </li>
+                                
+                                <!-- Vehicle types from the loop -->
+                                {% for veh in vehicletype %}
+                                <li style="margin-bottom: 10px;">
+                                    <a href="/products/?vehicletype={{veh.id}}&category={{ request.GET.category }}" 
+                                       class="vehicle-option m-0" 
+                                       data-type="specific" 
+                                       style="display: inline-block; padding: 10px 15px; border: 2px solid #ccc; border-radius: 4px; text-align: center; cursor: pointer; background-color: #f9f9f9; color: #333; text-decoration: none; user-select: none; width: 100%; box-sizing: border-box;"
+                                       onclick="handleClick(this, 'specific')">{{ veh.name }}</a>
+                                </li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    
+                    <!-- vehicle type end -->
+                    <!-- Sidebar single item -->
+                     <!-- category start -->
+                     <div class="sidebar-widget">
+                        <h4 class="sidebar-title">Top Categories</h4>
+                        <div class="sidebar-widget-category">
+                            <ul style="list-style: none; padding: 0; margin: 0;">
+                                <!-- "All PRODUCT" option -->
+                                <li style="margin-bottom: 10px;">
+                                    <a href="{% url 'products' %}" 
+                                       class="category-option selected m-0" 
+                                       data-type="all" 
+                                       style="display: inline-block; padding: 10px 15px; border: 2px solid #ccc; border-radius: 4px; text-align: center; cursor: pointer; background-color: #007bff; color: #fff; text-decoration: none; user-select: none; width: 100%; box-sizing: border-box;"
+                                       onclick="handleCategoryClick(this, 'all')">All PRODUCT</a>
+                                </li>
+                                
+                                <!-- Category types from the loop -->
+                                {% for cat in category %}
+                                <li style="margin-bottom: 10px;">
+                                    <a href="/products/?category={{cat.id}}&vehicletype={{ request.GET.vehicletype }}" 
+                                       class="category-option m-0" 
+                                       data-type="specific" 
+                                       style="display: inline-block; padding: 10px 15px; border: 2px solid #ccc; border-radius: 4px; text-align: center; cursor: pointer; background-color: #f9f9f9; color: #333; text-decoration: none; user-select: none; width: 100%; box-sizing: border-box;"
+                                       onclick="handleCategoryClick(this, 'specific')">{{ cat.name }}</a>
+                                </li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    </div>
+                       <!-- category end -->                  
+                    <!-- Sidebar single item -->
+                    <div class="sidebar-widget mt-8">
+                        <h4 class="sidebar-title">Price Filter</h4>
+                        <div class="price-filter">
+                           {% for f_price in filter_price %}
+                           <li>
+                            <a href="/products/?{% if request.GET.category %}category={{ request.GET.category }}&{% endif %}{% if request.GET.vehicletype %}vehicletype={{ request.GET.vehicletype }}&{% endif %}filter_price={{ f_price.id }}" class="selected m-8">
+                            {{ f_price.price }}
+                            </a>
+
+                            </li>
+                        
+                           {% endfor %}
+                        </div>
+
+                        
+                        <!-- filture switch end -->
+                    </div>
+                    <!-- Sidebar single item -->
+                    <div class="sidebar-widget mt-8">
+                        <h4 class="sidebar-title">TAG</h4>
+                        <div class="price-filter">
+                           {% for t in tag %}
+                           <li>
+                            <a href="/products/?tag={{ t.id }}"> {{ t.name }}</a>
+                            
+
+                            </li>
+                        
+                           {% endfor %}
+                        </div>
+
+                        
+                        <!-- filture switch end -->
+                    </div><!-- Sidebar single item -->
+                    <div class="sidebar-widget">
+                        <h4 class="sidebar-title">Size</h4>
+                        <div class="sidebar-widget-size">
+                            <ul>
+                                <li><a href="#" class="selected m-0"> All
+                                        <span>(6)</span> </a></li>
+                                <li><a href="#" class=""> S <span>(12)</span> </a>
+                                </li>
+                                <li><a href="#" class=""> M <span>(21)</span> </a>
+                                </li>
+                                <li><a href="#" class=""> L <span>(16)</span> </a>
+                                </li>
+                                <li><a href="#" class=""> XL <span>(22)</span> </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <!-- Sidebar single item -->
+                    <div class="sidebar-widget">
+                        <h4 class="sidebar-title">Brands</h4>
+                        <div class="sidebar-widget-brand">
+                            <ul style="list-style: none; padding: 0; margin: 0;">
+                                <!-- "ALL BRAND" option -->
+                                <li style="margin-bottom: 10px;">
+                                    <a href="{% url 'products' %}" 
+                                       class="brand-option selected m-0" 
+                                       data-type="all" 
+                                       style="display: inline-block; padding: 10px 15px; border: 2px solid #ccc; border-radius: 4px; text-align: center; cursor: pointer; background-color: #007bff; color: #fff; text-decoration: none; user-select: none; width: 100%; box-sizing: border-box;"
+                                       onclick="handleBrandClick(this, 'all')">ALL BRAND</a>
+                                </li>
+                                
+                                <!-- Brand types from the loop -->
+                                {% for bran in brand %}
+                                <li style="margin-bottom: 10px;">
+                                    <a href="/products/?category={{ request.GET.category }}&vehicletype={{ request.GET.vehicletype }}&brand={{ bran.id }}" 
+                                       class="brand-option m-0" 
+                                       data-type="specific" 
+                                       style="display: inline-block; padding: 10px 15px; border: 2px solid #ccc; border-radius: 4px; text-align: center; cursor: pointer; background-color: #f9f9f9; color: #333; text-decoration: none; user-select: none; width: 100%; box-sizing: border-box;"
+                                       onclick="handleBrandClick(this, 'specific')">{{ bran.name }}</a>
+                                </li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <script>
+                    function handleBrandClick(element, type) {
+                        // Get all brand options
+                        const brandOptions = document.querySelectorAll(".brand-option");
+                    
+                        if (type === "all") {
+                            // Deselect all other options
+                            brandOptions.forEach(opt => {
+                                opt.classList.remove("selected");
+                                opt.style.backgroundColor = "#f9f9f9";
+                                opt.style.color = "#333";
+                            });
+                    
+                            // Select "ALL BRAND"
+                            element.classList.add("selected");
+                            element.style.backgroundColor = "#007bff";
+                            element.style.color = "#fff";
+                        } else {
+                            // Deselect "ALL BRAND"
+                            const allBrandOption = document.querySelector('.brand-option[data-type="all"]');
+                            allBrandOption.classList.remove("selected");
+                            allBrandOption.style.backgroundColor = "#f9f9f9";
+                            allBrandOption.style.color = "#333";
+                    
+                            // Toggle the clicked option
+                            const isSelected = element.classList.contains("selected");
+                            brandOptions.forEach(opt => {
+                                if (opt.dataset.type !== "all") {
+                                    opt.classList.remove("selected");
+                                    opt.style.backgroundColor = "#f9f9f9";
+                                    opt.style.color = "#333";
+                                }
+                            });
+                    
+                            if (!isSelected) {
+                                element.classList.add("selected");
+                                element.style.backgroundColor = "#007bff";
+                                element.style.color = "#fff";
+                            }
+                        }
+                    }
+                    </script>
+                    
+                    <!-- Sidebar single item -->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Shop Page End  -->
+{% endblock content %}

@@ -32,6 +32,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'cart',
     'ckeditor',
     'jazzmin',
     'django.contrib.admin',
@@ -45,6 +46,8 @@ INSTALLED_APPS = [
     
     
 ]
+
+CART_SESSION_ID = 'cart'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -65,6 +68,7 @@ TEMPLATES = [
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
+                'cart.context_processor.cart_total_amount',
                 'django.template.context_processors.debug',
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
@@ -131,6 +135,9 @@ STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
 MEDIA_URL = '/media/'
 
 MEDIA_ROOT = os.path.join(BASE_DIR,"media")
+
+RAZORPAY_KEY_ID = 'rzp_test_sg_sdp0rAgOiysgoI'
+RAZORPAY_KEY_SECRECT = 'ERGVZQh3zztwbRqKFirYTb0d'
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 

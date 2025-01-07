@@ -11,20 +11,22 @@
                          <!-- image part bigreko cxa ani aarko index page ma image change garna mildaina kine vane hami le tesma for loop lagako xainau so -->
                         <div class="swiper-container zoom-top">
                             <div class="swiper-wrapper">
+                                {% for i in prod.images_set.all%}
                                 <div class="swiper-slide">
-                                    {% for i in prod.productimage.all %}
+                                    
                                     <img class="img-responsive m-auto" src="{{i.image.url}}" alt="">
                                     <a class="venobox full-preview" data-gall="myGallery" href="{{i.image.url}}">
                                         <i class="fa fa-arrows-alt" aria-hidden="true"></i>
                                     </a>
-                                    {% endfor %}
+                                    
                                 </div>
+                                {% endfor %}
                             </div>
                         </div>
 
                         <div class="swiper-container mt-20px zoom-thumbs slider-nav-style-1 small-nav">
                             <div class="swiper-wrapper">
-                                {% for i in prod.productimage.all %}
+                                {% for i in prod.images_set.all %}
                                 <div class="swiper-slide">
                                     <img class="img-responsive m-auto" src="{{i.image.url}}" alt="">
                                 </div>
@@ -85,12 +87,33 @@
                                     
                                 </ul>
                             </div>
+                            <!-- i edited -->
+                            <div class="pro-details-quality">
+                                <div class="cart-plus-minus">
+                                    <input class="cart-plus-minus-box" type="text" name="quantity" value="1" />
+                                </div>
+                                <div class="pro-details-cart">
+                                    <form method="post" action="{% url 'cart_add' prod.id %}">
+                                        {% csrf_token %}
+                                        <input type="hidden" name="product_id" value="{{ prod.id }}">
+                                        <button type="submit" class="add-cart">Add To Cart</button>
+                                    </form>
+                                </div>
+                                <div class="pro-details-compare-wishlist pro-details-wishlist">
+                                    <a href="wishlist.html"><i class="pe-7s-like"></i></a>
+                                </div>
+                                <div class="pro-details-compare-wishlist pro-details-wishlist">
+                                    <a href="compare.html"><i class="pe-7s-refresh-2"></i></a>
+                                </div>
+                            </div>
+                            
+                            <!-- <div class="action">
                             <div class="pro-details-quality">
                                 <div class="cart-plus-minus">
                                     <input class="cart-plus-minus-box" type="text" name="qtybutton" value="1" />
                                 </div>
                                 <div class="pro-details-cart">
-                                    <button class="add-cart"> Add To Cart</button>
+                                    <button title="Add To Cart" class="action add-to-cart" data-bs-toggle="modal" data-bs-target="#exampleModal-Cart-{{forloop.counter}}"> Add To Cart</button>
                                 </div>
                                 <div class="pro-details-compare-wishlist pro-details-wishlist ">
                                     <a href="wishlist.html"><i class="pe-7s-like"></i></a>
@@ -99,6 +122,8 @@
                                     <a href="compare.html"><i class="pe-7s-refresh-2"></i></a>
                                 </div>
                             </div>
+                        </div> -->
+                            <!-- i edited -->
                         </div>
                         <!-- product details description area start -->
                         <div class="description-review-wrapper">
@@ -111,7 +136,7 @@
                                 <div id="des-details2" class="tab-pane">
                                     <div class="product-anotherinfo-wrapper text-start">
                                         <ul>
-                                            <li>{{prod.information}}</li>
+                                            <li>{{prod.information | safe}}</li>
                                            
                                         </ul>
                                     </div>
@@ -119,7 +144,7 @@
                                 <div id="des-details1" class="tab-pane active">
                                     <div class="product-description-wrapper">
                                         <p>
-                                           {{prod.description}}
+                                           {{prod.description|safe}}
                                         </p>
                                     </div>
                                 </div>

@@ -24,7 +24,7 @@ def user_directory_path(instance, filename):
     return f'default/{filename}'
 
 # Models
-class Categories(models.Model):
+class Category(models.Model):
     name = models.CharField(max_length=100)
     image = models.ImageField(upload_to="category")
 
@@ -73,7 +73,7 @@ class VehicleType(models.Model):
     def __str__(self):
         return self.name
 
-class Tags(models.Model):
+class Tag(models.Model):
     name = models.CharField(max_length=100)
 
     class Meta:
@@ -95,11 +95,11 @@ class Product(models.Model):
     condition = models.CharField(choices=CONDITIONS, max_length=100)
     created_date = models.DateTimeField(default=timezone.now)
 
-    category = models.ForeignKey(Categories, on_delete=models.CASCADE)
+    category = models.ForeignKey(Category, on_delete=models.CASCADE)
     brand = models.ForeignKey(Brand, on_delete=models.CASCADE)
     vehicletype = models.ForeignKey(VehicleType, on_delete=models.CASCADE)
     filter_price = models.ForeignKey(FilterPrice, on_delete=models.CASCADE)
-    tags = models.ManyToManyField(Tags)
+    tags = models.ManyToManyField(Tag)
 
     class Meta:
         verbose_name_plural = "Products"
@@ -116,7 +116,7 @@ class Product(models.Model):
             return round(discount, 2)
         return 0
 
-class ProductImages(models.Model):
+class Images(models.Model):
     image = models.ImageField(upload_to="product-images")
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
 
@@ -164,6 +164,48 @@ class ProductReview(models.Model):
     def get_rating(self):
         return self.rating
 
+
+
+
+class OrderItem(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE,null=True)
+    product = models.CharField( max_length=200)
+    image = models.ImageField( upload_to='products/Order_Img')
+    quantity = models.IntegerField()
+    price = models.IntegerField()
+    total = models.IntegerField()
+
+    
+    class Meta:
+        verbose_name_plural = "OrderItem"
+
+    def __str__(self):
+        return f"{self.product} (X{self.quantity}) by {self.user.username}"
+
+
+class Order(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    firstname = models.CharField(max_length=100)
+    lastname = models.CharField(max_length=100)
+    address = models.TextField(max_length=100)
+    city = models.CharField(max_length=100)
+    phone = models.IntegerField()
+    email = models.EmailField( max_length=100)
+   
+    amount = models.CharField(max_length=100)
+    date = models.DateField(auto_now_add=True)
+
+    payment_id = models.CharField(max_length=300,null=True,blank=True)
+    paid = models.BooleanField(default=False,null=True)
+
+
+    class Meta:
+        verbose_name_plural = "Order"
+
+    def __str__(self):
+        return self.user.username
+
+
 class Wishlist(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
@@ -175,15 +217,9 @@ class Wishlist(models.Model):
     def __str__(self):
         return self.product.name
 
-class Address(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    address = models.CharField(max_length=100)
-    status = models.BooleanField(default=False)
 
-    class Meta:
-        verbose_name_plural = "Addresses"
 
-class ContactUs(models.Model):
+class Contact_us(models.Model):
     name = models.CharField(max_length=200)
     email = models.EmailField(max_length=200)
     subject = models.CharField(max_length=300)

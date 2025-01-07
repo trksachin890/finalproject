@@ -1,36 +1,49 @@
-from django.shortcuts import render,redirect
+from django.shortcuts import get_object_or_404, render,redirect
 from django.contrib.auth.models import User
 from django.contrib.auth import login,authenticate,logout
 from django.contrib import messages
 from django.db.models import Avg
 from app.models import *
 from django.contrib.auth.decorators import login_required
+# from django.contrib.auth.decorators import login_required
+from cart.cart import Cart
 
 from finalproject import settings
+import razorpay
+
+client = razorpay.Client(auth=(settings.RAZORPAY_KEY_ID,settings.RAZORPAY_KEY_SECRECT))
+
+
+
+
+
+
+
+
 
 # Create your views here.
 def BASE(request):
    
     return render(request,'core/base.html')
 
-def firstpage(request):
+def HOME(request):
     product = Product.objects.filter(status="PUBLIC")
 
     context = {
         "product":product
     }
-    return render(request,'core/firstpage.html',context)
+    return render(request,'core/index.html',context)
 
 
 # @login_required(login_url="/login/")
-def INDEX(request):
+def PRODUCT(request):
     product = Product.objects.filter(status='PUBLIC')
-    category = Categories.objects.all()
+    categories = Category.objects.all()
     vehicletype = VehicleType.objects.all()
     brand = Brand.objects.all()
     filter_price = FilterPrice.objects.all()
 
-    tag = Tags.objects.all()
+    tag = Tag.objects.all()
     
 
     # Get query parameters
@@ -78,7 +91,7 @@ def INDEX(request):
 
     context = {
         "product": product,
-        "category": category,
+        "category": categories,
         "brand": brand,
         "vehicletype": vehicletype,
         "filter_price": filter_price,
@@ -86,7 +99,7 @@ def INDEX(request):
         
     }
 
-    return render(request, 'core/index.html', context)
+    return render(request, 'core/product.html', context)
 
 
 
@@ -137,7 +150,7 @@ def HandleLogin(request):
         user =  authenticate(username=username,password=password )
         if user is not None:
             login(request,user)
-            return redirect('home')
+            return redirect('products')
         else:
             messages.error(request, "Incorrect username or password. Please try again.")
             return redirect('login')
@@ -153,7 +166,7 @@ def HandleLogout(request):
 
 @login_required(login_url="/login/")
 
-def SingleProductImage(request, id):
+def PRODUCT_DETAIL_PAGE(request, id):
     # Get the product by ID
     prod = Product.objects.filter(id=id).first()
 
@@ -218,14 +231,14 @@ def SEARCH(request):
     return render(request, 'core/search.html', context)
 
 
-def CONTACT(request):
+def Contact_Page(request):
     if request.method == 'POST':
         name = request.POST.get('name')
         email = request.POST.get('email')
         subject = request.POST.get('subject')
         message = request.POST.get('message')
 
-        contact = ContactUs(
+        contact = Contact_us(
             name=name,
             email=email,
             subject=subject,
@@ -243,6 +256,143 @@ def CONTACT(request):
         #     return redirect('contact')
 
         contact.save()
-        return redirect('home')
+        return redirect('product')
         
     return render(request,'core/contact.html')
+
+
+
+
+@login_required(login_url="/login/")
+def cart_add(request, id):
+    cart = Cart(request)
+    product = Product.objects.get(id=id)
+    cart.add(product=product)
+    return redirect("products")
+
+
+@login_required(login_url="/login/")
+def item_clear(request, id):
+    cart = Cart(request)
+    product = Product.objects.get(id=id)
+    cart.remove(product)
+    return redirect("cart_detail")
+
+
+@login_required(login_url="/login/")
+def item_increment(request, id):
+    cart = Cart(request)
+    product = Product.objects.get(id=id)
+    cart.add(product=product)
+    return redirect("cart_detail")
+
+
+@login_required(login_url="/login/")
+def item_decrement(request, id):
+    cart = Cart(request)
+    product = Product.objects.get(id=id)
+    cart.decrement(product=product)
+    return redirect("cart_detail")
+
+
+@login_required(login_url="/login/")
+def cart_clear(request):
+    cart = Cart(request)
+    cart.clear()
+    return redirect("cart_detail")
+
+
+@login_required(login_url="/login/")
+def cart_detail(request):
+    return render(request, 'core/cart_details.html')
+
+
+
+
+@login_required
+def ORDER_ITEM(request):
+    # Get the cart from the session
+    cart = request.session.get('cart', {})
+    cart_total_amount = 0  # Initialize the total amount
+
+# Loop through each item in the cart
+    for item in cart.values():
+        price = float(item['price'])  # Convert price to float
+        quantity = int(item['quantity'])  # Convert quantity to integer
+        print(type(price))
+        print(type(quantity))
+        cart_total_amount += price * quantity  # Add the product of price and quantity to the total amount
+
+        
+
+    if request.method == "POST":
+        
+        for  key,value in cart.items():
+            product_name = value['name']
+            product_price = float(value['price'])  # Convert price to float
+            product_quantity = int(value['quantity'])  # Convert quantity to integer
+            product_image = value['image']
+            
+            # Create an OrderItem instance
+            order_item = OrderItem(
+                user=request.user,
+                # order=order,
+                product=product_name,
+                price=product_price,
+                quantity=product_quantity,
+                image=product_image,
+                total=cart_total_amount
+            )
+            order_item.save()
+
+        # Clear the cart after the order is placed
+        request.session['cart'] = {}
+
+        # Redirect to a success page or order summary
+        return redirect('home')  # Update with your order summary URL name
+
+    return render(request, 'core/place/order_item.html', {
+        'cart': cart,
+        'cart_total_amount': cart_total_amount
+    })
+
+
+
+
+
+@login_required
+def Check_out(request):
+
+    # Set amount (in paise) and other Razorpay parameters
+
+
+# Create Razorpay order
+    payment = client.order.create({
+        "amount": 500000,
+    "currency": "INR",  # Currency should be INR
+    "payment_capture": "1"  # Auto-capture payment
+        })
+
+# Get the order ID
+    order_id = payment['id']
+
+# Pass payment details to the template
+    context = {
+    'order_id': order_id,
+    'payment': payment,
+    }
+    return render(request, 'core/checkout.html', context)
+
+    
+
+
+
+
+
+def PLACE_ORDER(request):
+    if request.method == 'POST':
+        firstname = request.POST.get('firstname'),
+    
+
+    return render(request, 'core/placeorder.html')
+
