@@ -1,0 +1,50 @@
+{% extends 'core/base.html' %}
+{% block content %}
+{% load static %}
+<!-- Wishlist Area Start -->
+<div class="cart-main-area pt-100px pb-100px">
+    <div class="container">
+        <h3 class="cart-page-title">Your cart items</h3>
+        <div class="row">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-12">
+                <form action="#">
+                    <div class="table-content table-responsive cart-table-content">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Image</th>
+                                    <th>Product Name</th>
+                                    <!-- <th>Until Price</th> -->
+                                    
+                                    <th>Subtotal</th>
+                                    <th>Add To Cart</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for i in wishlists %}
+                                <tr>
+                                    <td class="product-thumbnail">
+                                        <a href="#"><img class="img-responsive ml-15px" src="{{ i.product.image.url }}" alt="" /></a>
+                                    </td>
+                                    <td class="product-name"><a href="#">{{ i.product.name }}</a></td>
+                                    <td class="product-price-cart"><span class="amount">NRP. {{i.product.price}}</span></td>
+                                    <!-- <td class="product-subtotal">$70.00</td>     -->
+                                    <td class="product-wishlist-cart">
+                                        <div class="button-group">
+                                            <a href="{% url 'cart_add' i.product.id %}" class="btn btn-primary">Add to Cart</a>
+                                            <a href="#" class="btn btn-danger">Remove</a>
+                                        </div>
+                                    </td>
+                                    
+                                </tr>
+                               {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Wishlist Area End -->
+ {% endblock content %}

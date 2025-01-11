@@ -7,6 +7,7 @@ from app.models import *
 from django.contrib.auth.decorators import login_required
 # from django.contrib.auth.decorators import login_required
 from cart.cart import Cart
+from django.contrib.auth.views import PasswordResetView
 
 from finalproject import settings
 import razorpay
@@ -216,6 +217,34 @@ def add_review(request):
 
 
 
+
+def add_to_wishlist(request, id):  # Include the 'id' parameter
+    if request.method == "POST" and request.user.is_authenticated:
+        product = get_object_or_404(Product, id=id)
+
+        # Check if the product is already in the wishlist
+        wishlist_item, created = Wishlist.objects.get_or_create(user=request.user, product=product)
+
+        if created:
+            messages.success(request, "Added to Wishlist successfully!")
+        else:
+            messages.info(request, "Product is already in your Wishlist.")
+
+        return redirect("wishlist")  # Redirect to the wishlist page
+    else:
+        messages.error(request, "You must be logged in to add to Wishlist.")
+        return redirect("login")  # Redirect to login if the user is not authenticated
+
+
+def wishlist(request):
+    wishlists = Wishlist.objects.filter(user=request.user)
+    context = {'wishlists':wishlists}
+    return render(request,'wishlist/wishlist.html',context)
+
+
+
+
+
 def SEARCH(request):
     query = request.GET.get("query", "")
     
@@ -358,6 +387,56 @@ def ORDER_ITEM(request):
 
 
 
+@login_required
+def PLACE_ORDER(request):
+    if request.method == 'POST':
+        # Get user information
+        user = request.user
+        firstname = request.POST.get('firstname', user.first_name)
+        lastname = request.POST.get('lastname', user.last_name)
+        address = request.POST.get('address')
+        city = request.POST.get('city')
+        phone = request.POST.get('phone')
+        email = request.POST.get('email')
+
+        # Calculate total amount
+        cart_items = request.session.get('cart', [])  # Example: Fetch cart items from session
+        total_amount = 0
+        for item in cart_items:
+            product = Product.objects.get(id=item['product_id'])
+            total_amount += product.price * item['quantity']
+
+        # Save the order
+        order = Order.objects.create(
+            user=user,
+            firstname=firstname,
+            lastname=lastname,
+            address=address,
+            city=city,
+            phone=phone,
+            email=email,
+            amount=total_amount,
+        )
+        print(order)
+        # Save order items
+        for item in cart_items:
+            product = Product.objects.get(id=item['product_id'])
+            OrderItem.objects.create(
+                user=user,
+                product=product.name,
+                image=product.image,
+                quantity=item['quantity'],
+                price=product.price,
+                total=product.price * item['quantity'],
+            )
+
+        # Clear the cart (optional)
+        request.session['cart'] = []
+
+        return redirect('home')
+
+    return render(request, 'core/placeorder.html')
+
 
 
 @login_required
@@ -366,33 +445,34 @@ def Check_out(request):
     # Set amount (in paise) and other Razorpay parameters
 
 
-# Create Razorpay order
-    payment = client.order.create({
-        "amount": 500000,
-    "currency": "INR",  # Currency should be INR
-    "payment_capture": "1"  # Auto-capture payment
-        })
-
 # Get the order ID
-    order_id = payment['id']
 
 # Pass payment details to the template
-    context = {
-    'order_id': order_id,
-    'payment': payment,
-    }
-    return render(request, 'core/checkout.html', context)
-
     
+    return render(request, 'core/checkout.html')
 
 
 
 
+def about(request):
+    about_content = ABOUT.objects.first()  # Fetch the first About entry
+    return render(request, 'about/about.html', {'about': about_content})
 
-def PLACE_ORDER(request):
-    if request.method == 'POST':
-        firstname = request.POST.get('firstname'),
-    
 
-    return render(request, 'core/placeorder.html')
 
+
+# reset
+
+# views.py
+
+class CustomPasswordResetView(PasswordResetView):
+    email_template_name = 'registration/password_reset_email.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['protocol'] = self.request.scheme  # 'http' or 'https'
+        context['domain'] = self.request.get_host()  # Domain name (e.g., example.com)
+        # Ensure uidb64 and token are passed to the context
+        context['uidb64'] = kwargs.get('uidb64', '')
+        context['token'] = kwargs.get('token', '')
+        return context

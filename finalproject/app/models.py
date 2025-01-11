@@ -195,8 +195,8 @@ class Order(models.Model):
     amount = models.CharField(max_length=100)
     date = models.DateField(auto_now_add=True)
 
-    payment_id = models.CharField(max_length=300,null=True,blank=True)
-    paid = models.BooleanField(default=False,null=True)
+    # payment_id = models.CharField(max_length=300,null=True,blank=True)
+    # paid = models.BooleanField(default=False,null=True)
 
 
     class Meta:
@@ -228,3 +228,14 @@ class Contact_us(models.Model):
 
     def __str__(self):
         return self.email
+
+
+
+# about
+class ABOUT(models.Model):
+    title = models.CharField(max_length=200, help_text="Title of the About Page")
+    content = models.TextField(help_text="Content of the About Page")
+    last_updated = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return self.title

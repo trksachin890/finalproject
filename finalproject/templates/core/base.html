@@ -156,12 +156,12 @@
                             <ul>
                                 <li class="dropdown"><a href="{% url 'home' %}">Home <i class="fa fa-angle-down"></i></a>
                                     <ul class="sub-menu">
-                                        <li><a href="{% url 'home' %}">Home 1</a></li>
-                                        <li><a href="{% url 'home' %}">Home 2</a></li>
+                                        <li><a href="{% url 'products' %}">Products</a></li>
+                                        <li><a href="{% url 'home' %}">Home</a></li>
                                     </ul>
                                 </li>
-                                <li><a href="about.html">About</a></li>
-                                <li class="dropdown position-static"><a href="about.html">Pages <i class="fa fa-angle-down"></i></a>
+                                <li><a href="{% url 'about' %}">About</a></li>
+                                <li class="dropdown position-static"><a href="{% url 'about' %}">Pages <i class="fa fa-angle-down"></i></a>
                                     <ul class="mega-menu d-block">
                                         <li class="d-flex">
                                             <ul class="d-block">
@@ -174,7 +174,7 @@
                                             <ul class="d-block">
                                                 <li class="title"><a href="#">Other Shop Pages</a></li>
                                                 <li><a href="cart.html">Cart Page</a></li>
-                                                <li><a href="{% url 'Checkout' %}">Checkout Page</a></li>
+                                                <li><a href="{% url 'order_item' %}">Checkout Page</a></li>
                                                 <li><a href="compare.html">Compare Page</a></li>
                                                 <li><a href="wishlist.html">Wishlist Page</a></li>
                                             </ul>
@@ -230,7 +230,7 @@
                                             </ul>
                                             <ul class="d-block p-0 border-0">
                                                 <li class="title"><a href="#">Single Product Page</a></li>
-                                                <li><a href="{% url 'Checkout' %}">Checkout Page</a></li>
+                                                <li><a href="{% url 'order_item' %}">Checkout Page</a></li>
                                                 <li><a href="compare.html">Compare Page</a></li>
                                                 <li><a href="wishlist.html">Wishlist Page</a></li>
                                                 <li><a href="my-account.html">Account Page</a></li>
@@ -302,35 +302,24 @@
                 </div>
                 <div class="body customScroll">
                     <ul class="minicart-product-list">
+                        {% for i in wishlists %}
+                        
                         <li>
-                            <a href="#" class="image"><img src="assets/images/product-image/1.webp" alt="Cart product Image"></a>
+                            <a href="#" class="image"><img src="{{ i.product.image.url }}" alt="Cart product Image"></a>
                             <div class="content">
-                                <a href="#" class="title">Modern Smart Phone</a>
-                                <span class="quantity-price">1 x <span class="amount">$21.86</span></span>
+                                <a href="#" class="title">{{i.product.name}}</a>
+                                <span class="quantity-price"><span class="amount">NRP.{{i.product.price}}</span></span>
                                 <a href="#" class="remove">×</a>
                             </div>
                         </li>
-                        <li>
-                            <a href="#" class="image"><img src="assets/images/product-image/2.webp" alt="Cart product Image"></a>
-                            <div class="content">
-                                <a href="home/{{prod.id}}" class="title">Bluetooth Headphone</a>
-                                <span class="quantity-price">1 x <span class="amount">$13.28</span></span>
-                                <a href="#" class="remove">×</a>
-                            </div>
-                        </li>
-                        <li>
-                            <a href="home/{{prod.id}}" class="image"><img src="assets/images/product-image/3.webp" alt="Cart product Image"></a>
-                            <div class="content">
-                                <a href="home/{{prod.id}}}" class="title">Smart Music Box</a>
-                                <span class="quantity-price">1 x <span class="amount">$17.34</span></span>
-                                <a href="#" class="remove">×</a>
-                            </div>
-                        </li>
+                        
+                        {% endfor %}
+                       
                     </ul>
                 </div>
                 <div class="foot">
                     <div class="buttons">
-                        <a href="wishlist.html" class="btn btn-dark btn-hover-primary mt-30px">view wishlist</a>
+                        <a href="{% url 'wishlist' %}" class="btn btn-dark btn-hover-primary mt-30px">view wishlist</a>
                     </div>
                 </div>
             </div>
@@ -418,7 +407,7 @@
                 <div class="foot">
                     <div class="buttons mt-30px">
                         
-                        <a href="{% url 'Checkout' %}" class="btn btn-outline-dark current-btn">Logout</a>
+                        <a href="#" class="btn btn-outline-dark current-btn">Logout</a>
                     </div>
                 </div>
             </div>
@@ -484,7 +473,7 @@
                                 <li><a href="{% url 'home' %}"><span class="menu-text">Home 2</span></a></li>
                             </ul>
                         </li>
-                        <li><a href="about.html">About</a></li>
+                        <li><a href="{% url 'about' %}">About</a></li>
                         <li>
                             <a href="#"><span class="menu-text">Pages</span></a>
                             <ul class="sub-menu">
@@ -501,7 +490,7 @@
                                     <a href="#"><span class="menu-text"> Other Shop Pages</span></a>
                                     <ul class="sub-menu">
                                         <li><a href="cart.html">Cart Page</a></li>
-                                        <li><a href="{% url 'Checkout' %}">Checkout Page</a></li>
+                                        <li><a href="{% url 'order_item' %}">Checkout Page</a></li>
                                         <li><a href="compare.html">Compare Page</a></li>
                                         <li><a href="wishlist.html">Wishlist Page</a></li>
                                     </ul>
@@ -531,7 +520,7 @@
                                         <li><a href="shop-list-right-sidebar.html">Shop List Right Sidebar</a>
                                         </li>
                                         <li><a href="cart.html">Cart Page</a></li>
-                                        <li><a href="{% url 'Checkout' %}">Checkout Page</a></li>
+                                        <li><a href="{% url 'order_item' %}">Checkout Page</a></li>
                                     </ul>
                                 </li>
                                 <li>
@@ -841,6 +830,7 @@
     </div>     
     {% endfor %}
     <!-- Modal wishlist -->
+     {% for i in product %}
     <div class="modal customize-class fade" id="exampleModal-Wishlist-{{forloop.counter}}" tabindex="-1"   aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
@@ -851,14 +841,23 @@
                     </div>
                     <div class="tt-modal-product">
                         <div class="tt-img">
-                            <img src="{% static 'assets/images/product-image/1.webp' %}" alt="Modern Smart Phone">
+                            <img src="{{i.image.url}}" alt="Modern Smart Phone">
                         </div>
-                        <h2 class="tt-title"><a href="#">Modern Smart Phone</a></h2>
+                        <h2 class="tt-title"><a href="#">{{i.name}}</a></h2>
+                        <br>
+                        <form method="post" action="{% url 'add_to_wishlist' i.id %}">
+                            {% csrf_token %}
+                            <input type="hidden" name="product_id" value="{{ i.id }}">
+                            <button type="submit" class="btn btn-primary">Add To Wish</button>
+                        </form>
+                        
+                        
                     </div>
                 </div>
             </div>
         </div>
-    </div>    
+    </div>   
+    {% endfor %} 
     <!-- Modal compare -->
     <div class="modal customize-class fade" id="exampleModal-Compare-{{forloop.counter}}" tabindex="-1"   aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">

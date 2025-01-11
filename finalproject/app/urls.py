@@ -2,6 +2,7 @@ from django.urls import path
 from app.views import *
 from app import views
 
+from django.contrib.auth import views as auth_views  # Import Django's built-in views as auth_views
 
 urlpatterns = [
     path("", views.HOME,name="home"),
@@ -22,12 +23,20 @@ urlpatterns = [
     path("add-review/", views.add_review, name="add_review"),
 
 
+   path("wishlist/<int:id>/", views.add_to_wishlist, name="add_to_wishlist"),
 
-    path("checkout/",views.Check_out,name='Checkout'),
-
-
-
+    path("wishlist/",views.wishlist,name="wishlist"),
+     
+    # yaha wishlist ma problem xa but stll save vairako a
+    
     path('place_order/',views.PLACE_ORDER, name='place_order'),
+
+
+
+
+
+    path("about/",views.about,name="about"),
+
 
 
 
@@ -40,6 +49,19 @@ urlpatterns = [
     path('cart/cart_clear/', views.cart_clear, name='cart_clear'),
     path('cart/cart-detail/',views.cart_detail,name='cart_detail'),
     
+
+
+    # resetpassword
+   # urls.py
+
+
+
+    path('password_reset/', auth_views.PasswordResetView.as_view(), name='password_reset'),
+    path('password_reset/done/', auth_views.PasswordResetDoneView.as_view(), name='password_reset_done'),
+    path('reset/<uidb64>/<token>/', auth_views.PasswordResetConfirmView.as_view(), name='password_reset_confirm'),
+
+
+    path('reset/done/', auth_views.PasswordResetCompleteView.as_view(), name='password_reset_complete'),
 
 
     

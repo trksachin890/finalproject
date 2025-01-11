@@ -64,3 +64,4 @@ admin.site.register(OrderItem, OrderItemAdmin)
 
 admin.site.register(Tag, TagAdmin)
 admin.site.register(Contact_us)
+admin.site.register(ABOUT)
