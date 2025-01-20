@@ -7,7 +7,7 @@
             <div class="col-lg-9 order-lg-last col-md-12 order-md-first">
                 <!-- Shop Top Area Start -->
                 <div class="shop-top-bar d-flex">
-                    <p class="compare-product"> <span>12</span> Product Found of <span>30</span></p>
+                    <p class="compare-product"> <span>ALL</span> subway <span>WAY</span></p>
                     <!-- Left Side End -->
                     <div class="shop-tab nav">
                         <button class="active" data-bs-target="#shop-grid" data-bs-toggle="tab">
@@ -158,7 +158,7 @@
                                                     <div class="content">
                                                         <span class="category"><a href="{% url 'product_detail' prod.id %}">{{ prod.category }}</a></span>
                                                         <h5 class="title"><a href="{% url 'product_detail' prod.id %}">{{ prod.name }}</a></h5>
-                                                        {{ prod.information }} 
+                                                        {{ prod.information|safe }} 
                                                     </div>
                                                     <div class="box-inner">
                                                         <span class="price">

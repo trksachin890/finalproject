@@ -50,11 +50,7 @@
                             </div>
                             <div class="pro-details-rating-wrap">
                                 <div class="rating-product">
-                                    <i class="fa fa-star"></i>
-                                    <i class="fa fa-star"></i>
-                                    <i class="fa fa-star"></i>
-                                    <i class="fa fa-star"></i>
-                                    <i class="fa fa-star"></i>
+                                    {{prod.rating}}
                                 </div>
                                 <span class="read-review"><a class="reviews" href="#">({{avarage_rating|floatformat:2}} Customer Review out of 5)</a></span>
                             </div>
@@ -130,7 +126,7 @@
                             <div class="description-review-topbar nav">
                                 <button data-bs-toggle="tab" data-bs-target="#des-details2">Information</button>
                                 <button class="active" data-bs-toggle="tab" data-bs-target="#des-details1">Description</button>
-                                <button data-bs-toggle="tab" data-bs-target="#des-details3">Reviews ({{ review.count }})</button>
+                                <button data-bs-toggle="tab" data-bs-target="#des-details3">Reviews ({{review|length}})</button>
                             </div>
                             <div class="tab-content description-review-bottom">
                                 <div id="des-details2" class="tab-pane">
@@ -162,25 +158,25 @@
                                                         <div class="review-top-wrap">
                                                             <div class="review-left">
                                                                 <div class="review-name">
-                                                                    {% if re.user.get_full_name %}
-                                                                        {{ re.user.get_full_name }}
+                                                                    {% if re.review.user.get_full_name %}
+                                                                        {{ re.review.user.get_full_name }}
                                                                     {% else %}
-                                                                        {{ re.user.username }}
+                                                                        {{ re.review.user.username }}
                                                                     {% endif %}
                                                                 </div>
                                                                 
                                                                 <div class="rating-product">
-                                                                    <i class="fa fa-star"></i>
-                                                                    <i class="fa fa-star"></i>
-                                                                    <i class="fa fa-star"></i>
-                                                                    <i class="fa fa-star"></i>
-                                                                    <i class="fa fa-star"></i>
+                                                                    {% for i in re.rating %}
+                                                                        <label class="rating"><i class="fa fa-star"></i></label>
+                                                                    {% endfor %}
                                                                 </div>
+                                                                
+                                                               
                                                             </div>
                                                            
                                                         </div>
                                                         <div class="review-bottom">
-                                                            {{re.review}}
+                                                            {{re.review.review}}
                                                         </div>
                                                     </div>
                                                 </div>
@@ -203,13 +199,22 @@
                                                         <span>Your rating:</span>
                                                         <div class="rating-product">
                                                             <!-- Hidden input to capture the selected rating -->
-                                                            <input type="hidden" name="rating" id="rating-value" value="0">
-                                                            <!-- Clickable stars for rating -->
-                                                            <i class="fa fa-star" data-value="1"></i>
-                                                            <i class="fa fa-star" data-value="2"></i>
-                                                            <i class="fa fa-star" data-value="3"></i>
-                                                            <i class="fa fa-star" data-value="4"></i>
-                                                            <i class="fa fa-star" data-value="5"></i>
+                                                            
+                                                                
+                                                                <div class="rating">
+                                                                    <input type="radio" id="star5" name="rating" value="5" />
+                                                                    <label for="star5" title="5 stars">★</label>
+                                                                    <input type="radio" id="star4" name="rating" value="4" />
+                                                                    <label for="star4" title="4 stars">★</label>
+                                                                    <input type="radio" id="star3" name="rating" value="3" />
+                                                                    <label for="star3" title="3 stars">★</label>
+                                                                    <input type="radio" id="star2" name="rating" value="2" />
+                                                                    <label for="star2" title="2 stars">★</label>
+                                                                    <input type="radio" id="star1" name="rating" value="1" />
+                                                                    <label for="star1" title="1 star">★</label>
+                                                                </div>
+                                                               
+                                                            
                                                         </div>
                                                     </div>
                                     

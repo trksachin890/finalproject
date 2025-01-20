@@ -172,15 +172,19 @@ def PRODUCT_DETAIL_PAGE(request, id):
     prod = Product.objects.filter(id=id).first()
 
     # Get all reviews for the product, ordered by the most recent
-    review = ProductReview.objects.filter(product=prod).order_by("-date")
-
+    reviews = ProductReview.objects.filter(product=prod).order_by("-date")
+    
     # Calculate the average rating
     avarage_rating = ProductReview.objects.filter(product=prod).aggregate(rating=Avg("rating"))["rating"]
-
+    reviews_with_range = [
+        {'review': review, 'rating': list(range(review.rating))}  # Creates a range based on rating
+        for review in reviews
+    ]
+    
     # Pass the product, reviews, and average rating to the template
     context = {
         "prod": prod,
-        "review": review,
+        "review": reviews_with_range ,
         "avarage_rating": round(avarage_rating, 2) if avarage_rating else 0,  # Handle no reviews
     }
     return render(request, 'core/single-product.html', context)
@@ -199,7 +203,7 @@ def add_review(request):
         review_text = request.POST.get("review")
         rating = request.POST.get("rating")
         product = Product.objects.get(id=product_id)
-
+        
         # Create the review
         ProductReview.objects.create(
             user=request.user,
@@ -211,7 +215,7 @@ def add_review(request):
         # Success message
         messages.success(request, "Your review has been submitted successfully.")
 
-        return redirect("singleproduct", id=product_id)  # Redirect back to the product page
+        return redirect("product_detail", id=product_id)  # Redirect back to the product page
 
     return redirect("home")  # Redirect to home if the request is not POST
 

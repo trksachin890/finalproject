@@ -36,6 +36,7 @@ INSTALLED_APPS = [
     'cart',
     'ckeditor',
     'jazzmin',
+    'star_ratings',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -69,6 +70,7 @@ TEMPLATES = [
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
+                'django.template.context_processors.request',
                 'cart.context_processor.cart_total_amount',
                 'django.template.context_processors.debug',
                 'django.template.context_processors.request',
