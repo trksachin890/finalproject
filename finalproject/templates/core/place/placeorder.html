@@ -1,0 +1,101 @@
+{% extends 'core/base.html' %}
+{% block content %}
+<form method="post" action="{% url 'place_order' %}">
+    {% csrf_token %}
+    <div class="checkout-area pt-100px pb-100px">
+        <div class="container">
+            <div class="row">
+                <!-- Billing Details Section -->
+                <div class="col-lg-7">
+                    <div class="billing-info-wrap">
+                        <h3>Billing Details</h3>
+                        <div class="row">
+                            <div class="col-lg-6 col-md-6">
+                                <div class="billing-info mb-4">
+                                    <label>First Name</label>
+                                    <input type="text" value="{{ user.first_name }}" name="firstname" readonly />
+                                </div>
+                            </div>
+                            <div class="col-lg-6 col-md-6">
+                                <div class="billing-info mb-4">
+                                    <label>Last Name</label>
+                                    <input type="text" value="{{ user.last_name }}" name="lastname" readonly />
+                                </div>
+                            </div>
+                            <div class="col-lg-12">
+                                <div class="billing-info mb-4">
+                                    <label>Address</label>
+                                    <input type="text" name="address" placeholder="House number and street name" required />
+                                </div>
+                            </div>
+                            <div class="col-lg-12">
+                                <div class="billing-select mb-4">
+                                    <label>City</label>
+                                    <select name="city" required>
+                                        <option>Select a City</option>
+                                        <option>Janakpur</option>
+                                        <option>Bagmati</option>
+                                        <option>Lalitpur</option>
+                                        <!-- Add more options as needed -->
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-lg-6 col-md-6">
+                                <div class="billing-info mb-4">
+                                    <label>Phone</label>
+                                    <input type="text" name="phone" required />
+                                </div>
+                            </div>
+                            <div class="col-lg-6 col-md-6">
+                                <div class="billing-info mb-4">
+                                    <label>Email Address</label>
+                                    <input type="email" value="{{ user.email }}" name="email" readonly />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Order Summary Section -->
+                <div class="col-lg-5 mt-md-30px mt-lm-30px">
+                    <div class="your-order-area">
+                        <h3>Your Order</h3>
+                        <div class="your-order-wrap gray-bg-4">
+                            <!-- Product List -->
+                            <div class="your-order-product-info">
+                                <!-- Table Header -->
+                                <ul class="your-order-top">
+                                    <li>Product</li>
+                                    <li>Total</li>
+                                </ul>
+
+                                <!-- Product Items -->
+                                {% for key, item in cart_items.items %}
+                                <ul class="your-order-middle">
+                                    <li><span>{{ item.name }} x {{ item.quantity }}</span><span>{{ item.price|floatformat:2 }}</span></li>
+                                </ul>
+                                {% endfor %}
+
+                                <!-- Total Price -->
+                                <ul class="your-order-total">
+                                    <li>Total</li>
+                                    <li>NRP. {{ total_amount|floatformat:2 }}</li>
+                                </ul>
+                            </div>
+
+                            <!-- Payment Method -->
+                            <div class="payment-method mt-25">
+                                <!-- Add payment options here -->
+                            </div>
+
+                            <!-- Place Order Button -->
+                            <button type="submit" class="btn btn-primary w-100">Place Order</button>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</form>
+{% endblock %}

@@ -34,7 +34,7 @@ urlpatterns = [
 
 
 
-
+    path('dashbord/',views.dashbord,name='dashbord'),
     path("about/",views.about,name="about"),
 
 
@@ -65,6 +65,9 @@ urlpatterns = [
 
 
     
+
+    # recommendation system
+    path('recommendation/',views.recommended_products_view,name='recommendation_system')
 
     
 ]

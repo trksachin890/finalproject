@@ -95,7 +95,7 @@
                                                 <div class="content">
                                                     <span class="category"><a href="{% url 'product_detail' prod.id %}">{{ prod.category }}</a></span>
                                                     <h5 class="title">
-                                                        <a href="{% url 'product_detail' prod.id %}">{{ prod.name }}</a>
+                                                        <a href="{% url 'product_detail' prod.id %}">{{ prod.name|truncatewords:3 }}</a>
                                                     </h5>
                                                     <span class="price">
                                                         {% if prod.old_price > 0 %}
@@ -119,9 +119,7 @@
                                                     <button class="action quickview" data-link-action="quickview" title="Quick view" data-bs-toggle="modal" data-bs-target="#exampleModal-{{forloop.counter}}">
                                                         <i class="pe-7s-look"></i>
                                                     </button>
-                                                    <button class="action compare" title="Compare" data-bs-toggle="modal" data-bs-target="#exampleModal-Compare-{{forloop.counter}}">
-                                                        <i class="pe-7s-refresh-2"></i>
-                                                    </button>
+                                                   
                                                 </div>
                                             </div>
                                         </div>
@@ -157,8 +155,8 @@
                                                 <div class="content-desc-wrap">
                                                     <div class="content">
                                                         <span class="category"><a href="{% url 'product_detail' prod.id %}">{{ prod.category }}</a></span>
-                                                        <h5 class="title"><a href="{% url 'product_detail' prod.id %}">{{ prod.name }}</a></h5>
-                                                        {{ prod.information|safe }} 
+                                                        <h5 class="title"><a href="{% url 'product_detail' prod.id %}">{{ prod.name|truncatewords:10 }}</a></h5>
+                                                        {{ prod.information|truncatewords:10|safe }} 
                                                     </div>
                                                     <div class="box-inner">
                                                         <span class="price">
@@ -181,9 +179,7 @@
                                                             <button class="action quickview" data-link-action="quickview" title="Quick view" data-bs-toggle="modal" data-bs-target="#exampleModal-{{forloop.counter}}">
                                                                 <i class="pe-7s-look"></i>
                                                             </button>
-                                                            <button class="action compare" title="Compare" data-bs-toggle="modal" data-bs-target="#exampleModal-Compare">
-                                                                <i class="pe-7s-refresh-2"></i>
-                                                            </button>
+                                                            
                                                         </div>
                                                     </div>
                                                 </div>
@@ -198,21 +194,7 @@
                         </div>
                     </div>
                     <!-- Tab Content Area End -->
-                    <!--  Pagination Area Start -->
-                    <div class="pro-pagination-style text-center text-lg-end" data-aos="fade-up" data-aos-delay="200">
-                        <div class="pages">
-                            <ul>
-                                <li class="li"><a class="page-link" href="#"><i class="fa fa-angle-left"></i></a>
-                                </li>
-                                <li class="li"><a class="page-link" href="#">1</a></li>
-                                <li class="li"><a class="page-link active" href="#">2</a></li>
-                                <li class="li"><a class="page-link" href="#">3</a></li>
-                                <li class="li"><a class="page-link" href="#"><i class="fa fa-angle-right"></i></a>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                    <!--  Pagination Area End -->
+                   
                 </div>
                 <!-- Shop Bottom Area End -->
             </div>
@@ -314,23 +296,6 @@
                         
                         <!-- filture switch end -->
                     </div><!-- Sidebar single item -->
-                    <div class="sidebar-widget">
-                        <h4 class="sidebar-title">Size</h4>
-                        <div class="sidebar-widget-size">
-                            <ul>
-                                <li><a href="#" class="selected m-0"> All
-                                        <span>(6)</span> </a></li>
-                                <li><a href="#" class=""> S <span>(12)</span> </a>
-                                </li>
-                                <li><a href="#" class=""> M <span>(21)</span> </a>
-                                </li>
-                                <li><a href="#" class=""> L <span>(16)</span> </a>
-                                </li>
-                                <li><a href="#" class=""> XL <span>(22)</span> </a>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
                     <!-- Sidebar single item -->
                     <div class="sidebar-widget">
                         <h4 class="sidebar-title">Brands</h4>

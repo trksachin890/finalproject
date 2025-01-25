@@ -11,11 +11,11 @@
                          <!-- image part bigreko cxa ani aarko index page ma image change garna mildaina kine vane hami le tesma for loop lagako xainau so -->
                         <div class="swiper-container zoom-top">
                             <div class="swiper-wrapper">
-                                {% for i in prod.images_set.all%}
+                                {% for img in prod.imagess_set.all%}
                                 <div class="swiper-slide">
                                     
-                                    <img class="img-responsive m-auto" src="{{i.image.url}}" alt="">
-                                    <a class="venobox full-preview" data-gall="myGallery" href="{{i.image.url}}">
+                                    <img class="img-responsive m-auto" src="{{img.image.url}}" alt="">
+                                    <a class="venobox full-preview" data-gall="myGallery" href="{{img.image.url}}">
                                         <i class="fa fa-arrows-alt" aria-hidden="true"></i>
                                     </a>
                                     

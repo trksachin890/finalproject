@@ -3,13 +3,13 @@ from django.utils.html import mark_safe
 from app.models import *
 
 # Inline for Product Images
-class ImagesAdmin(admin.TabularInline):
-    model = Images
+class ImagesTublerinline(admin.TabularInline):
+    model=Images
     
 
 # Admin for Product
 class ProductAdmin(admin.ModelAdmin):
-    inlines = [ImagesAdmin]
+    inlines = [ImagesTublerinline]
     list_display = ['name', 'product_image', 'category', 'price', 'stock', 'condition', 'vehicletype']
     
 
@@ -55,7 +55,8 @@ admin.site.register(Product, ProductAdmin)
 admin.site.register(Category, CategoryAdmin)
 admin.site.register(Brand, BrandAdmin)
 admin.site.register(FilterPrice)
-admin.site.register(CartOrder, CartOrderAdmin)
+# admin.site.register(CartOrder, CartOrderAdmin)
+admin.site.register(Images)
 admin.site.register(ProductReview, ProductReviewAdmin)
 admin.site.register(Wishlist, WishlistAdmin)
 admin.site.register(Order, OrderAdmin)

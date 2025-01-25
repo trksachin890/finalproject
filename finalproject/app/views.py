@@ -12,6 +12,8 @@ from django.contrib.auth.views import PasswordResetView
 from finalproject import settings
 import razorpay
 
+
+from .recommendation import recommend_products
 client = razorpay.Client(auth=(settings.RAZORPAY_KEY_ID,settings.RAZORPAY_KEY_SECRECT))
 
 
@@ -382,7 +384,7 @@ def ORDER_ITEM(request):
         request.session['cart'] = {}
 
         # Redirect to a success page or order summary
-        return redirect('home')  # Update with your order summary URL name
+        return redirect('place_order')  # Update with your order summary URL name
 
     return render(request, 'core/place/order_item.html', {
         'cart': cart,
@@ -390,25 +392,27 @@ def ORDER_ITEM(request):
     })
 
 
-
 @login_required
 def PLACE_ORDER(request):
+    # Fetch the logged-in user
+    user = request.user
+
+    # Retrieve cart items from the session
+    cart_items = request.session.get('cart', {})
+    total_amount = 0
+
+    # Calculate total amount
+    for item in cart_items.values():
+        total_amount += float(item['price']) * int(item['quantity'])
+
     if request.method == 'POST':
-        # Get user information
-        user = request.user
+        # Get billing details from the form
         firstname = request.POST.get('firstname', user.first_name)
         lastname = request.POST.get('lastname', user.last_name)
         address = request.POST.get('address')
         city = request.POST.get('city')
         phone = request.POST.get('phone')
-        email = request.POST.get('email')
-
-        # Calculate total amount
-        cart_items = request.session.get('cart', [])  # Example: Fetch cart items from session
-        total_amount = 0
-        for item in cart_items:
-            product = Product.objects.get(id=item['product_id'])
-            total_amount += product.price * item['quantity']
+        email = request.POST.get('email', user.email)
 
         # Save the order
         order = Order.objects.create(
@@ -421,26 +425,30 @@ def PLACE_ORDER(request):
             email=email,
             amount=total_amount,
         )
-        print(order)
+
         # Save order items
-        for item in cart_items:
-            product = Product.objects.get(id=item['product_id'])
+        for item in cart_items.values():
             OrderItem.objects.create(
                 user=user,
-                product=product.name,
-                image=product.image,
+                order=order,
+                product=item['name'],
+                image=item['image'],
                 quantity=item['quantity'],
-                price=product.price,
-                total=product.price * item['quantity'],
+                price=float(item['price']),
+                total=float(item['price']) * int(item['quantity']),
             )
 
-        # Clear the cart (optional)
-        request.session['cart'] = []
+        # Clear the cart after placing the order
+        request.session['cart'] = {}
 
         return redirect('home')
 
-    return render(request, 'core/placeorder.html')
-
+    context = {
+        'user': user,
+        'cart_items': cart_items,
+        'total_amount': total_amount,
+    }
+    return render(request, 'core/place/placeorder.html', context)
 
 
 @login_required
@@ -453,7 +461,7 @@ def Check_out(request):
 
 # Pass payment details to the template
     
-    return render(request, 'core/checkout.html')
+    return render(request, 'core/placeorder.html')
 
 
 
@@ -479,4 +487,19 @@ class CustomPasswordResetView(PasswordResetView):
         # Ensure uidb64 and token are passed to the context
         context['uidb64'] = kwargs.get('uidb64', '')
         context['token'] = kwargs.get('token', '')
-        return context
+        return context   
+
+
+def dashbord(request):
+    return render(request,'dashbord/dashbord.html')
+
+
+
+
+# Recommendation system
+from django.shortcuts import render
+from .recommendation import recommend_products
+
+def recommended_products_view(request):
+    recommendations = recommend_products(user=request.user)
+    return render(request, 'recommendation/recommendation.html', {'products': recommendations})

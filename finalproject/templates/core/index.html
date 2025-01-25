@@ -127,7 +127,7 @@
                                 
                                 <div class="content">
                                     <span class="category"><a href="{% url 'product_detail' prod.id %}">{{pro.category}}</a></span>
-                                    <h5 class="title"><a href="{% url 'product_detail' prod.id %}">{{prod.name}}
+                                    <h5 class="title"><a href="{% url 'product_detail' prod.id %}">{{prod.name|truncatewords:10}}
                                         </a>
                                     </h5>
                                     <span class="price">
@@ -137,7 +137,7 @@
                                 <!-- add to cart -->
                                 <div class="actions">
                                     {% if request.user.is_authenticated %}
-                                        <button title="Add To Cart" class="action add-to-cart" data-bs-toggle="modal" data-bs-target="#exampleModal-Cart-{{ forloop.counter }}">
+                                        <button title="Add To Cart" class="action add-to-cart" data-bs-toggle="modal" data-bs-target="#exampleModal-Cart-{{forloop.counter}}">
                                             <i class="pe-7s-shopbag"></i>
                                         </button>
                                     {% else %}
@@ -146,10 +146,10 @@
                                         </a>
                                     {% endif %}
 
-                                    <button class="action wishlist" title="Wishlist" data-bs-toggle="modal" data-bs-target="#exampleModal-Wishlist-{{ forloop.counter }}">
+                                    <button class="action wishlist" title="Wishlist" data-bs-toggle="modal" data-bs-target="#exampleModal-Wishlist-{{forloop.counter}}">
                                         <i class="pe-7s-like"></i>
                                     </button>
-                                    <button class="action quickview" data-link-action="quickview" title="Quick view" data-bs-toggle="modal" data-bs-target="#exampleModal-{{ forloop.counter }}">
+                                    <button class="action quickview" data-link-action="quickview" title="Quick view" data-bs-toggle="modal" data-bs-target="#exampleModal-{{forloop.counter}}">
                                         <i class="pe-7s-look"></i>
                                     </button>
                                     
