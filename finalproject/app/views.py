@@ -26,8 +26,10 @@ client = razorpay.Client(auth=(settings.RAZORPAY_KEY_ID,settings.RAZORPAY_KEY_SE
 
 # Create your views here.
 def BASE(request):
-   
+    
+    
     return render(request,'core/base.html')
+
 
 def HOME(request):
     product = Product.objects.filter(status="PUBLIC")
@@ -223,30 +225,36 @@ def add_review(request):
 
 
 
-
-def add_to_wishlist(request, id):  # Include the 'id' parameter
+from django.http import JsonResponse
+@login_required(login_url="/login/")
+def add_to_wishlist(request, id):
     if request.method == "POST" and request.user.is_authenticated:
         product = get_object_or_404(Product, id=id)
-
-        # Check if the product is already in the wishlist
         wishlist_item, created = Wishlist.objects.get_or_create(user=request.user, product=product)
-
+        
         if created:
-            messages.success(request, "Added to Wishlist successfully!")
+            message = "Added to Wishlist successfully!"
         else:
-            messages.info(request, "Product is already in your Wishlist.")
-
-        return redirect("wishlist")  # Redirect to the wishlist page
+            message = "Product is already in your Wishlist."
+        
+        return JsonResponse({"success": True, "message": message})
     else:
-        messages.error(request, "You must be logged in to add to Wishlist.")
-        return redirect("login")  # Redirect to login if the user is not authenticated
+        return JsonResponse({"success": False, "message": "You must be logged in to add to Wishlist."})
 
 
+
+from django.shortcuts import render
+from .models import Wishlist
+@login_required(login_url="/login/")
 def wishlist(request):
-    wishlists = Wishlist.objects.filter(user=request.user)
-    context = {'wishlists':wishlists}
-    return render(request,'wishlist/wishlist.html',context)
-
+    if request.user.is_authenticated:
+        wishlists = Wishlist.objects.filter(user=request.user)
+    else:
+        wishlists = None  # No wishlist for unauthenticated users
+    
+    
+    context = {'wishlists': wishlists}
+    return render(request, 'wishlist/wishlist.html', context)
 
 
 
@@ -291,7 +299,7 @@ def Contact_Page(request):
         #     return redirect('contact')
 
         contact.save()
-        return redirect('product')
+        return redirect('products')
         
     return render(request,'core/contact.html')
 
@@ -340,7 +348,6 @@ def cart_clear(request):
 @login_required(login_url="/login/")
 def cart_detail(request):
     return render(request, 'core/cart_details.html')
-
 
 
 
@@ -495,11 +502,11 @@ def dashbord(request):
 
 
 
-
-# Recommendation system
 from django.shortcuts import render
-from .recommendation import recommend_products
+from .recommendation import recommend_products  # Import your function
 
 def recommended_products_view(request):
-    recommendations = recommend_products(user=request.user)
-    return render(request, 'recommendation/recommendation.html', {'products': recommendations})
+    related_products, best_products = recommend_products(user=request.user)
+    return render(request, 'recommendation/recommendation.html', {'related_products': related_products, 'best_products': best_products})
+
+

@@ -117,7 +117,7 @@ class Product(models.Model):
         return 0
 
 class Images(models.Model):
-    image=models.ImageField(upload_to='products/')
+    image=models.ImageField(upload_to=user_directory_path)
     Product=models.ForeignKey(Product,on_delete=models.CASCADE)
 
 class ProductReview(models.Model):

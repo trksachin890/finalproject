@@ -29,10 +29,69 @@
     <link rel="stylesheet" href="{% static 'assets/css/style.min.css' %}">
     <link rel="stylesheet" href="{% static 'assets/css/rating.css' %}">
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
+
+
+    <!-- Swiper CSS -->
+<link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css">
+
+<!-- Swiper JS -->
+<script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
+
+
     
 </head>
 
 <body>
+<!-- Swiper JS -->
+<script src="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.js"></script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        var swiper = new Swiper(".swiper-container", {
+            slidesPerView: 1,
+            spaceBetween: 10,
+            loop: true,
+            navigation: {
+                nextEl: ".swiper-button-next",
+                prevEl: ".swiper-button-prev",
+            },
+            pagination: {
+                el: ".swiper-pagination",
+                clickable: true,
+            },
+        });
+    });
+</script>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $(".wishlist-form").submit(function (e) {
+            e.preventDefault(); // Prevent default form submission
+            var form = $(this);
+            var url = form.attr("action"); // Get the form action URL
+            var formData = form.serialize(); // Serialize form data
+
+            $.ajax({
+                type: "POST",
+                url: url,
+                data: formData,
+                success: function (response) {
+                    if (response.success) {
+                        alert(response.message); // Show success message
+                        location.reload(); // Reload the page to update the wishlist
+                    } else {
+                        alert(response.message); // Show error message
+                    }
+                },
+                error: function () {
+                    alert("Something went wrong. Please try again.");
+                }
+            });
+        });
+    });
+</script>
 
 
 
@@ -166,6 +225,8 @@
                                 <li><a href="{% url 'about' %}">About</a></li>
                                 
                                 <li><a href="{% url 'contact' %}">Contact</a></li>
+                                <li><a href="{% url 'recommendation_system' %}">Recommended Products</a></li>
+                                <li><a href="{% url 'dashbord' %}">Dashbord</a></li>
                             </ul>
                         </div>
                     </div>
@@ -188,37 +249,56 @@
         <!-- offcanvas overlay start -->
         <div class="offcanvas-overlay"></div>
         <!-- offcanvas overlay end -->
-        <!-- OffCanvas Wishlist Start -->
-        <div id="offcanvas-wishlist" class="offcanvas offcanvas-wishlist">
-            <div class="inner">
-                <div class="head">
-                    <span class="title">Wishlist</span>
-                    <button class="offcanvas-close">×</button>
-                </div>
-                <div class="body customScroll">
+       <!-- OffCanvas Wishlist Start -->
+        
+<!-- OffCanvas Wishlist Start -->
+<div id="offcanvas-wishlist" class="offcanvas offcanvas-wishlist">
+    <div class="inner">
+        <div class="head">
+            <span class="title">Wishlist</span>
+            <button class="offcanvas-close">×</button>
+        </div>
+        <div class="body customScroll">
+            {% if request.user.is_authenticated %}
+                {% if wishlists and wishlists.count > 0 %}  <!-- Check if wishlist has items -->
                     <ul class="minicart-product-list">
                         {% for i in wishlists %}
-                        
                         <li>
-                            <a href="#" class="image"><img src="{{ i.product.image.url }}" alt="Cart product Image"></a>
+                            <a href="#" class="image">
+                                <img src="{{ i.product.image.url }}" alt="{{ i.product.name }}">
+                            </a>
                             <div class="content">
-                                <a href="#" class="title">{{i.product.name}}</a>
-                                <span class="quantity-price"><span class="amount">NRP.{{i.product.price}}</span></span>
+                                <a href="#" class="title">{{ i.product.name|truncatewords:10 }}</a>
+                                <span class="quantity-price">
+                                    <span class="amount">NRP. {{ i.product.price }}</span>
+                                </span>
                                 <a href="#" class="remove">×</a>
                             </div>
                         </li>
-                        
                         {% endfor %}
-                       
                     </ul>
-                </div>
-                <div class="foot">
-                    <div class="buttons">
-                        <a href="{% url 'wishlist' %}" class="btn btn-dark btn-hover-primary mt-30px">view wishlist</a>
-                    </div>
-                </div>
+                {% else %}
+                    <p class="text-center">Your wishlist is empty.</p>
+                {% endif %}
+            {% else %}
+                <p class="text-center">
+                    Please <a href="{% url 'login' %}">log in</a> to view your wishlist.
+                </p>
+            {% endif %}
+        </div>
+
+        {% if request.user.is_authenticated and wishlists.count > 0 %}
+        <div class="foot">
+            <div class="buttons">
+                <a href="{% url 'wishlist' %}" class="btn btn-dark btn-hover-primary mt-30px">View Wishlist</a>
             </div>
         </div>
+        {% endif %}
+    </div>
+</div>
+<!-- OffCanvas Wishlist End -->
+
+
         <!-- OffCanvas Wishlist End -->
 <!-- OffCanvas Cart Start -->
 {% load cart_tag %}
@@ -295,10 +375,10 @@
                 <!-- Body Section for Authenticated Users -->
                 <div class="body customScroll">
                     <ul class="account-links">
-                        <li><a href="my-account.html">Dashboard</a></li>
-                        <li><a href="orders.html">Orders</a></li>
-                        <li><a href="wishlist.html">Wishlist</a></li>
-                        <li><a href="profile.html">Profile</a></li>
+                        <li><a href="{% url 'dashbord' %}">Dashboard</a></li>
+                        <li><a href="{% url 'order_item' %}">Orders</a></li>
+                        <li><a href="{% url 'wishlist' %}">Wishlist</a></li>
+                        
                     </ul>
                 </div>
                 <!-- Footer Section for Authenticated Users -->
@@ -359,16 +439,16 @@
                                 <li>
                                     <a href="#"><span class="menu-text"> Other Shop Pages</span></a>
                                     <ul class="sub-menu">
-                                        <li><a href="cart.html">Cart Page</a></li>
+                                        <li><a href="{% url 'cart_detail' %}">Cart Page</a></li>
                                         <li><a href="{% url 'order_item' %}">Checkout Page</a></li>
                                         
-                                        <li><a href="wishlist.html">Wishlist Page</a></li>
+                                        <li><a href="{% url 'wishlist' %}">Wishlist Page</a></li>
                                     </ul>
                                 </li>
                                 <li>
                                     <a href="#"><span class="menu-text">Related Shop Page</span></a>
                                     <ul class="sub-menu">
-                                        <li><a href="my-account.html">Account Page</a></li>
+                                        <li><a href="{% url 'dashbord' %}">Dashboard</a></li>
                                         <li><a href="login.html">Login & Register Page</a></li>
                                         <li><a href="empty-cart.html">Empty Cart Page</a></li>
                                         <li><a href="thank-you-page.html">Thank You Page</a></li>
@@ -417,7 +497,7 @@
                                         </li>
                                         
                                         <li><a href="wishlist.html">Wishlist Page</a></li>
-                                        <li><a href="my-account.html">Account Page</a></li>
+                                        <li><a href="{% url 'dashbord' %}">Dashboard</a></li>
                                         <li><a href="login.html">Login & Register Page</a></li>
                                         <li><a href="empty-cart.html">Empty Cart Page</a></li>
                                     </ul>
@@ -507,11 +587,15 @@
                                     <div class="footer-links">
                                         <div class="footer-row">
                                             <ul class="align-items-center">
-                                                <li class="li"><a class="single-link" href="my-account.html">My Account</a></li>
+                                                <li class="li"><a class="single-link" href="{% url 'dashbord' %}">Dashbord</a></li>
                                                 <li class="li"><a class="single-link" href="{% url 'contact' %}">Contact</a></li>
-                                                <li class="li"><a class="single-link" href="cart.html">Shopping cart</a></li>
-                                                <li class="li"><a class="single-link" href="shop-left-sidebar.html">Shop</a></li>
+                                                <li class="li"><a class="single-link" href="{% url 'cart_detail' %}">Shopping cart</a></li>
+                                                <li class="li"><a class="single-link" href="{% url 'products' %}">Shop</a></li>
+                                                {% if user.is_authenticated %}
+                                                <li class="li"><a class="single-link" href="{% url 'logout' %}">Services Logout</a></li>
+                                                    {% else %}
                                                 <li class="li"><a class="single-link" href="{% url 'login' %}">Services Login</a></li>
+                                                {% endif %}
                                             </ul>
                                         </div>
                                     </div>
@@ -525,11 +609,10 @@
                                     <div class="footer-links">
                                         <div class="footer-row">
                                             <ul class="align-items-center">
-                                                <li class="li"><a class="single-link" href="my-account.html">My Account</a></li>
-                                                <li class="li"><a class="single-link" href="{% url 'contact' %}">Contact</a></li>
-                                                <li class="li"><a class="single-link" href="cart.html">Shopping cart</a></li>
-                                                <li class="li"><a class="single-link" href="shop-left-sidebar.html">Shop</a></li>
-                                                <li class="li"><a class="single-link" href="login.html">Services Login</a></li>
+                                                <li class="li"><a class="single-link" href="{% url 'dashbord' %}">Dashbord </a></li>
+                                                <li class="li"><a class="single-link" href="{% url 'about' %}">About</a></li>
+                                                <li class="li"><a class="single-link" href="{% url 'recommendation_system' %}">Recommended Products</a></li>
+                                                
                                             </ul>
                                         </div>
                                     </div>
@@ -542,7 +625,7 @@
                                     <h4 class="footer-herading">Contact Info</h4>
                                     <div class="footer-links">
                                         <!-- News letter area -->
-                                        <p class="address">Address: Your Address Goes Here.</p>
+                                        <p class="address">Address: Balkot,Lalitpur.</p>
                                         <p class="phone">Phone/Fax:<a href="tel:+977 9860080165"> +977 9860080165</a></p>
                                         <p class="mail">Email:<a href="mailto:trksachin890@.com"> trksachin890@gmail.com</a></p>
                                         <p class="mail"><a href="https://trksachin890@gmail.com/"> trksachin890@gmail.com</a></p>
@@ -558,11 +641,9 @@
                     <div class="container">
                         <div class="line-shape-top line-height-1">
                             <div class="row flex-md-row-reverse align-items-center">
-                                <div class="col-md-6 text-center text-md-end">
-                                    <div class="payment-mth"><a href="#"><img class="img img-fluid" src="{% static 'assets/images/icons/payment.png' %}" alt="payment-image"></a></div>
-                                </div>
+                             
                                 <div class="col-md-6 text-center text-md-start">
-                                    <p class="copy-text"> © 2024 <strong>API</strong> Made With <i class="fa fa-heart"
+                                    <p class="copy-text"> © 2025 <strong>API</strong> Made With <i class="fa fa-heart"
                                         aria-hidden="true"></i> By <a class="company-name" href="https://themeforest.net/user/codecarnival/portfolio">
                                             <strong> Botstrap </strong></a>.</p>
                                 </div>
@@ -591,8 +672,7 @@
                                 <div class="swiper-slide">
                                     <img class="img-responsive m-auto" src="{{ img.image.url }}" alt="">
                                 </div>
-                                {% empty %}
-                                <p>No images available</p>
+                                
                                 {% endfor %}
                             </div>
                         </div>
@@ -602,8 +682,7 @@
                                 <div class="swiper-slide">
                                     <img class="img-responsive m-auto" src="{{ img.image.url }}" alt="">
                                 </div>
-                                {% empty %}
-                                <p>No images available</p>
+                                
                                 {% endfor %}
                             </div>
                             <!-- Add Arrows -->
@@ -616,7 +695,7 @@
 
                     <div class="col-lg-6 col-sm-12 col-xs-12" data-aos="fade-up" data-aos-delay="200">
                         <div class="product-details-content quickview-content">
-                            <h2>{{ i.name }}</h2>
+                            <h2>{{ i.name|truncatewords:10 }}</h2>
                             <div class="pricing-meta">
                                 <ul class="d-flex">
                                     <li class="new-price">NRP. {{ i.price }}</li>
@@ -631,7 +710,7 @@
                                     <i class="fa fa-star"></i>
                                 </div>
                                 <span class="read-review">
-                                    <a class="reviews" href="#">( 2 Review )</a>
+                                    <a class="reviews" href="#">(review {{i.review|length}} )</a>
                                 </span>
                             </div>
                             <p class="mt-30px">{{ i.description | safe }}</p>
@@ -658,19 +737,18 @@
                             </div>
 
                             <div class="pro-details-quality">
-                                <div class="cart-plus-minus">
-                                    <input class="cart-plus-minus-box" type="text" name="qtybutton" value="1" />
-                                </div>
+                               
                                 <div class="pro-details-cart">
-                                    <button class="add-cart"> Add To Cart</button>
+                                    <a href="{% url 'cart_add' i.id %}">
+                                        <button class="add-cart">Add To Cart</button>
+                                    </a>
                                 </div>
+                                
                                 <div class="pro-details-compare-wishlist pro-details-wishlist ">
                                     <a href="wishlist.html"><i class="pe-7s-like"></i></a>
                                 </div>
                             </div>
-                            <div class="payment-img">
-                                <a href="#"><img src="{% static 'assets/images/icons/payment.png' %}" alt=""></a>
-                            </div>
+                            
                         </div>
                     </div>
                 </div>
@@ -695,7 +773,7 @@
                         <div class="tt-img">
                             <img src="{{i.image.url}}" alt="Modern Smart Phone">
                         </div>
-                        <h2 class="tt-title"><a href="#"> {{i.name}}</a></h2>
+                        <h2 class="tt-title"><a href="#"> {{i.name|truncatewords:10}}</a></h2>
                         <br>
                         <a href="{% url 'cart_add' i.id %}" > Add To Cart</a>
                     </div>
@@ -718,13 +796,14 @@
                         <div class="tt-img">
                             <img src="{{i.image.url}}" alt="Modern Smart Phone">
                         </div>
-                        <h2 class="tt-title"><a href="#">{{i.name}}</a></h2>
+                        <h2 class="tt-title"><a href="#">{{i.name|truncatewords:10}}</a></h2>
                         <br>
-                        <form method="post" action="{% url 'add_to_wishlist' i.id %}">
+                        <form method="post" action="{% url 'add_to_wishlist' i.id %}" class="wishlist-form">
                             {% csrf_token %}
                             <input type="hidden" name="product_id" value="{{ i.id }}">
                             <button type="submit" class="btn btn-primary">Add To Wish</button>
                         </form>
+                        
                         
                         
                     </div>

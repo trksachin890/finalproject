@@ -77,7 +77,7 @@
                         <div class="banner-content nth-child-3">
                             <h3 class="title">CAR PART</h3>
                             <span class="category">From 25.00</span>
-                            <a href="{% url 'home' %}" class="shop-link">Shop Now <i class="fa fa-arrow-right" aria-hidden="true"></i></a>
+                            <a href="{% url 'products' %}" class="shop-link">Shop Now <i class="fa fa-arrow-right" aria-hidden="true"></i></a>
                         </div>
                     </div>
                 </div>
@@ -87,7 +87,7 @@
                         <div class="banner-content nth-child-2">
                             <h3 class="title">BIKE PART</h3>
                             <span class="category">From NRP. 95.00</span>
-                            <a href="{% url 'home' %}" class="shop-link">Shop Now <i class="fa fa-arrow-right" aria-hidden="true"></i></a>
+                            <a href="{% url 'products' %}" class="shop-link">Shop Now <i class="fa fa-arrow-right" aria-hidden="true"></i></a>
                         </div>
                     </div>
                 </div>
@@ -212,7 +212,7 @@
                     <div class="swiper-slide feature-right-content">
                         <div class="image-side">
                             <img src="{{i.image.url}}" alt="">
-                            <button title="Add To Cart" class="action add-to-cart" data-bs-toggle="modal" data-bs-target="#exampleModal-Cart"><i
+                            <button title="Add To Cart" class="action add-to-cart" data-bs-toggle="modal" data-bs-target="#exampleModal-Cart-{{forloop.counter}}"><i
                                 class="pe-7s-shopbag"></i></button>
                         </div>
                         <div class="content-side">

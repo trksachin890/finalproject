@@ -11,7 +11,7 @@
                          <!-- image part bigreko cxa ani aarko index page ma image change garna mildaina kine vane hami le tesma for loop lagako xainau so -->
                         <div class="swiper-container zoom-top">
                             <div class="swiper-wrapper">
-                                {% for img in prod.imagess_set.all%}
+                                {% for img in prod.images_set.all %}
                                 <div class="swiper-slide">
                                     
                                     <img class="img-responsive m-auto" src="{{img.image.url}}" alt="">
@@ -26,19 +26,19 @@
 
                         <div class="swiper-container mt-20px zoom-thumbs slider-nav-style-1 small-nav">
                             <div class="swiper-wrapper">
-                                {% for i in prod.images_set.all %}
+                                {% for img in prod.images_set.all %}
                                 <div class="swiper-slide">
-                                    <img class="img-responsive m-auto" src="{{i.image.url}}" alt="">
+                                    <img class="img-responsive m-auto" src="{{img.image.url}}" alt="">
                                 </div>
                                 {% endfor %}
                             </div>
-
                             <!-- Add Arrows -->
                             <div class="swiper-buttons">
                                 <div class="swiper-button-next"></div>
                                 <div class="swiper-button-prev"></div>
                             </div>
                         </div>
+                        
                     </div>
                     <div class="col-lg-6 col-sm-12 col-xs-12" data-aos="fade-up" data-aos-delay="200">
                         <div class="product-details-content quickview-content ml-25px">
@@ -201,8 +201,8 @@
                                                             <!-- Hidden input to capture the selected rating -->
                                                             
                                                                 
-                                                                <div class="rating">
-                                                                    <input type="radio" id="star5" name="rating" value="5" />
+                                                                <div class="rating" >
+                                                                    <input type="radio" id="star5" name="rating" value="5" required/>
                                                                     <label for="star5" title="5 stars">★</label>
                                                                     <input type="radio" id="star4" name="rating" value="4" />
                                                                     <label for="star4" title="4 stars">★</label>
