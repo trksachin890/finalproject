@@ -351,47 +351,46 @@ def cart_detail(request):
 
 
 
+
 @login_required
 def ORDER_ITEM(request):
-    # Get the cart from the session
     cart = request.session.get('cart', {})
-    cart_total_amount = 0  # Initialize the total amount
+    cart_total_amount = sum(float(item['price']) * int(item['quantity']) for item in cart.values())
 
-# Loop through each item in the cart
-    for item in cart.values():
-        price = float(item['price'])  # Convert price to float
-        quantity = int(item['quantity'])  # Convert quantity to integer
-        print(type(price))
-        print(type(quantity))
-        cart_total_amount += price * quantity  # Add the product of price and quantity to the total amount
-
-        
+    print("\U0001F50D ORDER_ITEM view called!")  # Debugging log
 
     if request.method == "POST":
-        
-        for  key,value in cart.items():
-            product_name = value['name']
-            product_price = float(value['price'])  # Convert price to float
-            product_quantity = int(value['quantity'])  # Convert quantity to integer
-            product_image = value['image']
-            
-            # Create an OrderItem instance
-            order_item = OrderItem(
-                user=request.user,
-                # order=order,
-                product=product_name,
-                price=product_price,
-                quantity=product_quantity,
-                image=product_image,
-                total=cart_total_amount
-            )
-            order_item.save()
+        print("\U0001F4DD POST request received!")  # Check if POST is working
 
-        # Clear the cart after the order is placed
-        request.session['cart'] = {}
+        for key, value in cart.items():
+            print(f"\U0001F50D Processing Cart Item: {value}")  # Debugging
 
-        # Redirect to a success page or order summary
-        return redirect('place_order')  # Update with your order summary URL name
+            product_id = value.get('product_id')  # FIXED: Correct key
+            if not product_id:
+                print(f"⚠️ Skipping item {key} due to missing product_id")
+                continue  # Skip invalid entries
+
+            try:
+                product_instance = Product.objects.get(id=int(product_id))  # Convert to int
+                print(f"✅ Product {product_instance.name} found!")
+
+                order_item = OrderItem.objects.create(
+                    user=request.user,
+                    product=product_instance,
+                    price=float(value['price']),
+                    quantity=int(value['quantity']),
+                    image=value['image'],
+                    total=float(value['price']) * int(value['quantity'])
+                )
+
+                print("✅ OrderItem successfully created:", order_item)
+
+            except (ValueError, Product.DoesNotExist):
+                print(f"❌ Invalid or missing product ID: {product_id}")
+                continue  # Prevent crashes
+
+        request.session['cart'] = {}  # Clear the cart after saving
+        return redirect('place_order')
 
     return render(request, 'core/place/order_item.html', {
         'cart': cart,
@@ -401,19 +400,11 @@ def ORDER_ITEM(request):
 
 @login_required
 def PLACE_ORDER(request):
-    # Fetch the logged-in user
     user = request.user
-
-    # Retrieve cart items from the session
     cart_items = request.session.get('cart', {})
-    total_amount = 0
-
-    # Calculate total amount
-    for item in cart_items.values():
-        total_amount += float(item['price']) * int(item['quantity'])
+    total_amount = sum(float(item['price']) * int(item['quantity']) for item in cart_items.values())
 
     if request.method == 'POST':
-        # Get billing details from the form
         firstname = request.POST.get('firstname', user.first_name)
         lastname = request.POST.get('lastname', user.last_name)
         address = request.POST.get('address')
@@ -421,7 +412,6 @@ def PLACE_ORDER(request):
         phone = request.POST.get('phone')
         email = request.POST.get('email', user.email)
 
-        # Save the order
         order = Order.objects.create(
             user=user,
             firstname=firstname,
@@ -433,21 +423,23 @@ def PLACE_ORDER(request):
             amount=total_amount,
         )
 
-        # Save order items
         for item in cart_items.values():
-            OrderItem.objects.create(
-                user=user,
-                order=order,
-                product=item['name'],
-                image=item['image'],
-                quantity=item['quantity'],
-                price=float(item['price']),
-                total=float(item['price']) * int(item['quantity']),
-            )
+            product_id = item.get('id')  # Get product ID from session
+            try:
+                product_instance = Product.objects.get(id=product_id)  # Fetch product
+                OrderItem.objects.create(
+                    user=user,
+                    order=order,
+                    product=product_instance,  # Store Product instance
+                    image=item['image'],
+                    quantity=int(item['quantity']),
+                    price=float(item['price']),
+                    total=float(item['price']) * int(item['quantity']),
+                )
+            except Product.DoesNotExist:
+                print(f"Product with ID {product_id} does not exist.")  # Debugging
 
-        # Clear the cart after placing the order
-        request.session['cart'] = {}
-
+        request.session['cart'] = {}  
         return redirect('home')
 
     context = {
@@ -503,10 +495,10 @@ def dashbord(request):
 
 
 from django.shortcuts import render
-from .recommendation import recommend_products  # Import your function
+# from .recommendation import recommend_products  # Import your function
 
 def recommended_products_view(request):
-    related_products, best_products = recommend_products(user=request.user)
+    related_products, best_products = recommend_products(user=request.user, top_n=10)
     return render(request, 'recommendation/recommendation.html', {'related_products': related_products, 'best_products': best_products})
 
 

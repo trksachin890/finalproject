@@ -25,10 +25,12 @@
         </div>
         {% endfor %}
     </div>
+    {% else %}
+    <p class="text-center text-gray-600">No related products available based on your past orders and reviews.</p>
     {% endif %}
 
-    <!-- Best Products Section -->
-    <h2 class="text-3xl font-bold mb-6 text-center">Top-Rated Products</h2>
+    <!-- All Categories Top-Rated Products Section -->
+    <h2 class="text-3xl font-bold mb-6 text-center">Top-Rated Products Across All Categories</h2>
     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
         {% for product in best_products %}
         <div class="bg-white rounded-lg shadow-md overflow-hidden transition-transform duration-300 hover:scale-105 relative group">
@@ -49,5 +51,3 @@
 </div>
 
 {% endblock %}
-
-

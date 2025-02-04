@@ -16,7 +16,7 @@
                         <i class="pe-7s-shopbag"></i>
                         <h3>There are no more items in your cart</h3>
                         <a class="empty-cart-btn" href="{% url 'products' %}">
-                            <i class="fa fa-arrow-left"> </i> Continue shopping
+                            <i class="fa fa-arrow-left"></i> Continue shopping
                         </a>
                     </div>
                 </div>
@@ -49,20 +49,25 @@
                                     {% for key, value in request.session.cart.items %}
                                     <tr>
                                         <td class="product-thumbnail">
-                                            <a href="#"><img class="img-responsive ml-15px" src="{{ value.image }}" alt="" /></a>
+                                            <a href="#"><img class="img-responsive ml-15px" src="{{ value.image }}" alt="Product Image" /></a>
                                         </td>
                                         <td class="product-name"><a href="#">{{ value.name }}</a></td>
                                         <td class="product-price-cart"><span class="amount">NRP.{{ value.price }}</span></td>
                                         <td class="product-quantity">
                                             <div class="cart_quantity_buttom">
-                                                <input class="cart-plus-minus-box" type="text" name="qtybutton" value="{{ value.quantity }}" readonly />
+                                                <input class="cart-plus-minus-box" type="text" name="quantity_{{ key }}" value="{{ value.quantity }}" readonly />
                                             </div>
                                         </td>
                                         <td class="product-subtotal">NRP. {{ value.price|multiply:value.quantity }}</td>
                                         <td class="product-remove">
-                                            <!-- Optionally add a button to remove item from cart -->
+                                            <a href="{% url 'item_clear' key %}" class="btn btn-danger">Remove</a>
                                         </td>
                                     </tr>
+
+                                    <!-- Hidden inputs to send product data -->
+                                    <input type="hidden" name="product_id_{{ key }}" value="{{ key }}">
+                                    <input type="hidden" name="price_{{ key }}" value="{{ value.price }}">
+                                    <input type="hidden" name="image_{{ key }}" value="{{ value.image }}">
                                     {% endfor %}
                                 </tbody>
                             </table>
@@ -97,8 +102,8 @@
                                     <div class="total-shipping">
                                         <h5>Total shipping</h5>
                                         <ul>
-                                            <li><input type="checkbox" name="shipping_option" value="standard" /> Standard <span>NRP.200.00</span></li>
-                                            <li><input type="checkbox" name="shipping_option" value="express" /> Express <span>NRP.300.00</span></li>
+                                            <li><input type="radio" name="shipping_option" value="standard" required /> Standard <span>NRP.200.00</span></li>
+                                            <li><input type="radio" name="shipping_option" value="express" required /> Express <span>NRP.300.00</span></li>
                                         </ul>
                                     </div>
                                     <h4 class="grand-totall-title">Grand Total <span>NRP.{{ cart_total_amount|add:200|add:300 }}</span></h4>
@@ -113,5 +118,4 @@
         </div>
     </div>
 {% endif %}
-{% load static %}
 {% endblock content %}
