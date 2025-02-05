@@ -22,53 +22,40 @@ urlpatterns = [
     
     path("add-review/", views.add_review, name="add_review"),
 
-
+    # ----------------------------------------wishlist-------------------------------
    path("wishlist/<int:id>/", views.add_to_wishlist, name="add_to_wishlist"),
-
     path("wishlist/",views.wishlist,name="wishlist"),
-     
-    # yaha wishlist ma problem xa but stll save vairako a
+    # -------------------closewishlist---------------------------------- 
+ 
     
     path('place_order/',views.PLACE_ORDER, name='place_order'),
-
-
-
-
     path('dashbord/',views.dashbord,name='dashbord'),
     path("about/",views.about,name="about"),
-
-
-
-
     path('order_item/',views.ORDER_ITEM,name='order_item'),
-    # cart
+
+
+    # cart---------------------------------------------------------------------------------------------------------------------------
     path('cart/add/<int:id>/', views.cart_add, name='cart_add'),
     path('cart/item_clear/<int:id>/', views.item_clear, name='item_clear'),
     path('cart/item_increment/<int:id>/',views.item_increment, name='item_increment'),
     path('cart/item_decrement/<int:id>/',views.item_decrement, name='item_decrement'),
     path('cart/cart_clear/', views.cart_clear, name='cart_clear'),
     path('cart/cart-detail/',views.cart_detail,name='cart_detail'),
-    
+    #---------------------------------------- cart close-------------------------------------------------------------------------- 
 
 
-    # resetpassword
-   # urls.py
-
-
-
+    # resetpassword-------------------------------------------------------------------------------------------------------------
     path('password_reset/', auth_views.PasswordResetView.as_view(), name='password_reset'),
     path('password_reset/done/', auth_views.PasswordResetDoneView.as_view(), name='password_reset_done'),
     path('reset/<uidb64>/<token>/', auth_views.PasswordResetConfirmView.as_view(), name='password_reset_confirm'),
-
-
     path('reset/done/', auth_views.PasswordResetCompleteView.as_view(), name='password_reset_complete'),
-
+    # -----------------------------------------------resetpassword close-------------------------------------------------
 
     
 
-    # recommendation system
+    # recommendation system-----------------------------------------------------------------------------------
     path('recommendation/',views.recommended_products_view,name='recommendation_system')
-
+     # ----------------------------close recommendation system-----------------------------------------------------------------------------------
     
 ]
 

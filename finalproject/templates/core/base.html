@@ -745,7 +745,7 @@
                                 </div>
                                 
                                 <div class="pro-details-compare-wishlist pro-details-wishlist ">
-                                    <a href="wishlist.html"><i class="pe-7s-like"></i></a>
+                                    <a href="{% url 'add_to_wishlist' i.id %}"><i class="pe-7s-like"></i></a>
                                 </div>
                             </div>
                             
@@ -814,7 +814,18 @@
     {% endfor %} 
     <!-- Modal compare -->
     
- 
+    <script>
+        function loadWishlist() {
+            fetch("{% url 'wishlist' %}")  // Create a URL that returns JSON wishlist data
+                .then(response => response.text())
+                .then(html => {
+                    document.getElementById("wishlist-body").innerHTML = html;
+                });
+        }
+        
+        document.getElementById("wishlist-button").addEventListener("click", loadWishlist);
+    </script>
+    
    
     <script src="{% static 'assets/js/vendor/bootstrap.bundle.min.js' %}"></script>
     <script src="{% static 'assets/js/vendor/jquery-3.6.0.min.js' %}"></script>

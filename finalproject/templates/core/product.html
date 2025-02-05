@@ -156,7 +156,7 @@
                                                     <div class="content">
                                                         <span class="category"><a href="{% url 'product_detail' prod.id %}">{{ prod.category }}</a></span>
                                                         <h5 class="title"><a href="{% url 'product_detail' prod.id %}">{{ prod.name|truncatewords:10 }}</a></h5>
-                                                        {{ prod.information|truncatewords:10|safe }} 
+                                                        {{ prod.information|safe }} 
                                                     </div>
                                                     <div class="box-inner">
                                                         <span class="price">

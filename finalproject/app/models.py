@@ -142,8 +142,8 @@ class OrderItem(models.Model):
 
     image = models.ImageField( upload_to='products/Order_Img')
     quantity = models.IntegerField()
-    price = models.IntegerField()
-    total = models.IntegerField()
+    price = models.FloatField()
+    total = models.FloatField()
 
     
     class Meta:
@@ -159,10 +159,10 @@ class Order(models.Model):
     lastname = models.CharField(max_length=100)
     address = models.TextField(max_length=100)
     city = models.CharField(max_length=100)
-    phone = models.IntegerField()
+    phone = models.CharField(max_length=13)
     email = models.EmailField( max_length=100)
    
-    amount = models.CharField(max_length=100)
+    amount = models.BigIntegerField()
     date = models.DateField(auto_now_add=True)
 
     # payment_id = models.CharField(max_length=300,null=True,blank=True)

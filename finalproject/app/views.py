@@ -226,21 +226,27 @@ def add_review(request):
 
 
 from django.http import JsonResponse
+from django.shortcuts import get_object_or_404, redirect
+from django.contrib.auth.decorators import login_required
+from .models import Product, Wishlist
+
 @login_required(login_url="/login/")
 def add_to_wishlist(request, id):
-    if request.method == "POST" and request.user.is_authenticated:
-        product = get_object_or_404(Product, id=id)
-        wishlist_item, created = Wishlist.objects.get_or_create(user=request.user, product=product)
-        
-        if created:
-            message = "Added to Wishlist successfully!"
-        else:
-            message = "Product is already in your Wishlist."
-        
-        return JsonResponse({"success": True, "message": message})
+    product = get_object_or_404(Product, id=id)
+    wishlist_item, created = Wishlist.objects.get_or_create(user=request.user, product=product)
+    
+    if created:
+        message = "Added to Wishlist successfully!"
     else:
-        return JsonResponse({"success": False, "message": "You must be logged in to add to Wishlist."})
+        message = "Product is already in your Wishlist."
 
+    # Handle AJAX requests
+    if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+        return JsonResponse({"success": True, "message": message})
+
+    # Redirect back to the same page where the request came from
+    referer_url = request.META.get('HTTP_REFERER', 'wishlist')  # Defaults to wishlist page if no referer
+    return redirect(referer_url)
 
 
 from django.shortcuts import render
@@ -251,8 +257,6 @@ def wishlist(request):
         wishlists = Wishlist.objects.filter(user=request.user)
     else:
         wishlists = None  # No wishlist for unauthenticated users
-    
-    
     context = {'wishlists': wishlists}
     return render(request, 'wishlist/wishlist.html', context)
 
