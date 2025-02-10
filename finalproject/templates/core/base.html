@@ -262,23 +262,45 @@
             {% if request.user.is_authenticated %}
                 {% if wishlists and wishlists.count > 0 %}  <!-- Check if wishlist has items -->
                     <ul class="minicart-product-list">
-                        {% for i in wishlists %}
-                        <li>
-                            <a href="#" class="image">
-                                <img src="{{ i.product.image.url }}" alt="{{ i.product.name }}">
-                            </a>
-                            <div class="content">
-                                <a href="#" class="title">{{ i.product.name|truncatewords:10 }}</a>
-                                <span class="quantity-price">
-                                    <span class="amount">NRP. {{ i.product.price }}</span>
-                                </span>
-                                <a href="#" class="remove">×</a>
-                            </div>
-                        </li>
-                        {% endfor %}
+                       
+                            {% for i in wishlists %}
+                                <li>
+                                    <a href="#" class="image">
+                                        <img src="{{ i.product.image.url }}" alt="{{ i.product.name }}">
+                                    </a>
+                                    <div class="content">
+                                        <a href="#" class="title">{{ i.product.name|truncatewords:10 }}</a>
+                                        <span class="quantity-price">
+                                            <span class="amount">NRP. {{ i.product.price }}</span>
+                                        </span>
+                                        <a href="{% url 'remove_from_wishlist' i.product.id %}" class="remove">×</a>
+                                    </div>
+                                </li>
+                            {% endfor %}
+                        
+                        
                     </ul>
                 {% else %}
-                    <p class="text-center">Your wishlist is empty.</p>
+                   <!-- Empty Cart area start -->
+<div class="empty-cart-area pb-100px pt-100px">
+    <div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="cart-heading">
+                
+            </div>
+            <div class="empty-text-contant text-center">
+                <i class="pe-7s-shopbag"></i>
+                <h3>There are no more items in your Wishlist</h3>
+                <a class="empty-cart-btn" href="{% url 'products' %}">
+                    <i class="fa fa-arrow-left"> </i> Continue shopping
+                </a>
+            </div>
+        </div>
+    </div>
+    </div>
+    </div>
+    
                 {% endif %}
             {% else %}
                 <p class="text-center">
@@ -703,16 +725,13 @@
                             </div>
                             <div class="pro-details-rating-wrap">
                                 <div class="rating-product">
-                                    <i class="fa fa-star"></i>
-                                    <i class="fa fa-star"></i>
-                                    <i class="fa fa-star"></i>
-                                    <i class="fa fa-star"></i>
-                                    <i class="fa fa-star"></i>
+                                    <span>Average Rating: {{ average_rating }}/5</span>
                                 </div>
                                 <span class="read-review">
-                                    <a class="reviews" href="#">(review {{i.review|length}} )</a>
+                                    <a class="reviews" href="#">(Total Reviews: {{ review|length }})</a>
                                 </span>
                             </div>
+                            
                             <p class="mt-30px">{{ i.description | safe }}</p>
 
                             <div class="pro-details-categories-info pro-details-same-style d-flex m-0">
@@ -801,7 +820,7 @@
                         <form method="post" action="{% url 'add_to_wishlist' i.id %}" class="wishlist-form">
                             {% csrf_token %}
                             <input type="hidden" name="product_id" value="{{ i.id }}">
-                            <button type="submit" class="btn btn-primary">Add To Wish</button>
+                            <button type="submit" >Add To Wish</button>
                         </form>
                         
                         

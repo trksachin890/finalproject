@@ -85,9 +85,7 @@
                             </div>
                             <!-- i edited -->
                             <div class="pro-details-quality">
-                                <div class="cart-plus-minus">
-                                    <input class="cart-plus-minus-box" type="text" name="quantity" value="1" />
-                                </div>
+                            
                                 <div class="pro-details-cart">
                                     <form method="post" action="{% url 'cart_add' prod.id %}">
                                         {% csrf_token %}

@@ -12,6 +12,10 @@ from django.contrib.auth.views import PasswordResetView
 from finalproject import settings
 import razorpay
 
+from django.http import JsonResponse
+from django.shortcuts import get_object_or_404, redirect
+from django.contrib.auth.decorators import login_required
+from .models import Product, Wishlist
 
 from .recommendation import recommend_products
 client = razorpay.Client(auth=(settings.RAZORPAY_KEY_ID,settings.RAZORPAY_KEY_SECRECT))
@@ -225,10 +229,6 @@ def add_review(request):
 
 
 
-from django.http import JsonResponse
-from django.shortcuts import get_object_or_404, redirect
-from django.contrib.auth.decorators import login_required
-from .models import Product, Wishlist
 
 @login_required(login_url="/login/")
 def add_to_wishlist(request, id):
@@ -249,8 +249,7 @@ def add_to_wishlist(request, id):
     return redirect(referer_url)
 
 
-from django.shortcuts import render
-from .models import Wishlist
+
 @login_required(login_url="/login/")
 def wishlist(request):
     if request.user.is_authenticated:
@@ -260,6 +259,15 @@ def wishlist(request):
     context = {'wishlists': wishlists}
     return render(request, 'wishlist/wishlist.html', context)
 
+
+@login_required(login_url="/login/")
+def remove_from_wishlist(request, id):
+    wishlist_item = get_object_or_404(Wishlist, user=request.user, product_id=id)
+    wishlist_item.delete()
+    
+    # Redirect back to the same page where the request came from
+    referer_url = request.META.get("HTTP_REFERER", "wishlist")  # Defaults to 'wishlist' if no referrer is found
+    return redirect(referer_url)
 
 
 
