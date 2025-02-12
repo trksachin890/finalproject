@@ -98,19 +98,22 @@
                                     <div class="title-wrap">
                                         <h4 class="cart-bottom-title section-bg-gary-cart">Cart Total</h4>
                                     </div>
-                                    <h5>Total products <span>NRP.{{ cart_total_amount }}</span></h5>
+                                    <h5>Total products <span>NRP. {{ cart_total_amount }}</span></h5>
                                     <div class="total-shipping">
                                         <h5>Total shipping</h5>
-                                        <ul>
-                                            <li><input type="radio" name="shipping_option" value="standard" required /> Standard <span>NRP.200.00</span></li>
-                                            <li><input type="radio" name="shipping_option" value="express" required /> Express <span>NRP.300.00</span></li>
-                                        </ul>
                                     </div>
-                                    <h4 class="grand-totall-title">Grand Total <span>NRP.{{ cart_total_amount|add:200|add:300 }}</span></h4>
-                                    
-                                    <button type="submit" class="cart-btn-2">Proceed to Checkout</button>
+                                    <h4 class="grand-totall-title">
+                                        Grand Total <span>NRP. {{ cart_total_amount|add:200|add:300 }}</span>
+                                    </h4>
+                            
+                                    <form method="post" action="{% url 'place_order' %}">
+                                        {% csrf_token %}
+                                        <input type="hidden" name="amount" value="{{ cart_total_amount }}">
+                                        <button type="submit" class="btn btn-outline-dark current-btn text-light">Checkout</button>
+                                    </form>
                                 </div>
                             </div>
+                            
                         </div>
                     </form>
                 </div>

@@ -369,10 +369,10 @@ def ORDER_ITEM(request):
     cart = request.session.get('cart', {})
     cart_total_amount = sum(float(item['price']) * int(item['quantity']) for item in cart.values())
 
-    print("\U0001F50D ORDER_ITEM view called!")  # Debugging log
+    
 
     if request.method == "POST":
-        print("\U0001F4DD POST request received!")  # Check if POST is working
+        
 
         for key, value in cart.items():
             print(f"\U0001F50D Processing Cart Item: {value}")  # Debugging
@@ -402,6 +402,7 @@ def ORDER_ITEM(request):
                 continue  # Prevent crashes
 
         request.session['cart'] = {}  # Clear the cart after saving
+        print()
         return redirect('place_order')
 
     return render(request, 'core/place/order_item.html', {
@@ -415,6 +416,8 @@ def PLACE_ORDER(request):
     user = request.user
     cart_items = request.session.get('cart', {})
     total_amount = sum(float(item['price']) * int(item['quantity']) for item in cart_items.values())
+
+    
 
     if request.method == 'POST':
         firstname = request.POST.get('firstname', user.first_name)
@@ -439,6 +442,7 @@ def PLACE_ORDER(request):
             product_id = item.get('id')  # Get product ID from session
             try:
                 product_instance = Product.objects.get(id=product_id)  # Fetch product
+               
                 OrderItem.objects.create(
                     user=user,
                     order=order,
@@ -452,13 +456,15 @@ def PLACE_ORDER(request):
                 print(f"Product with ID {product_id} does not exist.")  # Debugging
 
         request.session['cart'] = {}  
-        return redirect('home')
+        return render(request, 'core/thanks/thanks.html')
 
     context = {
         'user': user,
         'cart_items': cart_items,
         'total_amount': total_amount,
+        
     }
+    print(context)
     return render(request, 'core/place/placeorder.html', context)
 
 
@@ -501,9 +507,29 @@ class CustomPasswordResetView(PasswordResetView):
         return context   
 
 
+@login_required
 def dashbord(request):
-    return render(request,'dashbord/dashbord.html')
+    orders = Order.objects.filter(user=request.user).order_by("-date")  # Get user orders
+    total_spent = 0  # Initialize total amount spent
 
+    order_details = []
+    for order in orders:
+        items = OrderItem.objects.filter(user=request.user)  # ✅ Filter OrderItem by user
+        order_total = sum(item.total for item in items)  # Calculate total for this order
+        total_spent += order_total  # Add to the user's total spending
+
+        order_details.append({
+            "order": order,
+            "items": items,
+            "order_total": order_total,  # Include order total for display
+        })
+
+    context = {
+        "order_details": order_details,
+        "total_spent": total_spent,  # Pass total amount spent
+    }
+
+    return render(request, "dashbord/dashbord.html", context)
 
 
 from django.shortcuts import render
@@ -512,5 +538,30 @@ from django.shortcuts import render
 def recommended_products_view(request):
     related_products, best_products = recommend_products(user=request.user, top_n=10)
     return render(request, 'recommendation/recommendation.html', {'related_products': related_products, 'best_products': best_products})
+
+
+
+
+
+
+@login_required
+def edit_review(request, review_id):
+    review = get_object_or_404(ProductReview, id=review_id, user=request.user)
+
+    if request.method == "POST":
+        new_review_text = request.POST.get("review")
+        new_rating = request.POST.get("rating")
+
+        if new_review_text and new_rating:
+            review.review = new_review_text
+            review.rating = new_rating
+            review.save()
+            messages.success(request, "Review updated successfully.")
+        else:
+            messages.error(request, "All fields are required.")
+
+        return redirect("product_detail", id=review.product.id)
+
+    return redirect("home")
 
 

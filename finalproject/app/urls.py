@@ -21,7 +21,7 @@ urlpatterns = [
 
     
     path("add-review/", views.add_review, name="add_review"),
-
+    path('edit-review/<int:review_id>/', edit_review, name="edit_review"),
     # ----------------------------------------wishlist-------------------------------
    path("wishlist/<int:id>/", views.add_to_wishlist, name="add_to_wishlist"),
     path("wishlist/",views.wishlist,name="wishlist"),
@@ -33,6 +33,7 @@ urlpatterns = [
     path('dashbord/',views.dashbord,name='dashbord'),
     path("about/",views.about,name="about"),
     path('order_item/',views.ORDER_ITEM,name='order_item'),
+    
 
 
     # cart---------------------------------------------------------------------------------------------------------------------------

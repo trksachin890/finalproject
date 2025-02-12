@@ -171,11 +171,59 @@
                                                                 
                                                                
                                                             </div>
-                                                           
+                                                            {% if re.review.user == request.user %}
+                                                            <div class="review-right">
+                                                            <button class="edit-review-btn" data-review-id="{{ re.review.id }}">
+                                                            <i class="fa fa-pencil"></i>
+                                                            </button>
+                                                            </div>
+                                                            {% endif %}
                                                         </div>
                                                         <div class="review-bottom">
                                                             {{re.review.review}}
                                                         </div>
+                                                        <div class="edit-review-form" id="edit-form-{{ re.review.id }}" style="display: none;">
+                                                            <form action="{% url 'edit_review' re.review.id %}" method="post">
+                                                                {% csrf_token %}
+                                                                <input type="hidden" name="review_id" value="{{ re.review.id }}">
+                                                        
+                                                                <div class="rating-product">
+                                                                    <label>Your Rating:</label>
+                                                                    <div class="rating">
+                                                                        {% for i in "54321" %}
+                                                                            <input type="radio" id="edit-star{{ i }}-{{ re.review.id }}" name="rating" value="{{ i }}" {% if re.review.rating|floatformat:0 == i|floatformat:0 %}checked{% endif %}>
+                                                                            <label for="edit-star{{ i }}-{{ re.review.id }}">★</label>
+                                                                        {% endfor %}
+                                                                    </div>
+                                                                </div>
+                                                        
+                                                                <textarea name="review" class="form-control">{{ re.review.review }}</textarea>
+
+<div style="margin-top: 10px; display: flex; gap: 10px;">
+    <button type="submit" class="btn btn-success">✔ Update</button>
+    <button type="button" class="btn btn-danger cancel-edit" data-review-id="{{ re.review.id }}">✖ Cancel</button>
+</div>
+
+                                                            </form>
+                                                        </div>
+                                                        <script>
+                                                            document.addEventListener("DOMContentLoaded", function() {
+                                                                document.querySelectorAll(".edit-review-btn").forEach(button => {
+                                                                    button.addEventListener("click", function() {
+                                                                        let reviewId = this.getAttribute("data-review-id");
+                                                                        document.getElementById("edit-form-" + reviewId).style.display = "block";
+                                                                    });
+                                                                });
+                                                            
+                                                                document.querySelectorAll(".cancel-edit").forEach(button => {
+                                                                    button.addEventListener("click", function() {
+                                                                        let reviewId = this.getAttribute("data-review-id");
+                                                                        document.getElementById("edit-form-" + reviewId).style.display = "none";
+                                                                    });
+                                                                });
+                                                            });
+                                                            </script>
+                                                                                                                    
                                                     </div>
                                                 </div>
                                             </div>

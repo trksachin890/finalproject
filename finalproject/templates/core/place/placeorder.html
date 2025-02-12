@@ -1,7 +1,10 @@
 {% extends 'core/base.html' %}
 {% block content %}
+
+
 <form method="post" action="{% url 'place_order' %}">
     {% csrf_token %}
+    
     <div class="checkout-area pt-100px pb-100px">
         <div class="container">
             <div class="row">
@@ -56,38 +59,7 @@
                     </div>
                 </div>
                 
-                <!-- Order Summary Section -->
-                <div class="col-lg-5 mt-md-30px mt-lm-30px">
-                    <div class="your-order-area">
-                        <h3>Your Order</h3>
-                        <div class="your-order-wrap gray-bg-4">
-                            <!-- Product List -->
-                            <div class="your-order-product-info">
-                                <!-- Table Header -->
-                                <ul class="your-order-top">
-                                    <li>Product</li>
-                                    <li>Total</li>
-                                </ul>
-
-                                <!-- Product Items -->
-                                {% for key, item in cart_items.items %}
-                                <ul class="your-order-middle">
-                                    <li><span>{{ item.name }} x {{ item.quantity }}</span><span>{{ item.price|floatformat:2 }}</span></li>
-                                </ul>
-                                {% endfor %}
-
-                                <!-- Total Price -->
-                                <ul class="your-order-total">
-                                    <li>Total</li>
-                                    <li>NRP. {{ total_amount|floatformat:2 }}</li>
-                                </ul>
-                            </div>
-
-                            <!-- Payment Method -->
-                            <div class="payment-method mt-25">
-                                <!-- Add payment options here -->
-                            </div>
-
+                
                             <!-- Place Order Button -->
                             <button type="submit" class="btn btn-primary w-100">Place Order</button>
                         </div>

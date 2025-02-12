@@ -35,44 +35,101 @@
                     </a>
                 </div>
             </div>
+<!-- Recent Orders -->
+<div class="bg-white shadow-md rounded-lg p-6">
+    <h2 class="text-2xl font-semibold mb-4">My Orders</h2>
 
-            <!-- Recent Orders -->
-            <div class="bg-white shadow-md rounded-lg p-6">
-                <h2 class="text-2xl font-semibold mb-4">My Vechicels</h2>
-                <div class="space-y-4">
-                    <div class="border-b pb-2">
-                        <p class="font-medium">Order #12345</p>
-                        <p class="text-gray-600">Brake Pads</p>
-                        <p class="text-sm text-gray-500">Ordered on: 01/15/2024</p>
-                    </div>
-                    <div class="border-b pb-2">
-                        <p class="font-medium">Order #12344</p>
-                        <p class="text-gray-600">Oil Filter</p>
-                        <p class="text-sm text-gray-500">Ordered on: 01/10/2024</p>
-                    </div>
-                </div>
-            </div>
+    {% if order_details %}
+        <div id="latest-order">
+            <!-- Show only the latest order -->
+            {% with order_details.0 as latest_order %}
+                <div class="border-b pb-2">
+                    <p class="font-medium">Order #{{ latest_order.order.id }}</p>
+                    <p class="text-gray-600">Total Amount: NPR. {{ latest_order.order_total }}</p>
+                    <p class="text-sm text-gray-500">Ordered on: {{ latest_order.order.date }}</p>
 
-            <!-- Saved Cars -->
-            <div class="bg-white shadow-md rounded-lg p-6">
-                <h2 class="text-2xl font-semibold mb-4">My Vehicles</h2>
-                <div class="space-y-4">
-                    <div class="border-b pb-2">
-                        <p class="font-medium">2022 Toyota Camry</p>
-                        <p class="text-gray-600">VIN: 1HGCM82633A123456</p>
-                    </div>
-                    <div class="border-b pb-2">
-                        <p class="font-medium">2019 Honda CR-V</p>
-                        <p class="text-gray-600">VIN: 5J6RW2H54KL123456</p>
-                    </div>
-                    <button class="mt-4 bg-gray-800 hover:bg-gray-900 text-white font-bold py-2 px-4 rounded">
-                        Add Vehicle
-                    </button>
+                    <!-- Show Ordered Products -->
+                    <ul class="mt-2">
+                        {% for item in latest_order.items %}
+                            <li class="text-sm text-gray-700">
+                                
+                                <a href="{% url 'product_detail' item.product.id %}" class="text-blue-500 hover:underline">
+                                    {{ item.product.name|truncatewords:3 }}
+                                </a>  (x{{ item.quantity }}) - NPR. {{ item.total }}
+                            </li>
+                        {% endfor %}
+                    </ul>
                 </div>
-            </div>
+            {% endwith %}
         </div>
 
-        <!-- Featured Parts Section -->
+        <!-- Hidden section for all orders -->
+        <div id="all-orders" class="hidden">
+            {% for order_data in order_details|slice:"1:" %} <!-- Show all except the first order -->
+            <div class="border-b pb-2">
+                <p class="font-medium">Order #{{ order_data.order.id }}</p>
+                <p class="text-gray-600">Total Amount: NPR. {{ order_data.order_total }}</p>
+                <p class="text-sm text-gray-500">Ordered on: {{ order_data.order.date }}</p>
+
+                <!-- Show Ordered Products -->
+                <ul class="mt-2">
+                    {% for item in order_data.items %}
+                        <li class="text-sm text-gray-700">
+                            <a href="{% url 'product_detail' item.product.id %}" class="text-blue-500 hover:underline">
+                                {{ item.product.name|truncatewords:3 }}
+                            </a> 
+                            (x{{ item.quantity }}) - NPR. {{ item.total }}
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
+            {% endfor %}
+        </div>
+
+        <!-- See More and See Less Buttons -->
+        {% if order_details|length > 1 %}
+        <button id="see-more-btn" class="mt-4 bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+            See More
+        </button>
+        <button id="see-less-btn" class="mt-4 bg-gray-600 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded hidden">
+            See Less
+        </button>
+        {% endif %}
+
+        <!-- Show Total Amount Spent -->
+        <div class="mt-6 p-4 bg-gray-200 rounded">
+            <h3 class="text-xl font-semibold">Total Spent: NPR. {{ total_spent }}</h3>
+        </div>
+
+    {% else %}
+        <p class="text-gray-500 text-center">No orders placed yet.</p>
+    {% endif %}
+</div>
+
+<!-- JavaScript for "See More" & "See Less" -->
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    let seeMoreBtn = document.getElementById("see-more-btn");
+    let seeLessBtn = document.getElementById("see-less-btn");
+    let allOrders = document.getElementById("all-orders");
+
+    if (seeMoreBtn && seeLessBtn) {
+        seeMoreBtn.addEventListener("click", function () {
+            allOrders.classList.remove("hidden"); // Show all orders
+            seeMoreBtn.classList.add("hidden"); // Hide "See More"
+            seeLessBtn.classList.remove("hidden"); // Show "See Less"
+        });
+
+        seeLessBtn.addEventListener("click", function () {
+            allOrders.classList.add("hidden"); // Hide all orders
+            seeMoreBtn.classList.remove("hidden"); // Show "See More"
+            seeLessBtn.classList.add("hidden"); // Hide "See Less"
+        });
+    }
+});
+</script>
+                                    
+          
         <div class="bg-white shadow-md rounded-lg p-6">
             <h2 class="text-2xl font-semibold mb-4">Recommended Parts</h2>
         

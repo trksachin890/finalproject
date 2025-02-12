@@ -362,9 +362,9 @@
 
                 {% for key,value in request.session.cart.items %}
              <li>
-                    <a href="single-product.html" class="image"><img src=" {{value.image}}" alt="Cart product Image"></a>
+                    <a href="#" class="image"><img src=" {{value.image}}" alt="Cart product Image"></a>
                     <div class="content">
-                        <a href="single-product.html" class="title">{{value.name|truncatechars:20}} </a>
+                        <a href="#" class="title">{{value.name|truncatechars:20}} </a>
                         <span class="quantity-price">{{value.quantity}} x <span class="amount">NRP.{{value.price}}</span></span>
                         <a href="{% url 'item_clear' key %}" class="remove">×</a>
                     </div>
@@ -723,14 +723,7 @@
                                     <li class="new-price">NRP. {{ i.price }}</li>
                                 </ul>
                             </div>
-                            <div class="pro-details-rating-wrap">
-                                <div class="rating-product">
-                                    <span>Average Rating: {{ average_rating }}/5</span>
-                                </div>
-                                <span class="read-review">
-                                    <a class="reviews" href="#">(Total Reviews: {{ review|length }})</a>
-                                </span>
-                            </div>
+                            
                             
                             <p class="mt-30px">{{ i.description | safe }}</p>
 
