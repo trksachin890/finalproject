@@ -272,6 +272,9 @@
                                         <a href="#" class="title">{{ i.product.name|truncatewords:10 }}</a>
                                         <span class="quantity-price">
                                             <span class="amount">NRP. {{ i.product.price }}</span>
+                                            <a href="{% url 'cart_add' i.product.id %}" class="add-to-cart" title="Add to Cart" style="margin-left: 8px; font-size: 16px; text-decoration: none;">
+                                                🛒 
+                                            </a>
                                         </span>
                                         <a href="{% url 'remove_from_wishlist' i.product.id %}" class="remove">×</a>
                                     </div>

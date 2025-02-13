@@ -56,16 +56,31 @@
                                     <td class="product-price-cart"><span class="amount">NRP.{{value.price}}</span></td>
                                     <td class="product-quantity">
 
-                                        <div class="cart_quantity_buttom">
-                                            <a class="cart_quantity_up" href="{% url 'item_increment' value.product_id %}">+</a>
-                                            <input class="cart-plus-minus-box" type="text" name="qtybutton" value="{{value.quantity}}" readonly/>
-                                            <a class="cart_quantity_down" href="{% url 'item_decrement' value.product_id %}">-</a>
+                                        <div class="cart_quantity_bottom" style="display: flex; align-items: center; gap: 5px;">
+                                            <!-- Increment Button -->
+                                            <a href="{% url 'item_increment' value.product_id %}" 
+                                               style="display: inline-flex; justify-content: center; align-items: center; width: 30px; height: 30px; background-color: #007bff; color: white; font-size: 18px; font-weight: bold; text-decoration: none; border-radius: 5px; transition: background 0.3s ease;">
+                                                +
+                                            </a>
+                                        
+                                            <!-- Quantity Box -->
+                                            <input type="text" name="qtybutton" value="{{ value.quantity }}" readonly
+                                                   style="width: 40px; height: 30px; text-align: center; font-size: 16px; font-weight: bold; border: 1px solid #ddd; border-radius: 5px; background-color: #f8f9fa;" />
+                                        
+                                            <!-- Decrement Button (Only if quantity > 1) -->
+                                            {% if value.quantity > 1 %}
+                                            <a href="{% url 'item_decrement' value.product_id %}" 
+                                               style="display: inline-flex; justify-content: center; align-items: center; width: 30px; height: 30px; background-color: #007bff; color: white; font-size: 18px; font-weight: bold; text-decoration: none; border-radius: 5px; transition: background 0.3s ease;">
+                                                -
+                                            </a>
+                                            {% endif %}
                                         </div>
+                                        
                                     </td>
 
                                     <td class="product-subtotal">NRP. {{ value.price|multiply:value.quantity }}</td>
                                     <td class="product-remove">
-                                        <a href="#"><i class="fa fa-pencil"></i></a>
+                                        
                                         <a href="{% url 'item_clear' key %}"><i class="fa fa-times"></i></a>
                                     </td>
                                 </tr>

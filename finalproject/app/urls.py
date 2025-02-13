@@ -54,6 +54,9 @@ urlpatterns = [
     # -----------------------------------------------resetpassword close-------------------------------------------------
 
     
+    # ---------------------------------------change password--------------------------------------------
+    path("password_change/" , views.change_pass, name="password_change"),
+
 
     # recommendation system-----------------------------------------------------------------------------------
     path('recommendation/',views.recommended_products_view,name='recommendation_system')

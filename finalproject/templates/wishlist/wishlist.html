@@ -1,10 +1,11 @@
 {% extends 'core/base.html' %}
 {% block content %}
 {% load static %}
+
 <!-- Wishlist Area Start -->
 <div class="cart-main-area pt-100px pb-100px">
     <div class="container">
-        <h3 class="cart-page-title">Your cart items</h3>
+        <h3 class="cart-page-title">Your Wishlist Items</h3>
         <div class="row">
             <div class="col-lg-12 col-md-12 col-sm-12 col-12">
                 <form action="#">
@@ -14,10 +15,8 @@
                                 <tr>
                                     <th>Image</th>
                                     <th>Product Name</th>
-                                    <!-- <th>Until Price</th> -->
-                                    
-                                    <th>Subtotal</th>
-                                    <th>Add To Cart</th>
+                                    <th>Price</th>
+                                    <th>Actions</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -27,17 +26,25 @@
                                         <a href="#"><img class="img-responsive ml-15px" src="{{ i.product.image.url }}" alt="" /></a>
                                     </td>
                                     <td class="product-name"><a href="#">{{ i.product.name }}</a></td>
-                                    <td class="product-price-cart"><span class="amount">NRP. {{i.product.price}}</span></td>
-                                    <!-- <td class="product-subtotal">$70.00</td>     -->
+                                    <td class="product-price-cart"><span class="amount">NRP. {{ i.product.price }}</span></td>
                                     <td class="product-wishlist-cart">
                                         <div class="button-group">
-                                            <a href="{% url 'cart_add' i.product.id %}" class="btn btn-primary">Add to Cart</a>
-                                            <a href="#" class="btn btn-danger">Remove</a>
+                                            <!-- Add to Cart Button -->
+                                            <a href="{% url 'cart_add' i.product.id %}" class="btn btn-success">
+                                                <i class="fas fa-shopping-cart"></i> Add to Cart
+                                            </a>
+                                            <!-- Remove from Wishlist Button -->
+                                            <a href="{% url 'remove_from_wishlist' i.product.id %}" class="btn btn-danger">
+                                                <i class="fas fa-times"></i> Remove
+                                            </a>
                                         </div>
                                     </td>
-                                    
                                 </tr>
-                               {% endfor %}
+                                {% empty %}
+                                <tr>
+                                    <td colspan="4" class="text-center">Your wishlist is empty.</td>
+                                </tr>
+                                {% endfor %}
                             </tbody>
                         </table>
                     </div>
@@ -47,4 +54,53 @@
     </div>
 </div>
 <!-- Wishlist Area End -->
- {% endblock content %}
+
+<!-- Ensure FontAwesome is Loaded -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+
+<style>
+    /* Button Group Styling */
+    .button-group {
+        display: flex;
+        gap: 10px; /* Space between buttons */
+    }
+
+    /* Add to Cart Button */
+    .button-group .btn-success {
+        background: #28a745;
+        color: white;
+        padding: 8px 12px;
+        border-radius: 5px;
+        text-decoration: none;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    /* Remove from Wishlist Button */
+    .button-group .btn-danger {
+        background: #dc3545;
+        color: white;
+        padding: 8px 12px;
+        border-radius: 5px;
+        text-decoration: none;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    /* Ensure Icons are Always Visible */
+    .button-group a i {
+        font-size: 16px;
+        color: white;
+        margin-right: 5px;
+    }
+
+    /* Ensure Icons Stay Visible */
+    .button-group a:hover i {
+        opacity: 1;
+        visibility: visible;
+    }
+</style>
+
+{% endblock content %}

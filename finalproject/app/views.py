@@ -10,7 +10,7 @@ from cart.cart import Cart
 from django.contrib.auth.views import PasswordResetView
 
 from finalproject import settings
-import razorpay
+
 
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, redirect
@@ -18,8 +18,6 @@ from django.contrib.auth.decorators import login_required
 from .models import Product, Wishlist
 
 from .recommendation import recommend_products
-client = razorpay.Client(auth=(settings.RAZORPAY_KEY_ID,settings.RAZORPAY_KEY_SECRECT))
-
 
 
 
@@ -254,9 +252,12 @@ def add_to_wishlist(request, id):
 def wishlist(request):
     if request.user.is_authenticated:
         wishlists = Wishlist.objects.filter(user=request.user)
+         # Count the number of wishlist items
+
     else:
         wishlists = None  # No wishlist for unauthenticated users
-    context = {'wishlists': wishlists}
+    context = {'wishlists': wishlists,
+}
     return render(request, 'wishlist/wishlist.html', context)
 
 
@@ -411,7 +412,8 @@ def ORDER_ITEM(request):
     })
 
 
-@login_required
+
+@login_required(login_url="/login/")
 def PLACE_ORDER(request):
     user = request.user
     cart_items = request.session.get('cart', {})
@@ -468,7 +470,8 @@ def PLACE_ORDER(request):
     return render(request, 'core/place/placeorder.html', context)
 
 
-@login_required
+
+@login_required(login_url="/login/")
 def Check_out(request):
 
     # Set amount (in paise) and other Razorpay parameters
@@ -507,7 +510,8 @@ class CustomPasswordResetView(PasswordResetView):
         return context   
 
 
-@login_required
+
+@login_required(login_url="/login/")
 def dashbord(request):
     orders = Order.objects.filter(user=request.user).order_by("-date")  # Get user orders
     total_spent = 0  # Initialize total amount spent
@@ -532,8 +536,8 @@ def dashbord(request):
     return render(request, "dashbord/dashbord.html", context)
 
 
-from django.shortcuts import render
-# from .recommendation import recommend_products  # Import your function
+
+from .recommendation import recommend_products  # Import your function
 
 def recommended_products_view(request):
     related_products, best_products = recommend_products(user=request.user, top_n=10)
@@ -543,7 +547,7 @@ def recommended_products_view(request):
 
 
 
-
+# --------------------------------edit rating------------------------------
 @login_required
 def edit_review(request, review_id):
     review = get_object_or_404(ProductReview, id=review_id, user=request.user)
@@ -563,5 +567,27 @@ def edit_review(request, review_id):
         return redirect("product_detail", id=review.product.id)
 
     return redirect("home")
+
+
+
+# ------------------------------------change password----------------------------------
+from django.contrib.auth.forms import PasswordChangeForm
+from django.contrib.auth import update_session_auth_hash
+
+def change_pass(request):
+    if request.method == 'POST':
+        fm = PasswordChangeForm(request.user, request.POST)
+        if fm.is_valid():
+            user = fm.save()
+            update_session_auth_hash(request, user)  # Prevent logout after password change
+            messages.success(request, 'Your password was successfully updated!')
+            return redirect('dashbord')  
+        else:
+            for error in fm.errors.get('__all__', []):  # Show general form errors
+                messages.error(request, error)
+    else:
+        fm = PasswordChangeForm(request.user)
+
+    return render(request, 'changepassword/changepassword.html', {'form': fm})
 
 
