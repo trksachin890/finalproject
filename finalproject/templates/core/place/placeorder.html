@@ -1,73 +1,182 @@
 {% extends 'core/base.html' %}
 {% block content %}
-
-
-<form method="post" action="{% url 'place_order' %}">
-    {% csrf_token %}
-    
-    <div class="checkout-area pt-100px pb-100px">
-        <div class="container">
-            <div class="row">
-                <!-- Billing Details Section -->
-                <div class="col-lg-7">
-                    <div class="billing-info-wrap">
-                        <h3>Billing Details</h3>
-                        <div class="row">
-                            <div class="col-lg-6 col-md-6">
-                                <div class="billing-info mb-4">
-                                    <label>First Name</label>
-                                    <input type="text" value="{{ user.first_name }}" name="firstname" readonly />
-                                </div>
-                            </div>
-                            <div class="col-lg-6 col-md-6">
-                                <div class="billing-info mb-4">
-                                    <label>Last Name</label>
-                                    <input type="text" value="{{ user.last_name }}" name="lastname" readonly />
-                                </div>
-                            </div>
-                            <div class="col-lg-12">
-                                <div class="billing-info mb-4">
-                                    <label>Address</label>
-                                    <input type="text" name="address" placeholder="House number and street name" required />
-                                </div>
-                            </div>
-                            <div class="col-lg-12">
-                                <div class="billing-select mb-4">
-                                    <label>City</label>
-                                    <select name="city" required>
-                                        <option>Select a City</option>
-                                        <option>Janakpur</option>
-                                        <option>Bagmati</option>
-                                        <option>Lalitpur</option>
-                                        <!-- Add more options as needed -->
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="col-lg-6 col-md-6">
-                                <div class="billing-info mb-4">
-                                    <label>Phone</label>
-                                    <input type="text" name="phone" required />
-                                </div>
-                            </div>
-                            <div class="col-lg-6 col-md-6">
-                                <div class="billing-info mb-4">
-                                    <label>Email Address</label>
-                                    <input type="email" value="{{ user.email }}" name="email" readonly />
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                
-                
-                            <!-- Place Order Button -->
-                            <button type="submit" class="btn btn-primary w-100">Place Order</button>
-                        </div>
-                    </div>
-                </div>
-
-            </div>
+{% load cart_tag %}
+<div class="checkout-container py-5">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-lg-10">
+        <div class="checkout-header text-center mb-5">
+          <h2 class="fw-bold">Checkout</h2>
+          <div class="checkout-progress">
+            <div class="progress-step active">Cart</div>
+            <div class="progress-step active">Checkout</div>
+            <div class="progress-step">Confirmation</div>
+          </div>
         </div>
+
+        <form method="post" action="{% url 'place_order' %}" class="checkout-form">
+          {% csrf_token %}
+          
+          <div class="row g-4">
+            <!-- Billing Details Section -->
+            <div class="col-lg-7">
+              <div class="billing-details card border-0 shadow-sm">
+                <div class="card-body p-4">
+                  <h3 class="card-title mb-4 pb-2 border-bottom">Billing Details</h3>
+                  
+                  <div class="row g-3">
+                    <div class="col-md-6">
+                      <div class="form-floating mb-3">
+                        <input type="text" class="form-control" id="firstname" value="{{ user.first_name }}" name="firstname" readonly />
+                        <label for="firstname">First Name</label>
+                      </div>
+                    </div>
+                    
+                    <div class="col-md-6">
+                      <div class="form-floating mb-3">
+                        <input type="text" class="form-control" id="lastname" value="{{ user.last_name }}" name="lastname" readonly />
+                        <label for="lastname">Last Name</label>
+                      </div>
+                    </div>
+                    
+                    <div class="col-12">
+                      <div class="form-floating mb-3">
+                        <input type="text" class="form-control" id="address" name="address" placeholder="House number and street name" required />
+                        <label for="address">Address</label>
+                      </div>
+                    </div>
+                    
+                    <div class="col-12">
+                      <div class="form-floating mb-3">
+                        <select class="form-select" id="city" name="city" required>
+                          <option value="">Select a City</option>
+                          <option>Janakpur</option>
+                          <option>Bagmati</option>
+                          <option>Lalitpur</option>
+                          <!-- Add more options as needed -->
+                        </select>
+                        <label for="city">City</label>
+                      </div>
+                    </div>
+                    
+                    <div class="col-md-6">
+                      <div class="form-floating mb-3">
+                        <input type="text" class="form-control" id="phone" name="phone" required />
+                        <label for="phone">Phone</label>
+                      </div>
+                    </div>
+                    
+                    <div class="col-md-6">
+                      <div class="form-floating mb-3">
+                        <input type="email" class="form-control" id="email" value="{{ user.email }}" name="email" readonly />
+                        <label for="email">Email Address</label>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <!-- Order Summary Section -->
+            <div class="col-lg-5">
+              <div class="order-summary card border-0 shadow-sm">
+                <div class="card-body p-4">
+                
+                  
+               
+                  
+                  <button type="submit" class="btn btn-primary w-100 py-3 fw-bold">Place Order {{cart_total_amount}}</button>
+                  
+                  <div class="payment-icons text-center mt-4">
+                    <i class="bi bi-credit-card me-2"></i>
+                    <i class="bi bi-paypal me-2"></i>
+                    <i class="bi bi-wallet2"></i>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
     </div>
-</form>
+  </div>
+</div>
+
+<style>
+  .checkout-container {
+    background-color: #f8f9fa;
+    min-height: 100vh;
+  }
+  
+  .checkout-header {
+    margin-bottom: 2rem;
+  }
+  
+  .checkout-progress {
+    display: flex;
+    justify-content: center;
+    margin-top: 1.5rem;
+  }
+  
+  .progress-step {
+    position: relative;
+    padding: 0 2rem;
+    color: #6c757d;
+  }
+  
+  .progress-step.active {
+    color: #0d6efd;
+    font-weight: 600;
+  }
+  
+  .progress-step:not(:last-child):after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    right: 0;
+    width: 1rem;
+    height: 2px;
+    background-color: #dee2e6;
+    transform: translateY(-50%);
+  }
+  
+  .progress-step.active:not(:last-child):after {
+    background-color: #0d6efd;
+  }
+  
+  .billing-details, .order-summary {
+    border-radius: 10px;
+    overflow: hidden;
+    height: 100%;
+  }
+  
+  .form-floating > .form-control:focus ~ label,
+  .form-floating > .form-control:not(:placeholder-shown) ~ label {
+    color: #0d6efd;
+  }
+  
+  .form-control:focus, .form-select:focus {
+    border-color: #0d6efd;
+    box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+  }
+  
+  .btn-primary {
+    background-color: #0d6efd;
+    border-color: #0d6efd;
+    transition: all 0.3s ease;
+  }
+  
+  .btn-primary:hover {
+    background-color: #0b5ed7;
+    border-color: #0a58ca;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  .payment-icons i {
+    font-size: 1.5rem;
+    color: #6c757d;
+  }
+</style>
+
 {% endblock %}

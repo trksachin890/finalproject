@@ -8,7 +8,7 @@ from django.contrib.auth.decorators import login_required
 # from django.contrib.auth.decorators import login_required
 from cart.cart import Cart
 from django.contrib.auth.views import PasswordResetView
-
+from django.http import JsonResponse
 from finalproject import settings
 
 
@@ -473,16 +473,17 @@ def PLACE_ORDER(request):
 
 @login_required(login_url="/login/")
 def Check_out(request):
+    user = request.user
+    cart_items = request.session.get('cart', {})
+    total_amount = sum(float(item['price']) * int(item['quantity']) for item in cart_items.values())
 
-    # Set amount (in paise) and other Razorpay parameters
+    context = {
+        'user': user,
+        'cart_items': cart_items,
+        'total_amount': total_amount
+    }
 
-
-# Get the order ID
-
-# Pass payment details to the template
-    
-    return render(request, 'core/placeorder.html')
-
+    return render(request, 'core/placeorder.html', context)
 
 
 
@@ -536,16 +537,64 @@ def dashbord(request):
     return render(request, "dashbord/dashbord.html", context)
 
 
-
-from .recommendation import recommend_products  # Import your function
+from django.shortcuts import render
+from django.db.models import Q
+from .recommendation import recommend_products
+from .models import Product, Category, Brand, VehicleType
 
 def recommended_products_view(request):
+    category_filter = request.GET.get('category', '')
+    brand_filter = request.GET.get('brand', '')
+    vehicletype_filter = request.GET.get('vehicletype', '')
+
     related_products, best_products = recommend_products(user=request.user, top_n=10)
-    return render(request, 'recommendation/recommendation.html', {'related_products': related_products, 'best_products': best_products})
+
+    # Apply filters to related products
+    if category_filter:
+        related_products = [product for product in related_products if product.category.id == int(category_filter)]
+    if brand_filter:
+        related_products = [product for product in related_products if product.brand.id == int(brand_filter)]
+    if vehicletype_filter:
+        related_products = [product for product in related_products if product.vehicletype.id == int(vehicletype_filter)]
+
+    # Apply filters to best products
+    if category_filter:
+        best_products = [product for product in best_products if product.category.id == int(category_filter)]
+    if brand_filter:
+        best_products = [product for product in best_products if product.brand.id == int(brand_filter)]
+    if vehicletype_filter:
+        best_products = [product for product in best_products if product.vehicletype.id == int(vehicletype_filter)]
+
+    # Get all categories, brands, and vehicle types for filters
+    categories = Category.objects.all()
+    brands = Brand.objects.all()
+    vehicletypes = VehicleType.objects.all()
+
+    return render(request, 'recommendation/recommendation.html', {
+        'related_products': related_products,
+        'best_products': best_products,
+        'categories': categories,
+        'brands': brands,
+        'vehicletypes': vehicletypes,
+    })   
 
 
 
 
+
+def search_suggestions(request):
+    query = request.GET.get('query', '')
+    suggestions = []
+    recommendations = []
+    
+    if query:
+        # Fetch product names that match the query
+        suggestions = Product.objects.filter(status='PUBLIC', name__icontains=query).values_list('name', flat=True)[:10]
+        
+        # Fetch recommended product names based on the query
+        recommendations = Product.objects.filter(status='PUBLIC', name__icontains=query).exclude(name__in=suggestions).values_list('name', flat=True)[:10]
+    
+    return JsonResponse({'suggestions': list(suggestions), 'recommendations': list(recommendations)}, safe=False)
 
 # --------------------------------edit rating------------------------------
 @login_required

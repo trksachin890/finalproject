@@ -23,9 +23,9 @@
                                 {% for i in wishlists %}
                                 <tr>
                                     <td class="product-thumbnail">
-                                        <a href="#"><img class="img-responsive ml-15px" src="{{ i.product.image.url }}" alt="" /></a>
+                                        <a href="{% url 'product_detail' i.product.id %}"><img class="img-responsive ml-15px" src="{{ i.product.image.url }}" alt="" /></a>
                                     </td>
-                                    <td class="product-name"><a href="#">{{ i.product.name }}</a></td>
+                                    <td class="product-name"><a href="{% url 'product_detail' i.product.id %}">{{ i.product.name }}</a></td>
                                     <td class="product-price-cart"><span class="amount">NRP. {{ i.product.price }}</span></td>
                                     <td class="product-wishlist-cart">
                                         <div class="button-group">

@@ -265,11 +265,11 @@
                        
                             {% for i in wishlists %}
                                 <li>
-                                    <a href="#" class="image">
+                                    <a href="{% url 'product_detail' i.product.id %}" class="image">
                                         <img src="{{ i.product.image.url }}" alt="{{ i.product.name }}">
                                     </a>
                                     <div class="content">
-                                        <a href="#" class="title">{{ i.product.name|truncatewords:10 }}</a>
+                                        <a href="{% url 'product_detail' i.product.id %}" class="title">{{ i.product.name|truncatewords:10 }}</a>
                                         <span class="quantity-price">
                                             <span class="amount">NRP. {{ i.product.price }}</span>
                                             <a href="{% url 'cart_add' i.product.id %}" class="add-to-cart" title="Add to Cart" style="margin-left: 8px; font-size: 16px; text-decoration: none;">
@@ -339,7 +339,7 @@
 
                 {% if request.session.cart|length < 1 %}
 <!-- Empty Cart area start -->
-<div class="empty-cart-area pb-100px pt-100px">
+            <div class="empty-cart-area pb-100px pt-100px">
 <div class="container">
 <div class="row">
     <div class="col-md-12">
@@ -373,19 +373,23 @@
                     </div>
                 </li>
                 {% endfor %}
-                {% endif %}
+
+                <div class="foot">
+                    <div class="buttons mt-30px">
+                        <a href="{% url 'cart_detail' %}" class="btn btn-dark btn-hover-primary mb-30px">view cart</a>
+                        <form method="post" action="{% url 'order_item' %}">
+                            {% csrf_token %}
+                            <input value="{{cart_total_amount}}" name="amount" hidden>
+                        <a  class="btn btn-outline-dark current-btn"><button type="submit" class="text-Light">Checkout</button></a>
+                    </form>
+                    </div>
+                </div>
+        {% endif %}
             </ul>
         </div>
-        <div class="foot">
-            <div class="buttons mt-30px">
-                <a href="{% url 'cart_detail' %}" class="btn btn-dark btn-hover-primary mb-30px">view cart</a>
-                <form method="post" action="{% url 'order_item' %}">
-                    {% csrf_token %}
-                    <input value="{{cart_total_amount}}" name="amount" hidden>
-                <a  class="btn btn-outline-dark current-btn"><button type="submit" class="text-Light">Checkout</button></a>
-            </form>
-            </div>
-        </div>
+        
+       
+        
     </div>
 </div>
         <!-- i edited -->

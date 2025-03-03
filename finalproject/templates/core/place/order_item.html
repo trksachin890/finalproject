@@ -5,20 +5,18 @@
 <!-- Cart Area Start -->
 {% if request.session.cart|length < 1 %}
     <!-- Empty Cart area start -->
-    <div class="empty-cart-area pb-100px pt-100px">
+    <div class="empty-cart-area py-5">
         <div class="container">
-            <div class="row">
-                <div class="col-md-12">
-                    <div class="cart-heading">
-                        <h2>Your cart item</h2>
-                    </div>
-                    <div class="empty-text-contant text-center">
+            <div class="empty-cart-container">
+                <div class="empty-cart-content text-center">
+                    <div class="empty-cart-icon">
                         <i class="pe-7s-shopbag"></i>
-                        <h3>There are no more items in your cart</h3>
-                        <a class="empty-cart-btn" href="{% url 'products' %}">
-                            <i class="fa fa-arrow-left"></i> Continue shopping
-                        </a>
                     </div>
+                    <h2>Your Cart is Empty</h2>
+                    <p>Looks like you haven't made your choice yet...</p>
+                    <a class="empty-cart-btn" href="{% url 'products' %}">
+                        <i class="fa fa-arrow-left"></i> Continue Shopping
+                    </a>
                 </div>
             </div>
         </div>
@@ -26,94 +24,113 @@
     <!-- Empty Cart area end -->
 {% else %}
     {% load cart_tag %}
-    <div class="cart-main-area pt-100px pb-100px">
+    <div class="cart-main-area py-5">
         <div class="container">
-            <h3 class="cart-page-title">Your cart items</h3>
+            <div class="cart-header">
+                <h3 class="cart-page-title">Shopping Cart</h3>
+                <p class="cart-subtitle">{{ request.session.cart|length }} items in your cart</p>
+            </div>
+
             <div class="row">
                 <div class="col-lg-12 col-md-12 col-sm-12 col-12">
                     <form method="POST" action="{% url 'order_item' %}">
                         {% csrf_token %}
-                        <div class="table-content table-responsive cart-table-content">
-                            <table>
-                                <thead>
-                                    <tr>
-                                        <th>Image</th>
-                                        <th>Product Name</th>
-                                        <th>Unit Price</th>
-                                        <th>Qty</th>
-                                        <th>Subtotal</th>
-                                        <th>Action</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {% for key, value in request.session.cart.items %}
-                                    <tr>
-                                        <td class="product-thumbnail">
-                                            <a href="#"><img class="img-responsive ml-15px" src="{{ value.image }}" alt="Product Image" /></a>
-                                        </td>
-                                        <td class="product-name"><a href="#">{{ value.name }}</a></td>
-                                        <td class="product-price-cart"><span class="amount">NRP.{{ value.price }}</span></td>
-                                        <td class="product-quantity">
-                                            <div class="cart_quantity_buttom">
-                                                <input class="cart-plus-minus-box" type="text" name="quantity_{{ key }}" value="{{ value.quantity }}" readonly />
-                                            </div>
-                                        </td>
-                                        <td class="product-subtotal">NRP. {{ value.price|multiply:value.quantity }}</td>
-                                        <td class="product-remove">
-                                            <a href="{% url 'item_clear' key %}" class="btn btn-danger">Remove</a>
-                                        </td>
-                                    </tr>
+                        <div class="cart-table-container">
+                            <div class="table-responsive">
+                                <table class="table cart-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Product</th>
+                                            <th>Price</th>
+                                            <th>Quantity</th>
+                                            <th>Total</th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for key, value in request.session.cart.items %}
+                                        <tr class="cart-item">
+                                            <td class="product-info">
+                                                <div class="product-details">
+                                                    <div class="product-image">
+                                                        <img src="{{ value.image }}" alt="Product Image" />
+                                                    </div>
+                                                    <div class="product-name">
+                                                        <h4>{{ value.name }}</h4>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td class="product-price">
+                                                <span class="amount">NPR. {{ value.price }}</span>
+                                            </td>
+                                            <td class="product-quantity">
+                                                <div class="quantity-input">
+                                                    <input type="text" name="quantity_{{ key }}" value="{{ value.quantity }}" readonly />
+                                                </div>
+                                            </td>
+                                            <td class="product-subtotal">
+                                                <span>NPR. {{ value.price|multiply:value.quantity }}</span>
+                                            </td>
+                                            <td class="product-remove">
+                                                <a href="{% url 'item_clear' key %}" class="remove-btn">
+                                                    <i class="fa fa-times"></i>
+                                                </a>
+                                            </td>
+                                        </tr>
 
-                                    <!-- Hidden inputs to send product data -->
-                                    <input type="hidden" name="product_id_{{ key }}" value="{{ key }}">
-                                    <input type="hidden" name="price_{{ key }}" value="{{ value.price }}">
-                                    <input type="hidden" name="image_{{ key }}" value="{{ value.image }}">
-                                    {% endfor %}
-                                </tbody>
-                            </table>
-                        </div>
-
-                        <div class="row">
-                            <div class="col-lg-12">
-                                <div class="cart-shiping-update-wrapper">
-                                    <div class="cart-shiping-update">
-                                        <a href="{% url 'products' %}">Continue Shopping</a>
-                                    </div>
-                                </div>
+                                        <!-- Hidden inputs -->
+                                        <input type="hidden" name="product_id_{{ key }}" value="{{ key }}">
+                                        <input type="hidden" name="price_{{ key }}" value="{{ value.price }}">
+                                        <input type="hidden" name="image_{{ key }}" value="{{ value.image }}">
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
                             </div>
                         </div>
 
-                        <div class="row">
-                            <div class="col-lg-4 col-md-6 mb-lm-30px">
-                                <div class="discount-code-wrapper">
-                                    <div class="title-wrap">
-                                        <h4 class="cart-bottom-title section-bg-gray">Use Coupon Code</h4>
-                                    </div>
-                                    <!-- Coupon input can be added here if needed -->
+                        <div class="cart-actions">
+                            <div class="row align-items-center">
+                                <div class="col-md-6">
+                                    <a href="{% url 'products' %}" class="continue-shopping-btn">
+                                        <i class="fa fa-arrow-left"></i> Continue Shopping
+                                    </a>
                                 </div>
                             </div>
+                        </div>
 
-                            <div class="col-lg-4 col-md-12 mt-md-30px">
-                                <div class="grand-totall">
-                                    <div class="title-wrap">
-                                        <h4 class="cart-bottom-title section-bg-gary-cart">Cart Total</h4>
+                        <div class="row mt-4">
+                            <div class="col-lg-4 col-md-6 ms-auto">
+                                <div class="cart-summary">
+                                    <div class="summary-header">
+                                        <h4>Cart Summary</h4>
                                     </div>
-                                    <h5>Total products <span>NRP. {{ cart_total_amount }}</span></h5>
-                                    <div class="total-shipping">
-                                        <h5>Total shipping</h5>
+                                    
+                                    <div class="summary-body">
+                                        <div class="summary-item">
+                                            <span>Subtotal</span>
+                                            <span>NPR. {{ cart_total_amount }}</span>
+                                        </div>
+                                        <div class="summary-item">
+                                            <span>Shipping</span>
+                                            <span>Free</span>
+                                        </div>
+                                        <div class="summary-total">
+                                            <span>Total</span>
+                                            <span>NPR. {{ cart_total_amount }}</span>
+                                        </div>
                                     </div>
-                                    <h4 class="grand-totall-title">
-                                        Grand Total <span>NRP. {{ cart_total_amount|add:200|add:300 }}</span>
-                                    </h4>
-                            
-                                    <form method="post" action="{% url 'place_order' %}">
-                                        {% csrf_token %}
-                                        <input type="hidden" name="amount" value="{{ cart_total_amount }}">
-                                        <button type="submit" class="btn btn-outline-dark current-btn text-light">Checkout</button>
-                                    </form>
+
+                                    <div class="summary-footer">
+                                        <form method="post" action="{% url 'place_order' %}">
+                                            {% csrf_token %}
+                                            <input type="hidden" name="amount" value="{{ cart_total_amount }}">
+                                            <button type="submit" class="checkout-btn">
+                                                Proceed to Checkout <i class="fa fa-arrow-right"></i>
+                                            </button>
+                                        </form>
+                                    </div>
                                 </div>
                             </div>
-                            
                         </div>
                     </form>
                 </div>
@@ -121,4 +138,279 @@
         </div>
     </div>
 {% endif %}
+
+<style>
+    /* Cart Area Styling */
+    .cart-main-area {
+        background-color: #f8f9fa;
+        min-height: 70vh;
+    }
+
+    /* Cart Header */
+    .cart-header {
+        margin-bottom: 2rem;
+    }
+
+    .cart-page-title {
+        font-size: 2rem;
+        font-weight: 600;
+        color: #333;
+        margin-bottom: 0.5rem;
+    }
+
+    .cart-subtitle {
+        color: #6c757d;
+        font-size: 1.1rem;
+    }
+
+    /* Empty Cart Styling */
+    .empty-cart-container {
+        background: white;
+        border-radius: 15px;
+        padding: 4rem 2rem;
+        text-align: center;
+        box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+    }
+
+    .empty-cart-icon {
+        font-size: 5rem;
+        color: #e0e0e0;
+        margin-bottom: 2rem;
+    }
+
+    .empty-cart-content h2 {
+        font-size: 2rem;
+        color: #333;
+        margin-bottom: 1rem;
+    }
+
+    .empty-cart-content p {
+        color: #6c757d;
+        margin-bottom: 2rem;
+    }
+
+    .empty-cart-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 1rem 2rem;
+        background: #007bff;
+        color: white;
+        border-radius: 8px;
+        text-decoration: none;
+        font-weight: 500;
+        transition: all 0.3s ease;
+    }
+
+    .empty-cart-btn:hover {
+        background: #0056b3;
+        transform: translateY(-2px);
+        color: white;
+    }
+
+    /* Cart Table Styling */
+    .cart-table-container {
+        background: white;
+        border-radius: 15px;
+        overflow: hidden;
+        box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+        margin-bottom: 2rem;
+    }
+
+    .cart-table {
+        margin-bottom: 0;
+    }
+
+    .cart-table thead {
+        background: #f8f9fa;
+    }
+
+    .cart-table th {
+        padding: 1.2rem 1rem;
+        font-weight: 600;
+        color: #495057;
+        border: none;
+    }
+
+    .cart-item {
+        transition: background-color 0.3s ease;
+    }
+
+    .cart-item:hover {
+        background-color: #f8f9fa;
+    }
+
+    .cart-item td {
+        padding: 1.2rem 1rem;
+        vertical-align: middle;
+        border-bottom: 1px solid #dee2e6;
+    }
+
+    /* Product Details */
+    .product-details {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+    }
+
+    .product-image {
+        width: 80px;
+        height: 80px;
+        border-radius: 8px;
+        overflow: hidden;
+    }
+
+    .product-image img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.3s ease;
+    }
+
+    .cart-item:hover .product-image img {
+        transform: scale(1.05);
+    }
+
+    .product-name h4 {
+        font-size: 1.1rem;
+        font-weight: 500;
+        color: #333;
+        margin: 0;
+    }
+
+    /* Quantity Input */
+    .quantity-input {
+        width: 80px;
+        margin: 0 auto;
+    }
+
+    .quantity-input input {
+        width: 100%;
+        text-align: center;
+        padding: 0.5rem;
+        border: 1px solid #dee2e6;
+        border-radius: 5px;
+        background: #f8f9fa;
+    }
+
+    /* Remove Button */
+    .remove-btn {
+        color: #dc3545;
+        font-size: 1.2rem;
+        transition: all 0.3s ease;
+    }
+
+    .remove-btn:hover {
+        color: #c82333;
+        transform: scale(1.1);
+    }
+
+    /* Continue Shopping Button */
+    .continue-shopping-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.8rem 1.5rem;
+        background: white;
+        color: #333;
+        border: 1px solid #dee2e6;
+        border-radius: 8px;
+        text-decoration: none;
+        transition: all 0.3s ease;
+    }
+
+    .continue-shopping-btn:hover {
+        background: #f8f9fa;
+        color: #333;
+    }
+
+    /* Cart Summary */
+    .cart-summary {
+        background: white;
+        border-radius: 15px;
+        overflow: hidden;
+        box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+    }
+
+    .summary-header {
+        padding: 1.2rem 1.5rem;
+        background: #f8f9fa;
+        border-bottom: 1px solid #dee2e6;
+    }
+
+    .summary-header h4 {
+        font-size: 1.2rem;
+        font-weight: 600;
+        color: #333;
+        margin: 0;
+    }
+
+    .summary-body {
+        padding: 1.5rem;
+    }
+
+    .summary-item {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 1rem;
+        color: #6c757d;
+    }
+
+    .summary-total {
+        display: flex;
+        justify-content: space-between;
+        padding-top: 1rem;
+        border-top: 1px solid #dee2e6;
+        font-size: 1.2rem;
+        font-weight: 600;
+        color: #333;
+    }
+
+    .summary-footer {
+        padding: 1.5rem;
+        background: #f8f9fa;
+    }
+
+    .checkout-btn {
+        width: 100%;
+        padding: 1rem;
+        background: #28a745;
+        color: white;
+        border: none;
+        border-radius: 8px;
+        font-weight: 500;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+        transition: all 0.3s ease;
+    }
+
+    .checkout-btn:hover {
+        background: #218838;
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(40, 167, 69, 0.2);
+    }
+
+    /* Responsive Adjustments */
+    @media (max-width: 768px) {
+        .cart-table th:nth-child(3),
+        .cart-table td:nth-child(3) {
+            display: none;
+        }
+
+        .product-image {
+            width: 60px;
+            height: 60px;
+        }
+
+        .product-name h4 {
+            font-size: 1rem;
+        }
+
+        .cart-summary {
+            margin-top: 2rem;
+        }
+    }
+</style>
 {% endblock content %}

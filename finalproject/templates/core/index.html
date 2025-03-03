@@ -1,259 +1,355 @@
 {% extends 'core/base.html' %}
 {% block content %}
 {% load static %}
-	   <!-- Hero/Intro Slider Start -->
-       <div class="section ">
-        <div class="hero-slider swiper-container slider-nav-style-1 slider-dot-style-1">
-            <!-- Hero slider Active -->
-            <div class="swiper-wrapper">
-                <!-- Single slider item -->
-                <div class="hero-slide-item slider-height-2 swiper-slide bg-color1" data-bg-image="{% static 'assets/images/hero/inner-img/bearing.png' %}">
-                    <div class="container h-100">
-                        <div class="row h-100 flex-row-reverse">
-                            <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 align-self-center sm-center-view">
-                                <div class="hero-slide-content hero-slide-content-2 slider-animated-1">
-                                    <h2 class="title-1">Easy Your Life <br>
-                                    For Smart Device </h2>
-                                    <span class="price">
-                                        <span class="mini-title">Only</span>
-                                    <span class="amount">NRP.250.00</span>
-                                    </span>
-                                    <a href="{% url 'home' %}" class="btn btn-primary text-capitalize">Shop All Devices</a>
-                                </div>
-                            </div>
-                            <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 d-flex justify-content-center position-relative align-items-center">
-                                <div class="show-case">
-                                    <div class="hero-slide-image slider-2">
-                                        <img src="{% static 'assets/images/logo/1.webp' %}" alt="" />
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <!-- Single slider item -->
-                <div class="hero-slide-item slider-height-2 swiper-slide bg-color1" data-bg-image="{% static 'assets/images/hero/inner-img/bikepart.png' %}">
-                    <div class="container h-100">
-                        <div class="row h-100 flex-row-reverse">
-                            <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 align-self-center sm-center-view">
-                                <div class="hero-slide-content hero-slide-content-2 slider-animated-1">
-                                    <h2 class="title-1">Easy Your Life <br>
-                                    For Smart Device </h2>
-                                    <span class="price">
-                                        <span class="mini-title">Only</span>
-                                    <span class="amount">NRP.240.00</span>
-                                    </span>
-                                    <a href="{% url 'home' %}" class="btn btn-primary text-capitalize">Shop All Devices</a>
-                                </div>
-                            </div>
-                            <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 d-flex justify-content-center position-relative align-items-center">
-                                <div class="show-case">
-                                    <div class="hero-slide-image slider-2">
-                                        <img src="{% static 'assets/images/logo/1.webp' %}" alt="" />
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <!-- Add Pagination -->
-            <div class="swiper-pagination swiper-pagination-white"></div>
-            <!-- Add Arrows -->
-            <div class="swiper-buttons">
-                <div class="swiper-button-next"></div>
-                <div class="swiper-button-prev"></div>
-            </div>
-        </div>
-    </div>
-    <!-- Hero/Intro Slider End -->
-    <!-- Banner Area Start -->
-    <div class="banner-area style-two pt-100px pb-100px">
-        <div class="container">
-            <div class="row">
-                <div class="col-md-6">
-                    <div class="single-banner nth-child-2 mb-lm-30px">
-                        <img src="{% static 'assets/images/banner/bydcar.png' %}" alt="">
-                        <div class="banner-content nth-child-3">
-                            <h3 class="title">CAR PART</h3>
-                            <span class="category">From 25.00</span>
-                            <a href="{% url 'products' %}" class="shop-link">Shop Now <i class="fa fa-arrow-right" aria-hidden="true"></i></a>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-6">
-                    <div class="single-banner nth-child-2">
-                        <img src="{% static 'assets/images/hero/inner-img/2.png' %}" alt="">
-                        <div class="banner-content nth-child-2">
-                            <h3 class="title">BIKE PART</h3>
-                            <span class="category">From NRP. 95.00</span>
-                            <a href="{% url 'products' %}" class="shop-link">Shop Now <i class="fa fa-arrow-right" aria-hidden="true"></i></a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- Banner Area End -->
-    <!-- Product Area Start -->
-    <div class="product-area pb-100px">
-        <div class="container">
-            <!-- Section Title & Tab Start -->
-            <div class="row">
-                <div class="col-12">
-                    <div class="section-title text-center">
-                        <h2 class="title">New Products</h2>
-                        <p>There are many variations of passages of Lorem Ipsum available</p>
-                    </div>
-                </div>
-            </div>
-            <!-- Section Title & Tab End -->
-            <div class="row">
-                <div class="col">
-                    <div class="row mb-n-30px">
-                        {% for prod in product %}
-                        <div class="col-lg-4 col-xl-3 col-md-6 col-sm-6 col-xs-6 mb-30px">
-                            <!-- Single Prodect -->
-                            <div class="product">
-                                <span class="badges">
-                                    <span class="new">{{prod.condition}}</span>
-                                </span>
-                                <div class="thumb">
-                                    <a href="{% url 'product_detail' prod.id %}" class="image">
-                                        <img src="{{prod.image.url}}" alt="Product" style="width: 200px; height: 200px; object-fit: cover;" />
-                                        <img class="hover-image" src="{{prod.image.url}}" alt="Product" style="width: 200px; height: 200px; object-fit: cover;" />
-                                    </a>
-                                </div>
-                                
-                                <div class="content">
-                                    <span class="category"><a href="{% url 'product_detail' prod.id %}">{{pro.category}}</a></span>
-                                    <h5 class="title"><a href="{% url 'product_detail' prod.id %}">{{prod.name|truncatewords:10}}
-                                        </a>
-                                    </h5>
-                                    <span class="price">
-                                        <span class="new">NRP.{{prod.price}}</span>
-                                    </span>
-                                </div>
-                                <!-- add to cart -->
-                                <div class="actions">
-                                    {% if request.user.is_authenticated %}
-                                        <button title="Add To Cart" class="action add-to-cart" data-bs-toggle="modal" data-bs-target="#exampleModal-Cart-{{forloop.counter}}">
-                                            <i class="pe-7s-shopbag"></i>
-                                        </button>
-                                    {% else %}
-                                        <a href="{% url 'login' %}" title="Add To Cart" class="action add-to-cart">
-                                            <i class="pe-7s-shopbag"></i>
-                                        </a>
-                                    {% endif %}
 
-                                    <button class="action wishlist" title="Wishlist" data-bs-toggle="modal" data-bs-target="#exampleModal-Wishlist-{{forloop.counter}}">
-                                        <i class="pe-7s-like"></i>
-                                    </button>
-                                    <button class="action quickview" data-link-action="quickview" title="Quick view" data-bs-toggle="modal" data-bs-target="#exampleModal-{{forloop.counter}}">
-                                        <i class="pe-7s-look"></i>
-                                    </button>
-                                    
-                                </div>
-                                
+<!-- Hero Section -->
+<div class="relative bg-gray-900">
+    <!-- Hero Slider -->
+    <div class="swiper-container hero-slider" x-data="{ activeSlide: 1 }">
+        <div class="swiper-wrapper">
+            <!-- Slide 1 -->
+            <div class="swiper-slide relative h-[600px] bg-gradient-to-r from-gray-900 to-gray-800">
+                <div class="container mx-auto px-4 h-full">
+                    <div class="grid lg:grid-cols-2 gap-8 h-full items-center">
+                        <div class="text-white space-y-6">
+                            <h1 class="text-4xl md:text-6xl font-bold leading-tight">
+                                Premium Auto Parts <br>
+                                <span class="text-red-600">For Every Vehicle</span>
+                            </h1>
+                            <p class="text-gray-300 text-lg md:text-xl max-w-lg">
+                                Discover quality parts for your vehicle from trusted brands at competitive prices.
+                            </p>
+                            <div class="flex gap-4">
+                                <a href="{% url 'products' %}" 
+                                   class="inline-flex items-center px-6 py-3 bg-red-600 text-white font-semibold rounded-lg hover:bg-red-700 transition duration-300">
+                                    Shop Now
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ml-2" viewBox="0 0 20 20" fill="currentColor">
+                                        <path fill-rule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clip-rule="evenodd" />
+                                    </svg>
+                                </a>
+                                <a href="{% url 'products' %}" 
+                                   class="inline-flex items-center px-6 py-3 border-2 border-white text-white font-semibold rounded-lg hover:bg-white hover:text-gray-900 transition duration-300">
+                                    View Catalog
+                                </a>
                             </div>
                         </div>
+                        <div class="hidden lg:block relative">
+                            <img src="{% static 'assets/images/hero/inner-img/bearing.png' %}" 
+                                 alt="Auto Parts" 
+                                 class="max-w-xl mx-auto transform hover:scale-105 transition duration-500">
+                            <!-- Price Badge -->
+                            <div class="absolute top-10 right-10 bg-white text-gray-900 rounded-full p-4 shadow-lg">
+                                <p class="text-sm font-medium">Starting from</p>
+                                <p class="text-2xl font-bold text-red-600">NRP.250.00</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
-                        {% endfor %}
+            <!-- Slide 2 -->
+            <div class="swiper-slide relative h-[600px] bg-gradient-to-r from-gray-900 to-gray-800">
+                <div class="container mx-auto px-4 h-full">
+                    <div class="grid lg:grid-cols-2 gap-8 h-full items-center">
+                        <div class="text-white space-y-6">
+                            <h1 class="text-4xl md:text-6xl font-bold leading-tight">
+                                Performance Parts <br>
+                                <span class="text-red-600">For Your Ride</span>
+                            </h1>
+                            <p class="text-gray-300 text-lg md:text-xl max-w-lg">
+                                Upgrade your vehicle with high-performance parts and accessories.
+                            </p>
+                            <div class="flex gap-4">
+                                <a href="{% url 'products' %}" 
+                                   class="inline-flex items-center px-6 py-3 bg-red-600 text-white font-semibold rounded-lg hover:bg-red-700 transition duration-300">
+                                    Shop Now
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ml-2" viewBox="0 0 20 20" fill="currentColor">
+                                        <path fill-rule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clip-rule="evenodd" />
+                                    </svg>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="hidden lg:block relative">
+                            <img src="{% static 'assets/images/hero/inner-img/bikepart.png' %}" 
+                                 alt="Performance Parts" 
+                                 class="max-w-xl mx-auto transform hover:scale-105 transition duration-500">
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
+        
+        <!-- Slider Controls -->
+        <div class="absolute inset-0 flex items-center justify-between p-4">
+            <button class="swiper-button-prev w-12 h-12 flex items-center justify-center bg-white bg-opacity-30 rounded-full text-white hover:bg-opacity-50 transition duration-300">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+                </svg>
+            </button>
+            <button class="swiper-button-next w-12 h-12 flex items-center justify-center bg-white bg-opacity-30 rounded-full text-white hover:bg-opacity-50 transition duration-300">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                </svg>
+            </button>
+        </div>
+        
+        <!-- Slider Pagination -->
+        <div class="swiper-pagination"></div>
     </div>
-    <!-- Product Area End -->
-    <!-- Banner Area Start --><div class="banner-area style-three pb-100px">
-    <div class="container">
-        <div class="row">
-            <div class="col-md-6" style="display: flex; justify-content: center; align-items: center; margin-bottom: 30px;">
-                <div class="single-banner" style="width: 100%; height: 300px; position: relative; overflow: hidden; text-align: center; box-sizing: border-box;">
-                    <img src="{% static 'assets/images/hero/inner-img/4.png' %}" alt="" style="width: 100%; height: 100%; object-fit: cover;">
-                    <div class="banner-content nth-child-3" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: #fff; text-align: center;">
-                        <h3 class="title" style="font-size: 20px; margin: 0;">Car <br>Parts</h3>
-                        <span class="category" style="font-size: 16px; display: block; margin: 10px 0;">From NRP.69.00</span>
-                        <a href="{% url 'products' %}" class="shop-link" style="color: #fff; text-decoration: none; font-size: 14px; background: #000; padding: 5px 10px; border-radius: 5px;">Shop Now <i class="fa fa-arrow-right" aria-hidden="true"></i></a>
-                    </div>
+</div>
+
+<!-- Featured Categories -->
+<div class="py-16 bg-gray-50">
+    <div class="container mx-auto px-4">
+        <div class="grid md:grid-cols-2 gap-8">
+            <!-- Car Parts Category -->
+            <div class="group relative overflow-hidden rounded-2xl bg-white shadow-lg hover:shadow-xl transition duration-300">
+                <img src="{% static 'assets/images/banner/bydcar.png' %}" 
+                     alt="Car Parts" 
+                     class="w-full h-[400px] object-cover transform group-hover:scale-105 transition duration-500">
+                <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent flex flex-col justify-end p-8">
+                    <h3 class="text-3xl font-bold text-white mb-2">Car Parts</h3>
+                    <p class="text-gray-200 mb-4">Starting from NRP. 25.00</p>
+                    <a href="{% url 'products' %}" 
+                       class="inline-flex items-center px-6 py-3 bg-red-600 text-white font-semibold rounded-lg hover:bg-red-700 transition duration-300 w-fit">
+                        Shop Now
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ml-2" viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clip-rule="evenodd" />
+                        </svg>
+                    </a>
                 </div>
             </div>
-            
-            <div class="col-md-6" style="display: flex; justify-content: center; align-items: center; margin-bottom: 30px;">
-                <div class="single-banner" style="width: 100%; height: 300px; position: relative; overflow: hidden; text-align: center; box-sizing: border-box;">
-                    <img src="{% static 'assets/images/hero/inner-img/5.png' %}" alt="" style="width: 100%; height: 100%; object-fit: cover;">
-                    <div class="banner-content nth-child-2" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: #fff; text-align: center;">
-                        <h3 class="title" style="font-size: 20px; margin: 0;">Car <br>Parts</h3>
-                        <span class="category" style="font-size: 16px; display: block; margin: 10px 0;">From NRP.69.00</span>
-                        <a href="{% url 'products' %}" class="shop-link" style="color: #fff; text-decoration: none; font-size: 14px; background: #000; padding: 5px 10px; border-radius: 5px;">Shop Now <i class="fa fa-arrow-right" aria-hidden="true"></i></a>
-                    </div>
+
+            <!-- Bike Parts Category -->
+            <div class="group relative overflow-hidden rounded-2xl bg-white shadow-lg hover:shadow-xl transition duration-300">
+                <img src="{% static 'assets/images/hero/inner-img/2.png' %}" 
+                     alt="Bike Parts" 
+                     class="w-full h-[400px] object-cover transform group-hover:scale-105 transition duration-500">
+                <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent flex flex-col justify-end p-8">
+                    <h3 class="text-3xl font-bold text-white mb-2">Bike Parts</h3>
+                    <p class="text-gray-200 mb-4">Starting from NRP. 95.00</p>
+                    <a href="{% url 'products' %}" 
+                       class="inline-flex items-center px-6 py-3 bg-red-600 text-white font-semibold rounded-lg hover:bg-red-700 transition duration-300 w-fit">
+                        Shop Now
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ml-2" viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clip-rule="evenodd" />
+                        </svg>
+                    </a>
                 </div>
             </div>
-          
         </div>
     </div>
 </div>
 
-    <!-- Banner Area End -->
-    <!-- Feature product area start -->
-    <div class="feature-product-area pb-100px">
-        <div class="container">
-            <div class="row">
-                <div class="col-12">
-                    <div class="section-title text-center">
-                        <h2 class="title">Products</h2>
-                        <p>There are many product to see....</p>
-                    </div>
-                </div>
-            </div>
-            <div class="feature-product-slider swiper-container slider-nav-style-1">
-                <div class="swiper-wrapper">
-                    {% for i in product %}
-                    <div class="swiper-slide feature-right-content">
-                        <div class="image-side">
-                            <img src="{{i.image.url}}" alt="">
-                            <button title="Add To Cart" class="action add-to-cart" data-bs-toggle="modal" data-bs-target="#exampleModal-Cart-{{forloop.counter}}"><i
-                                class="pe-7s-shopbag"></i></button>
-                        </div>
-                        <div class="content-side">
-                            <div class="prize-content">
-                                <h5 class="title"><a href="#">{{i.name}}</a></h5>
-                                <span class="price">
-                            <span class="old">NRP.{{i.old_price}}</span>
-                                <span class="new">NRP.{{i.price}}</span>
-                                </span>
-                            </div>
-                            <div class="product-feature">
-                                <ul>
-                                    {{i.information|safe}}
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                    {% endfor %}
-                </div>
-                <!-- Add Arrows -->
-                <div class="swiper-buttons">
-                    <div class="swiper-button-next"></div>
-                    <div class="swiper-button-prev"></div>
-                </div>
-            </div>
+<!-- New Products Section -->
+<div class="py-16">
+    <div class="container mx-auto px-4">
+        <div class="text-center mb-12">
+            <h2 class="text-3xl font-bold text-gray-900 mb-4">New Arrivals</h2>
+            <p class="text-gray-600 max-w-2xl mx-auto">Discover our latest collection of high-quality auto parts</p>
         </div>
-    </div>
-    <!-- Feature product area End -->
-    <!-- Fashion Area Start -->
-    <div class="fashion-area" data-bg-image="{% static 'assets/images/hero/inner-img/3.png' %}">
-        <div class="container h-100">
-            <div class="row justify-content-center align-items-center h-100">
-                <div class="col-12 text-center">
-                    <h2 class="title"> <span>Cars</span> Parts </h2>
-                    <a href="{% url 'products' %}" class="btn btn-primary text-capitalize m-auto">Shop All Devices</a>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- Fashion Area End -->
-     
-     
 
-{% endblock content%}
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            {% for prod in product %}
+            <div class="group bg-white rounded-xl shadow-sm overflow-hidden hover:shadow-lg transition duration-300">
+                <div class="relative">
+                    <!-- Product Image -->
+                    <a href="{% url 'product_detail' prod.id %}" class="block">
+                        <img src="{{prod.image.url}}" 
+                             alt="{{prod.name}}" 
+                             class="w-full h-64 object-cover transform group-hover:scale-105 transition duration-500">
+                    </a>
+                    
+                    <!-- Condition Badge -->
+                    <span class="absolute top-4 left-4 bg-red-600 text-white text-xs font-bold px-2 py-1 rounded">
+                        {{prod.condition}}
+                    </span>
+
+                    <!-- Quick Action Buttons -->
+                    <div class="absolute top-4 right-4 flex flex-col gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                        {% if request.user.is_authenticated %}
+                        <button class="bg-white p-2 rounded-full shadow-lg hover:bg-gray-100 transition duration-300"
+                                title="Add To Cart" 
+                                data-bs-toggle="modal" 
+                                data-bs-target="#exampleModal-Cart-{{forloop.counter}}">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
+                            </svg>
+                        </button>
+                        {% else %}
+                        <a href="{% url 'login' %}" 
+                           class="bg-white p-2 rounded-full shadow-lg hover:bg-gray-100 transition duration-300"
+                           title="Add To Cart">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
+                            </svg>
+                        </a>
+                        {% endif %}
+
+                        <button class="bg-white p-2 rounded-full shadow-lg hover:bg-gray-100 transition duration-300"
+                                title="Add to Wishlist"
+                                data-bs-toggle="modal" 
+                                data-bs-target="#exampleModal-Wishlist-{{forloop.counter}}">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                            </svg>
+                        </button>
+
+                        <button class="bg-white p-2 rounded-full shadow-lg hover:bg-gray-100 transition duration-300"
+                                title="Quick View"
+                                data-bs-toggle="modal" 
+                                data-bs-target="#exampleModal-{{forloop.counter}}">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="p-6">
+                    <div class="mb-2">
+                        <span class="text-xs text-gray-500 uppercase">{{prod.category}}</span>
+                    </div>
+                    <h3 class="text-lg font-bold text-gray-900 mb-2">
+                        <a href="{% url 'product_detail' prod.id %}" class="hover:text-red-600 transition duration-200">
+                            {{prod.name|truncatewords:10}}
+                        </a>
+                    </h3>
+                    <div class="flex items-center justify-between">
+                        <span class="text-xl font-bold text-red-600">NRP.{{prod.price}}</span>
+                        {% if prod.old_price %}
+                        <span class="text-sm text-gray-500 line-through">NRP.{{prod.old_price}}</span>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+<!-- Featured Products Slider -->
+<div class="bg-gray-50 py-16">
+    <div class="container mx-auto px-4">
+        <div class="text-center mb-12">
+            <h2 class="text-3xl font-bold text-gray-900 mb-4">Featured Products</h2>
+            <p class="text-gray-600 max-w-2xl mx-auto">Explore our selection of premium auto parts</p>
+        </div>
+
+        <div class="feature-product-slider swiper-container">
+            <div class="swiper-wrapper">
+                {% for i in product %}
+                <div class="swiper-slide">
+                    <div class="bg-white rounded-xl shadow-sm overflow-hidden">
+                        <div class="relative">
+                            <img src="{{i.image.url}}" 
+                                 alt="{{i.name}}" 
+                                 class="w-full h-64 object-cover">
+                            
+                            <button class="absolute bottom-4 right-4 bg-red-600 text-white p-3 rounded-full hover:bg-red-700 transition duration-300"
+                                    title="Add To Cart"
+                                    data-bs-toggle="modal" 
+                                    data-bs-target="#exampleModal-Cart-{{forloop.counter}}">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
+                                </svg>
+                            </button>
+                        </div>
+
+                        <div class="p-6">
+                            <h3 class="text-xl font-bold text-gray-900 mb-2">
+                                <a href="#" class="hover:text-red-600 transition duration-200">{{i.name}}</a>
+                            </h3>
+                            <div class="flex items-center justify-between mb-4">
+                                <div class="space-x-2">
+                                    {% if i.old_price %}
+                                    <span class="text-sm text-gray-500 line-through">NRP.{{i.old_price}}</span>
+                                    {% endif %}
+                                    <span class="text-xl font-bold text-red-600">NRP.{{i.price}}</span>
+                                </div>
+                            </div>
+                            <div class="text-gray-600 space-y-2">
+                                {{i.information|safe}}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            
+            <!-- Slider Controls -->
+            <div class="swiper-buttons">
+                <button class="swiper-button-next w-12 h-12 flex items-center justify-center bg-white rounded-full shadow-lg text-gray-900 hover:bg-gray-100 transition duration-300">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                    </svg>
+                </button>
+                <button class="swiper-button-prev w-12 h-12 flex items-center justify-center bg-white rounded-full shadow-lg text-gray-900 hover:bg-gray-100 transition duration-300">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Call to Action Section -->
+<div class="relative py-24 bg-cover bg-center" style="background-image: url '{% static 'assets/images/hero/inner-img/3.png' %}'">
+    <div class="absolute inset-0 bg-black bg-opacity-60"></div>
+    <div class="container mx-auto px-4 relative z-10">
+        <div class="max-w-3xl mx-auto text-center text-white">
+            <h2 class="text-4xl md:text-5xl font-bold mb-6">Premium Auto Parts</h2>
+            <p class="text-xl mb-8">Discover quality parts for your vehicle from trusted brands</p>
+            <a href="{% url 'products' %}" 
+               class="inline-flex items-center px-8 py-4 bg-red-600 text-white font-semibold rounded-lg hover:bg-red-700 transition duration-300">
+                Shop All Parts
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ml-2" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clip-rule="evenodd" />
+                </svg>
+            </a>
+        </div>
+    </div>
+</div>
+
+<!-- Initialize Swiper -->
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Hero Slider
+    new Swiper('.hero-slider', {
+        loop: true,
+        autoplay: {
+            delay: 5000,
+        },
+        pagination: {
+            el: '.swiper-pagination',
+            clickable: true,
+        },
+        navigation: {
+            nextEl: '.swiper-button-next',
+            prevEl: '.swiper-button-prev',
+        },
+    });
+
+    // Featured Products Slider
+    new Swiper('.feature-product-slider', {
+        slidesPerView: 1,
+        spaceBetween: 30,
+        loop: true,
+        navigation: {
+            nextEl: '.swiper-button-next',
+            prevEl: '.swiper-button-prev',
+        },
+        breakpoints: {
+            640: {
+                slidesPerView: 2,
+            },
+            1024: {
+                slidesPerView: 3,
+            },
+        },
+    });
+});
+</script>
+{% endblock %}

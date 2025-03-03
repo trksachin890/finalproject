@@ -59,7 +59,8 @@ urlpatterns = [
 
 
     # recommendation system-----------------------------------------------------------------------------------
-    path('recommendation/',views.recommended_products_view,name='recommendation_system')
+    path('recommendation/',views.recommended_products_view,name='recommendation_system'),
+    path('search-suggestions/', views.search_suggestions, name='search_suggestions'),
      # ----------------------------close recommendation system-----------------------------------------------------------------------------------
     
 ]
