@@ -1,25 +1,303 @@
 {% extends 'core/base.html' %}
 {% block content %}
- <!-- Thank You area start -->
- <div class="thank-you-area">
+<!-- Thank You area start -->
+<div class="thank-you-area">
     <div class="container">
-        <div class="row justify-content-center align-items-center">
-            <div class="col-md-8">
-                <div class="inner_complated">
-                    <div class="img_cmpted"><img src="assets/images/icons/cmpted_logo.png" alt=""></div>
-                    <p class="dsc_cmpted">Thank you for ordering in our store.
-                        </p>
-                    <div class="btn_cmpted">
-                        <a href="{% url 'home' %}" class="shop-btn" title="Go To Shop">Continue Shopping </a>
-                    </div>
+        <div class="thank-you-card">
+            <div class="success-animation">
+                <svg class="checkmark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 52 52">
+                    <circle class="checkmark__circle" cx="26" cy="26" r="25" fill="none"/>
+                    <path class="checkmark__check" fill="none" d="M14.1 27.2l7.1 7.2 16.7-16.8"/>
+                </svg>
+            </div>
+            
+            <div class="thank-you-content">
+                <div class="img_cmpted">
+                    <img src="assets/images/icons/cmpted_logo.png" alt="Company Logo">
                 </div>
-                <div class="main_quickorder text-align-center">
-                    <h3 class="title">Call Us for Quick Order</h3>
-                    <div class="cntct typewriter-effect"><span class="call_desk"><a href="tel:+9779860080165" id="typewriter_num">+977 9860080165</a></span></div>
+                <h1 class="thank-you-title">Thank You!</h1>
+                <p class="thank-you-message">Thank you for ordering in our store.</p>
+                <div class="btn_cmpted">
+                    <a href="{% url 'home' %}" class="shop-btn" title="Go To Shop">Continue Shopping</a>
+                </div>
+            </div>
+            
+            <div class="quick-order">
+                <h3 class="quick-order-title">Call Us for Quick Order</h3>
+                <div class="phone-container">
+                    <span class="phone-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-phone"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+                    </span>
+                    <div class="typewriter-container">
+                        <a href="tel:+9779860080165" id="typewriter_num" class="phone-number"></a>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
+
+<script>
+    // Typewriter effect for phone number
+    document.addEventListener('DOMContentLoaded', function() {
+        const phoneNumber = "+977 9860080165";
+        const typewriterElement = document.getElementById('typewriter_num');
+        let i = 0;
+        
+        function typeWriter() {
+            if (i < phoneNumber.length) {
+                typewriterElement.textContent += phoneNumber.charAt(i);
+                i++;
+                setTimeout(typeWriter, 100);
+            }
+        }
+        
+        typeWriter();
+        
+        // Create confetti effect
+        createConfetti();
+    });
+    
+    function createConfetti() {
+        const confettiCount = 150;
+        const container = document.querySelector('.thank-you-area');
+        
+        for (let i = 0; i < confettiCount; i++) {
+            const confetti = document.createElement('div');
+            confetti.className = 'confetti';
+            confetti.style.left = Math.random() * 100 + 'vw';
+            confetti.style.animationDelay = Math.random() * 5 + 's';
+            confetti.style.backgroundColor = getRandomColor();
+            container.appendChild(confetti);
+        }
+    }
+    
+    function getRandomColor() {
+        const colors = ['#f44336', '#e91e63', '#9c27b0', '#673ab7', '#3f51b5', '#2196f3', '#03a9f4', '#00bcd4', '#009688', '#4CAF50', '#8BC34A', '#CDDC39', '#FFEB3B', '#FFC107', '#FF9800', '#FF5722'];
+        return colors[Math.floor(Math.random() * colors.length)];
+    }
+</script>
+
+<style>
+    .thank-you-area {
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: #f8f9fa;
+        position: relative;
+        overflow: hidden;
+        padding: 40px 0;
+    }
+    
+    .container {
+        width: 100%;
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 15px;
+    }
+    
+    .thank-you-card {
+        background-color: white;
+        border-radius: 20px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        padding: 40px;
+        text-align: center;
+        position: relative;
+        z-index: 10;
+        max-width: 600px;
+        margin: 0 auto;
+    }
+    
+    .thank-you-title {
+        font-size: 2.5rem;
+        color: #333;
+        margin-bottom: 20px;
+        font-weight: 700;
+    }
+    
+    .thank-you-message {
+        font-size: 1.2rem;
+        color: #666;
+        margin-bottom: 30px;
+        line-height: 1.6;
+    }
+    
+    .thank-you-content {
+        margin-bottom: 40px;
+    }
+    
+    .img_cmpted {
+        margin-bottom: 20px;
+    }
+    
+    .img_cmpted img {
+        max-height: 80px;
+        max-width: 100%;
+    }
+    
+    .shop-btn {
+        display: inline-block;
+        background-color: #4CAF50;
+        color: white;
+        padding: 12px 30px;
+        border-radius: 50px;
+        text-decoration: none;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 15px rgba(76, 175, 80, 0.3);
+    }
+    
+    .shop-btn:hover {
+        background-color: #3d8b40;
+        transform: translateY(-3px);
+        box-shadow: 0 6px 20px rgba(76, 175, 80, 0.4);
+    }
+    
+    .quick-order {
+        border-top: 1px solid #eee;
+        padding-top: 30px;
+    }
+    
+    .quick-order-title {
+        font-size: 1.5rem;
+        color: #333;
+        margin-bottom: 20px;
+    }
+    
+    .phone-container {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+    }
+    
+    .phone-icon {
+        color: #4CAF50;
+        display: flex;
+        align-items: center;
+    }
+    
+    .phone-number {
+        font-size: 1.3rem;
+        color: #4CAF50;
+        text-decoration: none;
+        font-weight: 600;
+        display: inline-block;
+        min-height: 30px;
+    }
+    
+    .typewriter-container {
+        min-height: 30px;
+        display: flex;
+        align-items: center;
+    }
+    
+    /* Success checkmark animation */
+    .success-animation {
+        margin: 0 auto 30px;
+        width: 80px;
+        height: 80px;
+    }
+    
+    .checkmark {
+        width: 80px;
+        height: 80px;
+        border-radius: 50%;
+        display: block;
+        stroke-width: 2;
+        stroke: #4CAF50;
+        stroke-miterlimit: 10;
+        box-shadow: inset 0px 0px 0px #4CAF50;
+        animation: fill .4s ease-in-out .4s forwards, scale .3s ease-in-out .9s both;
+    }
+    
+    .checkmark__circle {
+        stroke-dasharray: 166;
+        stroke-dashoffset: 166;
+        stroke-width: 2;
+        stroke-miterlimit: 10;
+        stroke: #4CAF50;
+        fill: none;
+        animation: stroke 0.6s cubic-bezier(0.65, 0, 0.45, 1) forwards;
+    }
+    
+    .checkmark__check {
+        transform-origin: 50% 50%;
+        stroke-dasharray: 48;
+        stroke-dashoffset: 48;
+        animation: stroke 0.3s cubic-bezier(0.65, 0, 0.45, 1) 0.8s forwards;
+    }
+    
+    /* Confetti animation */
+    .confetti {
+        position: absolute;
+        width: 10px;
+        height: 10px;
+        opacity: 0;
+        animation: confetti-fall 5s linear infinite;
+    }
+    
+    @keyframes confetti-fall {
+        0% {
+            opacity: 1;
+            top: -10%;
+            transform: translateX(0) rotateZ(0deg);
+        }
+        100% {
+            opacity: 0;
+            top: 100%;
+            transform: translateX(20px) rotateZ(360deg);
+        }
+    }
+    
+    @keyframes stroke {
+        100% {
+            stroke-dashoffset: 0;
+        }
+    }
+    
+    @keyframes scale {
+        0%, 100% {
+            transform: none;
+        }
+        50% {
+            transform: scale3d(1.1, 1.1, 1);
+        }
+    }
+    
+    @keyframes fill {
+        100% {
+            box-shadow: inset 0px 0px 0px 30px rgba(76, 175, 80, 0.1);
+        }
+    }
+    
+    /* Responsive styles */
+    @media (max-width: 768px) {
+        .thank-you-card {
+            padding: 30px 20px;
+        }
+        
+        .thank-you-title {
+            font-size: 2rem;
+        }
+        
+        .thank-you-message {
+            font-size: 1rem;
+        }
+        
+        .shop-btn {
+            padding: 10px 25px;
+        }
+        
+        .quick-order-title {
+            font-size: 1.3rem;
+        }
+        
+        .phone-number {
+            font-size: 1.1rem;
+        }
+    }
+</style>
 <!-- Thank You area end -->
-{% endblock content%}
+{% endblock content %}

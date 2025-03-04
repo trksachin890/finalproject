@@ -184,7 +184,8 @@ document.addEventListener('DOMContentLoaded', function() {
                     </h3>
                     <div class="space-y-2">
                         {% for f_price in filter_price %}
-                        <a href="/products/?{% if request.GET.category %}category={{ request.GET.category }}&{% endif %}{% if request.GET.vehicletype %}vehicletype={{ request.GET.vehicletype }}&{% endif %}filter_price={{ f_price.id }}" 
+                        <a href="/products/?{% if request.GET.category %}category={{ request.GET.category }}&{% endif %}{% if request.GET.vehicletype %}vehicletype={{ request.GET.vehicletype }}&{% endif %}{% if request.GET.brand %}brand={{ request.GET.brand }}&{% endif %}filter_price={{ f_price.id }}"
+
                            class="block w-full py-2 px-3 rounded-lg text-center {% if request.GET.filter_price == f_price.id|stringformat:'i' %}bg-red-600 text-white{% else %}bg-gray-100 text-gray-800 hover:bg-gray-200{% endif %} transition duration-200">
                             {{ f_price.price }}
                         </a>
@@ -208,7 +209,8 @@ document.addEventListener('DOMContentLoaded', function() {
                         </a>
                         
                         {% for bran in brand %}
-                        <a href="/products/?{% if request.GET.category %}category={{ request.GET.category }}&{% endif %}{% if request.GET.vehicletype %}vehicletype={{ request.GET.vehicletype }}&{% endif %}brand={{ bran.id }}" 
+                        <a href="/products/?{% if request.GET.category %}category={{ request.GET.category }}&{% endif %}{% if request.GET.vehicletype %}vehicletype={{ request.GET.vehicletype }}&{% endif %}{% if request.GET.filter_price %}filter_price={{ request.GET.filter_price }}&{% endif %}brand={{ bran.id }}"
+ 
                            class="brand-option block w-full py-2 px-3 rounded-lg text-center {% if request.GET.brand == bran.id|stringformat:'i' %}bg-red-600 text-white{% else %}bg-gray-100 text-gray-800 hover:bg-gray-200{% endif %} transition duration-200">
                             {{ bran.name }}
                         </a>

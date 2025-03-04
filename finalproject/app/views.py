@@ -418,8 +418,8 @@ def PLACE_ORDER(request):
     user = request.user
     cart_items = request.session.get('cart', {})
     total_amount = sum(float(item['price']) * int(item['quantity']) for item in cart_items.values())
+    total_quantity = sum(int(item['quantity']) for item in cart_items.values())  # Calculate total quantity
 
-    
 
     if request.method == 'POST':
         firstname = request.POST.get('firstname', user.first_name)
@@ -441,32 +441,31 @@ def PLACE_ORDER(request):
         )
 
         for item in cart_items.values():
-            product_id = item.get('id')  # Get product ID from session
+            product_id = item.get('id')
             try:
-                product_instance = Product.objects.get(id=product_id)  # Fetch product
-               
+                product_instance = Product.objects.get(id=product_id)
                 OrderItem.objects.create(
                     user=user,
                     order=order,
-                    product=product_instance,  # Store Product instance
+                    product=product_instance,
                     image=item['image'],
                     quantity=int(item['quantity']),
                     price=float(item['price']),
                     total=float(item['price']) * int(item['quantity']),
                 )
             except Product.DoesNotExist:
-                print(f"Product with ID {product_id} does not exist.")  # Debugging
+                print(f"Product with ID {product_id} does not exist.")
 
         request.session['cart'] = {}  
         return render(request, 'core/thanks/thanks.html')
 
+    # Ensure all data is passed to the template
     context = {
         'user': user,
         'cart_items': cart_items,
-        'total_amount': total_amount,
-        
+        'cart_total_amount': total_amount,
+        'total_quantity': total_quantity,  # Pass total quantity
     }
-    print(context)
     return render(request, 'core/place/placeorder.html', context)
 
 
